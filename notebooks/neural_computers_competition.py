@@ -113,7 +113,26 @@ def _(mo):
         font-size: 0.9em;
     }
     .nc-hero {
-        box-shadow: 0 12px 36px rgba(0,0,0,0.22);
+        box-shadow: 0 12px 36px rgba(0,0,0,0.18);
+    }
+    .nc-lead {
+        color: #d7d9e3;
+        font-size: 1.08em;
+        line-height: 1.8;
+        max-width: 760px;
+        margin: 0 auto;
+    }
+    .nc-kicker {
+        display: inline-block;
+        margin-bottom: 16px;
+        padding: 6px 12px;
+        border: 1px solid rgba(255,255,255,0.10);
+        border-radius: 999px;
+        color: #cdd6f4;
+        font-size: 0.82em;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        background: rgba(255,255,255,0.04);
     }
     </style>
     """
@@ -127,17 +146,17 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     hero_html_comp = """
-    <div class="nc-hero" style="background: linear-gradient(135deg, #1e1e2e 0%, #2d1b4e 50%, #1e1e2e 100%); border-radius: 24px; padding: 56px 48px; text-align: center; margin-bottom: 32px; position: relative; overflow: hidden;">
-        <div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.10) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.10) 0%, transparent 50%); pointer-events: none;"></div>
+    <div class="nc-hero" style="background: linear-gradient(135deg, #1e1e2e 0%, #29214a 50%, #1e1e2e 100%); border-radius: 24px; padding: 52px 46px; text-align: center; margin-bottom: 26px; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.08) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.08) 0%, transparent 50%); pointer-events: none;"></div>
         <div style="position: relative; z-index: 1;">
-            <div style="display:inline-block; margin-bottom: 18px; padding: 8px 14px; border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; color: #cdd6f4; font-size: 0.9em; letter-spacing: 0.04em; text-transform: uppercase; background: rgba(255,255,255,0.04);">Interactive research notebook</div>
-            <h1 style="font-size: 2.7em; color: #cdd6f4; margin-bottom: 16px; font-weight: 800; letter-spacing: -0.02em;">Can a Model Learn How a Computer Works?</h1>
-            <p style="font-size: 1.35em; color: #a6adc8; max-width: 680px; margin: 0 auto 28px auto; line-height: 1.7;">
-                Not by reading code. Not by being taught.<br>
-                <strong style="color: #f9e2af;">Just by watching the screen change.</strong>
+            <div class="nc-kicker">A toy benchmark inspired by Neural Computers</div>
+            <h1 style="font-size: 2.65em; color: #cdd6f4; margin-bottom: 16px; font-weight: 800; letter-spacing: -0.02em;">Can a Model Learn How a Computer Works?</h1>
+            <p class="nc-lead" style="margin-bottom: 24px; color: #bcc0d0;">
+                This notebook studies a simple version of that question: given the current terminal screen,
+                can a model predict the next one purely from observed screen transitions?
             </p>
-            <div style="display: inline-flex; gap: 12px; align-items: center; background: rgba(69, 71, 90, 0.6); backdrop-filter: blur(10px); border-radius: 12px; padding: 14px 24px; border: 1px solid rgba(255,255,255,0.1);">
-                <span style="color: #cdd6f4;">Inspired by</span>
+            <div style="display: inline-flex; gap: 10px; align-items: center; background: rgba(69, 71, 90, 0.58); border-radius: 12px; padding: 12px 20px; border: 1px solid rgba(255,255,255,0.08);">
+                <span style="color: #cdd6f4;">Source paper:</span>
                 <a href="https://arxiv.org/abs/2604.06425" style="color: #89b4fa; font-weight: 600; text-decoration: none;">Neural Computers</a>
                 <span style="color: #6b7280;">(2026)</span>
             </div>
@@ -150,32 +169,25 @@ def _(mo):
 
 @app.cell(hide_code=True)
 def _(mo):
-    intro_callout_comp = mo.callout(
-        mo.md(
-            """
-**The big question:** If you show a model lots of screen recordings, can it learn to predict what happens next?
-
-This notebook explores that question with a toy terminal benchmark and a fair comparison between three model families.
-"""
-        ),
-        kind="info",
+    opening_summary_comp = mo.Html(
+        """
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 18px 0 30px 0;">
+            <div class='nc-card' style='border-left: 3px solid #3b82f6;'>
+                <div style='font-weight: 700; color: #cdd6f4; margin-bottom: 8px;'>Question</div>
+                <div class='nc-small'>Can next-screen prediction recover both typing mechanics and command meaning?</div>
+            </div>
+            <div class='nc-card' style='border-left: 3px solid #22c55e;'>
+                <div style='font-weight: 700; color: #cdd6f4; margin-bottom: 8px;'>Benchmark</div>
+                <div class='nc-small'>A toy terminal task with matched saved results for MLP, Transformer, and GRU baselines.</div>
+            </div>
+            <div class='nc-card' style='border-left: 3px solid #a855f7;'>
+                <div style='font-weight: 700; color: #cdd6f4; margin-bottom: 8px;'>Result</div>
+                <div class='nc-small'>MLP wins overall; Transformer is more competitive on the meaning-heavy Enter step.</div>
+            </div>
+        </div>
+        """
     )
-    intro_callout_comp
-    return
-
-
-@app.cell(hide_code=True)
-def _(mo):
-    journey_html_comp = """
-    <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin: 24px 0 32px 0;">
-        <div class='nc-card' style='border-left: 3px solid #3b82f6;'><div style='font-size: 0.82em; letter-spacing:0.06em; text-transform:uppercase; color:#89b4fa; margin-bottom: 8px;'>01</div><div style='font-weight: 700; color: #cdd6f4;'>Task</div><div class='nc-small'>Predict the next screen from the current one.</div></div>
-        <div class='nc-card' style='border-left: 3px solid #f59e0b;'><div style='font-size: 0.82em; letter-spacing:0.06em; text-transform:uppercase; color:#f59e0b; margin-bottom: 8px;'>02</div><div style='font-weight: 700; color: #cdd6f4;'>Split</div><div class='nc-small'>Typing is easy. Meaning after Enter is hard.</div></div>
-        <div class='nc-card' style='border-left: 3px solid #22c55e;'><div style='font-size: 0.82em; letter-spacing:0.06em; text-transform:uppercase; color:#22c55e; margin-bottom: 8px;'>03</div><div style='font-weight: 700; color: #cdd6f4;'>Metric</div><div class='nc-small'>We score changed cells, not easy unchanged background.</div></div>
-        <div class='nc-card' style='border-left: 3px solid #a855f7;'><div style='font-size: 0.82em; letter-spacing:0.06em; text-transform:uppercase; color:#a855f7; margin-bottom: 8px;'>04</div><div style='font-weight: 700; color: #cdd6f4;'>Comparison</div><div class='nc-small'>MLP vs Transformer vs GRU on the same settings.</div></div>
-        <div class='nc-card' style='border-left: 3px solid #f97316;'><div style='font-size: 0.82em; letter-spacing:0.06em; text-transform:uppercase; color:#f97316; margin-bottom: 8px;'>05</div><div style='font-weight: 700; color: #cdd6f4;'>Finding</div><div class='nc-small'>Different architectures win at different parts of the job.</div></div>
-    </div>
-    """
-    mo.Html(journey_html_comp)
+    opening_summary_comp
     return
 
 
@@ -198,26 +210,22 @@ Before looking at the winner, here is the benchmark in plain English.
 @app.cell(hide_code=True)
 def _(mo):
     protocol_html_comp = """
-    <div style="display:grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 16px; margin: 20px 0 24px 0;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0 18px 0;">
         <div class="nc-card" style="border-left: 4px solid #89b4fa;">
-            <div style="font-size:0.82em; letter-spacing:0.06em; text-transform:uppercase; color:#89b4fa; margin-bottom:8px;">01</div>
-            <div style="font-weight:700; color:#cdd6f4; margin-bottom:6px;">One sample</div>
-            <div class="nc-small">A terminal episode: current screen → next screen after one action.</div>
+            <div style="font-weight:700; color:#cdd6f4; margin-bottom:8px;">Task</div>
+            <div class="nc-small">One sample is a terminal episode step: current screen, action, and next screen.</div>
         </div>
         <div class="nc-card" style="border-left: 4px solid #22c55e;">
-            <div style="font-size:0.82em; letter-spacing:0.06em; text-transform:uppercase; color:#22c55e; margin-bottom:8px;">02</div>
-            <div style="font-weight:700; color:#cdd6f4; margin-bottom:6px;">Main metric</div>
-            <div class="nc-small"><b>Changed-cell accuracy</b>: only score the cells that actually changed.</div>
+            <div style="font-weight:700; color:#cdd6f4; margin-bottom:8px;">Main metric</div>
+            <div class="nc-small"><b>Changed-cell accuracy</b> scores only the cells that actually changed.</div>
         </div>
         <div class="nc-card" style="border-left: 4px solid #a855f7;">
-            <div style="font-size:0.82em; letter-spacing:0.06em; text-transform:uppercase; color:#a855f7; margin-bottom:8px;">03</div>
-            <div style="font-weight:700; color:#cdd6f4; margin-bottom:6px;">Four settings</div>
-            <div class="nc-small">Standard family, standard command, paraphrase family, paraphrase command.</div>
+            <div style="font-weight:700; color:#cdd6f4; margin-bottom:8px;">Evaluation settings</div>
+            <div class="nc-small">The saved benchmark covers standard and paraphrase settings, with family-level and exact-command hints.</div>
         </div>
         <div class="nc-card" style="border-left: 4px solid #f97316;">
-            <div style="font-size:0.82em; letter-spacing:0.06em; text-transform:uppercase; color:#f97316; margin-bottom:8px;">04</div>
-            <div style="font-weight:700; color:#cdd6f4; margin-bottom:6px;">Fair comparison</div>
-            <div class="nc-small">Same toy task, same evaluation settings, matched saved result files.</div>
+            <div style="font-weight:700; color:#cdd6f4; margin-bottom:8px;">Comparison rule</div>
+            <div class="nc-small">All models are compared on the same toy task with the same saved evaluation settings.</div>
         </div>
     </div>
     """
