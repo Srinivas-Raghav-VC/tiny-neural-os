@@ -30,9 +30,9 @@ def _():
     import pandas as pd
 
     ROOT = Path(__file__).resolve().parents[1]
-    sys.path.insert(0, str(ROOT / "experiments" / "toy_nc_cli"))
+    sys.path.insert(0, str(ROOT / "experiments" / "toy_nc_cli" / "src"))
 
-    from src.toy_terminal import COMMAND_VARIANTS, TerminalConfig, generate_episodes, html_screen
+    from toy_terminal import COMMAND_VARIANTS, TerminalConfig, generate_episodes, html_screen
 
     COLORS = {
         "correct": "#22c55e",
@@ -53,16 +53,19 @@ def _():
 
     plt.rcParams.update(
         {
-            "figure.facecolor": "#1e1e2e",
-            "axes.facecolor": "#1e1e2e",
-            "axes.edgecolor": "#6b7280",
-            "axes.labelcolor": "#cdd6f4",
-            "text.color": "#cdd6f4",
-            "xtick.color": "#a6adc8",
-            "ytick.color": "#a6adc8",
-            "grid.color": "#45475a",
-            "legend.facecolor": "#313244",
-            "legend.edgecolor": "#6b7280",
+            "figure.facecolor": "#ffffff",
+            "axes.facecolor": "#ffffff",
+            "savefig.facecolor": "#ffffff",
+            "axes.edgecolor": "#d1d5db",
+            "axes.labelcolor": "#111827",
+            "axes.titlecolor": "#111827",
+            "text.color": "#111827",
+            "xtick.color": "#4b5563",
+            "ytick.color": "#4b5563",
+            "grid.color": "#e5e7eb",
+            "legend.facecolor": "#ffffff",
+            "legend.edgecolor": "#d1d5db",
+            "legend.framealpha": 0.95,
         }
     )
 
@@ -172,17 +175,17 @@ def _(mo):
     opening_summary_comp = mo.Html(
         """
         <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 18px 0 30px 0;">
-            <div class='nc-card' style='border-left: 3px solid #3b82f6;'>
-                <div style='font-weight: 700; color: #cdd6f4; margin-bottom: 8px;'>Question</div>
-                <div class='nc-small'>Can next-screen prediction recover both typing mechanics and command meaning?</div>
+            <div style='background:#ffffff; border:1px solid #e5e7eb; border-left:3px solid #3b82f6; border-radius:16px; padding:18px 20px; box-shadow:0 10px 30px rgba(15,23,42,0.06);'>
+                <div style='font-weight: 700; color: #0f172a; margin-bottom: 8px;'>Question</div>
+                <div style='color:#475569; line-height:1.7;'>Can next-screen prediction recover both typing mechanics and command meaning?</div>
             </div>
-            <div class='nc-card' style='border-left: 3px solid #22c55e;'>
-                <div style='font-weight: 700; color: #cdd6f4; margin-bottom: 8px;'>Benchmark</div>
-                <div class='nc-small'>A toy terminal task with matched saved results for MLP, Transformer, and GRU baselines.</div>
+            <div style='background:#ffffff; border:1px solid #e5e7eb; border-left:3px solid #22c55e; border-radius:16px; padding:18px 20px; box-shadow:0 10px 30px rgba(15,23,42,0.06);'>
+                <div style='font-weight: 700; color: #0f172a; margin-bottom: 8px;'>Benchmark</div>
+                <div style='color:#475569; line-height:1.7;'>A toy terminal task with matched saved results for MLP, Transformer, and GRU baselines.</div>
             </div>
-            <div class='nc-card' style='border-left: 3px solid #a855f7;'>
-                <div style='font-weight: 700; color: #cdd6f4; margin-bottom: 8px;'>Result</div>
-                <div class='nc-small'>MLP wins overall; Transformer is more competitive on the meaning-heavy Enter step.</div>
+            <div style='background:#ffffff; border:1px solid #e5e7eb; border-left:3px solid #a855f7; border-radius:16px; padding:18px 20px; box-shadow:0 10px 30px rgba(15,23,42,0.06);'>
+                <div style='font-weight: 700; color: #0f172a; margin-bottom: 8px;'>Result</div>
+                <div style='color:#475569; line-height:1.7;'>MLP wins overall; Transformer is more competitive on the meaning-heavy Enter step.</div>
             </div>
         </div>
         """
@@ -211,21 +214,21 @@ Before looking at the winner, here is the benchmark in plain English.
 def _(mo):
     protocol_html_comp = """
     <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0 18px 0;">
-        <div class="nc-card" style="border-left: 4px solid #89b4fa;">
-            <div style="font-weight:700; color:#cdd6f4; margin-bottom:8px;">Task</div>
-            <div class="nc-small">One sample is a terminal episode step: current screen, action, and next screen.</div>
+        <div style="background:#ffffff; border:1px solid #e5e7eb; border-left:4px solid #89b4fa; border-radius:16px; padding:18px 20px; box-shadow:0 10px 30px rgba(15,23,42,0.05);">
+            <div style="font-weight:700; color:#0f172a; margin-bottom:8px;">Task</div>
+            <div style="color:#475569; line-height:1.7;">One sample is a terminal episode step: current screen, action, and next screen.</div>
         </div>
-        <div class="nc-card" style="border-left: 4px solid #22c55e;">
-            <div style="font-weight:700; color:#cdd6f4; margin-bottom:8px;">Main metric</div>
-            <div class="nc-small"><b>Changed-cell accuracy</b> scores only the cells that actually changed.</div>
+        <div style="background:#ffffff; border:1px solid #e5e7eb; border-left:4px solid #22c55e; border-radius:16px; padding:18px 20px; box-shadow:0 10px 30px rgba(15,23,42,0.05);">
+            <div style="font-weight:700; color:#0f172a; margin-bottom:8px;">Main metric</div>
+            <div style="color:#475569; line-height:1.7;"><b style="color:#0f172a;">Changed-cell accuracy</b> scores only the cells that actually changed.</div>
         </div>
-        <div class="nc-card" style="border-left: 4px solid #a855f7;">
-            <div style="font-weight:700; color:#cdd6f4; margin-bottom:8px;">Evaluation settings</div>
-            <div class="nc-small">The saved benchmark covers standard and paraphrase settings, with family-level and exact-command hints.</div>
+        <div style="background:#ffffff; border:1px solid #e5e7eb; border-left:4px solid #a855f7; border-radius:16px; padding:18px 20px; box-shadow:0 10px 30px rgba(15,23,42,0.05);">
+            <div style="font-weight:700; color:#0f172a; margin-bottom:8px;">Evaluation settings</div>
+            <div style="color:#475569; line-height:1.7;">The saved benchmark covers standard and paraphrase settings, with family-level and exact-command hints.</div>
         </div>
-        <div class="nc-card" style="border-left: 4px solid #f97316;">
-            <div style="font-weight:700; color:#cdd6f4; margin-bottom:8px;">Comparison rule</div>
-            <div class="nc-small">All models are compared on the same toy task with the same saved evaluation settings.</div>
+        <div style="background:#ffffff; border:1px solid #e5e7eb; border-left:4px solid #f97316; border-radius:16px; padding:18px 20px; box-shadow:0 10px 30px rgba(15,23,42,0.05);">
+            <div style="font-weight:700; color:#0f172a; margin-bottom:8px;">Comparison rule</div>
+            <div style="color:#475569; line-height:1.7;">All models are compared on the same toy task with the same saved evaluation settings.</div>
         </div>
     </div>
     """
@@ -843,7 +846,7 @@ def _(COLORS, comp_has_data, comp_overall_map, comp_enter_map, np, plt, mo):
             showdown_pair_width,
             label="MLP",
             color=COLORS["mlp"],
-            edgecolor="#1e1e2e",
+            edgecolor="#ffffff",
             linewidth=2,
         )
         showdown_pair_ax_left_tf_bars = showdown_pair_ax_left.bar(
@@ -852,7 +855,7 @@ def _(COLORS, comp_has_data, comp_overall_map, comp_enter_map, np, plt, mo):
             showdown_pair_width,
             label="Transformer",
             color=COLORS["transformer"],
-            edgecolor="#1e1e2e",
+            edgecolor="#ffffff",
             linewidth=2,
         )
         showdown_pair_ax_left_gru_bars = showdown_pair_ax_left.bar(
@@ -861,7 +864,7 @@ def _(COLORS, comp_has_data, comp_overall_map, comp_enter_map, np, plt, mo):
             showdown_pair_width,
             label="GRU",
             color=COLORS["gru"],
-            edgecolor="#1e1e2e",
+            edgecolor="#ffffff",
             linewidth=2,
         )
         showdown_pair_ax_left.set_ylabel("Changed-cell accuracy", fontsize=12, fontweight="bold")
@@ -871,7 +874,7 @@ def _(COLORS, comp_has_data, comp_overall_map, comp_enter_map, np, plt, mo):
         showdown_pair_ax_left.set_ylim(0, 1.08)
         showdown_pair_ax_left.spines["top"].set_visible(False)
         showdown_pair_ax_left.spines["right"].set_visible(False)
-        showdown_pair_ax_left.axhline(y=0.5, color="#45475a", linestyle="--", alpha=0.5)
+        showdown_pair_ax_left.axhline(y=0.5, color="#d1d5db", linestyle="--", alpha=0.5)
         showdown_pair_ax_left.legend(loc="upper right", fontsize=10)
 
         for showdown_pair_bar_left in list(showdown_pair_ax_left_mlp_bars) + list(showdown_pair_ax_left_tf_bars) + list(showdown_pair_ax_left_gru_bars):
@@ -893,7 +896,7 @@ def _(COLORS, comp_has_data, comp_overall_map, comp_enter_map, np, plt, mo):
             showdown_pair_width,
             label="MLP",
             color=COLORS["mlp"],
-            edgecolor="#1e1e2e",
+            edgecolor="#ffffff",
             linewidth=2,
         )
         showdown_pair_ax_right_tf_bars = showdown_pair_ax_right.bar(
@@ -902,7 +905,7 @@ def _(COLORS, comp_has_data, comp_overall_map, comp_enter_map, np, plt, mo):
             showdown_pair_width,
             label="Transformer",
             color=COLORS["transformer"],
-            edgecolor="#1e1e2e",
+            edgecolor="#ffffff",
             linewidth=2,
         )
         showdown_pair_ax_right_gru_bars = showdown_pair_ax_right.bar(
@@ -911,7 +914,7 @@ def _(COLORS, comp_has_data, comp_overall_map, comp_enter_map, np, plt, mo):
             showdown_pair_width,
             label="GRU",
             color=COLORS["gru"],
-            edgecolor="#1e1e2e",
+            edgecolor="#ffffff",
             linewidth=2,
         )
         showdown_pair_ax_right.set_ylabel("Enter-step changed-cell accuracy", fontsize=12, fontweight="bold")
@@ -921,7 +924,7 @@ def _(COLORS, comp_has_data, comp_overall_map, comp_enter_map, np, plt, mo):
         showdown_pair_ax_right.set_ylim(0, 1.08)
         showdown_pair_ax_right.spines["top"].set_visible(False)
         showdown_pair_ax_right.spines["right"].set_visible(False)
-        showdown_pair_ax_right.axhline(y=0.5, color="#45475a", linestyle="--", alpha=0.5)
+        showdown_pair_ax_right.axhline(y=0.5, color="#d1d5db", linestyle="--", alpha=0.5)
         showdown_pair_ax_right.legend(loc="upper right", fontsize=10)
 
         for showdown_pair_bar_right in list(showdown_pair_ax_right_mlp_bars) + list(showdown_pair_ax_right_tf_bars) + list(showdown_pair_ax_right_gru_bars):
@@ -949,28 +952,28 @@ def _(COLORS, comp_has_data, comp_mlp_overall_win_count, comp_profile_means, com
         discovery_output_comp = mo.md("")
     else:
         discovery_output_html_comp = f"""
-        <div style="background: linear-gradient(135deg, {COLORS['transformer']}15 0%, {COLORS['mlp']}15 100%); border-radius: 20px; padding: 28px; margin: 24px 0; border: 2px solid {COLORS['transformer']}44;">
-            <h3 style="color:#cdd6f4; text-align:center; margin-bottom:20px;">Main comparison outcome</h3>
+        <div style="background: linear-gradient(135deg, #faf5ff 0%, #f8fafc 50%, #f0fdf4 100%); border-radius: 20px; padding: 28px; margin: 24px 0; border: 1px solid #e9d5ff; box-shadow: 0 16px 40px rgba(15,23,42,0.06);">
+            <h3 style="color:#0f172a; text-align:center; margin-bottom:20px;">Main comparison outcome</h3>
             <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 18px;">
-                <div class="nc-card" style="border-left:4px solid {COLORS['mlp']}; text-align:center;">
-                    <div style="font-size:0.95em; color:#a6adc8; margin-bottom:6px;">Mean overall changed-cell accuracy</div>
+                <div style="background:#ffffff; border:1px solid #e5e7eb; border-left:4px solid {COLORS['mlp']}; border-radius:16px; text-align:center; padding:18px 16px;">
+                    <div style="font-size:0.95em; color:#64748b; margin-bottom:6px;">Mean overall changed-cell accuracy</div>
                     <div style="font-size:2.2em; font-weight:800; color:{COLORS['mlp']};">{100*comp_profile_means['mlp']['overall']:.1f}%</div>
-                    <div class="nc-small">MLP is best overall in <b>{comp_mlp_overall_win_count}/4</b> settings.</div>
+                    <div style="color:#475569; line-height:1.7;">MLP is best overall in <b>{comp_mlp_overall_win_count}/4</b> settings.</div>
                 </div>
-                <div class="nc-card" style="border-left:4px solid {COLORS['transformer']}; text-align:center;">
-                    <div style="font-size:0.95em; color:#a6adc8; margin-bottom:6px;">Mean Enter-step accuracy</div>
+                <div style="background:#ffffff; border:1px solid #e5e7eb; border-left:4px solid {COLORS['transformer']}; border-radius:16px; text-align:center; padding:18px 16px;">
+                    <div style="font-size:0.95em; color:#64748b; margin-bottom:6px;">Mean Enter-step accuracy</div>
                     <div style="font-size:2.2em; font-weight:800; color:{COLORS['transformer']};">{100*comp_profile_means['transformer']['enter']:.1f}%</div>
-                    <div class="nc-small">Transformer beats MLP on Enter in <b>{comp_transformer_enter_win_count}/4</b> settings.</div>
+                    <div style="color:#475569; line-height:1.7;">Transformer beats MLP on Enter in <b>{comp_transformer_enter_win_count}/4</b> settings.</div>
                 </div>
-                <div class="nc-card" style="border-left:4px solid {COLORS['gru']}; text-align:center;">
-                    <div style="font-size:0.95em; color:#a6adc8; margin-bottom:6px;">Mean overall changed-cell accuracy</div>
+                <div style="background:#ffffff; border:1px solid #e5e7eb; border-left:4px solid {COLORS['gru']}; border-radius:16px; text-align:center; padding:18px 16px;">
+                    <div style="font-size:0.95em; color:#64748b; margin-bottom:6px;">Mean overall changed-cell accuracy</div>
                     <div style="font-size:2.2em; font-weight:800; color:{COLORS['gru']};">{100*comp_profile_means['gru']['overall']:.1f}%</div>
-                    <div class="nc-small">GRU was a negative result on this benchmark.</div>
+                    <div style="color:#475569; line-height:1.7;">GRU was a negative result on this benchmark.</div>
                 </div>
             </div>
-            <div style="text-align:center; padding-top:16px; border-top:1px solid #45475a; color:#cdd6f4; line-height:1.7;">
+            <div style="text-align:center; padding-top:16px; border-top:1px solid #e5e7eb; color:#334155; line-height:1.7;">
                 <b>The honest story:</b> the MLP is still the strongest toy baseline overall, but the Transformer is more competitive on the meaning-heavy Enter step.
-                <br><span style="color:#a6adc8;">That advantage is real, but it is not universal: it is strongest in the standard setting and much smaller under paraphrase.</span>
+                <br><span style="color:#64748b;">That advantage is real, but it is not universal: it is strongest in the standard setting and much smaller under paraphrase.</span>
             </div>
         </div>
         """
@@ -993,10 +996,10 @@ def _(COLORS, comp_has_data, comp_transformer_enter_delta, comp_setting_keys, co
             gap_chart_x_comp,
             comp_transformer_enter_delta,
             color=gap_chart_colors_comp,
-            edgecolor="#1e1e2e",
+            edgecolor="#ffffff",
             linewidth=2,
         )
-        gap_chart_ax_comp.axhline(y=0, color="#a6adc8", linewidth=1.5)
+        gap_chart_ax_comp.axhline(y=0, color="#94a3b8", linewidth=1.5)
         gap_chart_ax_comp.set_xticks(gap_chart_x_comp)
         gap_chart_ax_comp.set_xticklabels(
             [
@@ -1109,7 +1112,7 @@ def _(COLORS, comp_has_data, comp_profile_means, comp_profile_stds, np, plt, mo)
             capsize=6,
             label="MLP",
             color=COLORS["mlp"],
-            edgecolor="#1e1e2e",
+            edgecolor="#ffffff",
             linewidth=2,
         )
         profile_transformer_bars_comp = profile_ax_comp.bar(
@@ -1120,7 +1123,7 @@ def _(COLORS, comp_has_data, comp_profile_means, comp_profile_stds, np, plt, mo)
             capsize=6,
             label="Transformer",
             color=COLORS["transformer"],
-            edgecolor="#1e1e2e",
+            edgecolor="#ffffff",
             linewidth=2,
         )
         profile_gru_bars_comp = profile_ax_comp.bar(
@@ -1131,7 +1134,7 @@ def _(COLORS, comp_has_data, comp_profile_means, comp_profile_stds, np, plt, mo)
             capsize=6,
             label="GRU",
             color=COLORS["gru"],
-            edgecolor="#1e1e2e",
+            edgecolor="#ffffff",
             linewidth=2,
         )
         profile_ax_comp.set_ylabel("Accuracy", fontsize=12, fontweight="bold")
@@ -1141,7 +1144,7 @@ def _(COLORS, comp_has_data, comp_profile_means, comp_profile_stds, np, plt, mo)
         profile_ax_comp.set_title("Mean accuracy across the four saved settings", fontsize=14, fontweight="bold", pad=12)
         profile_ax_comp.spines["top"].set_visible(False)
         profile_ax_comp.spines["right"].set_visible(False)
-        profile_ax_comp.axhline(y=0.5, color="#45475a", linestyle="--", alpha=0.5)
+        profile_ax_comp.axhline(y=0.5, color="#d1d5db", linestyle="--", alpha=0.5)
         profile_ax_comp.legend(loc="upper right")
 
         for profile_bar_comp in list(profile_mlp_bars_comp) + list(profile_transformer_bars_comp) + list(profile_gru_bars_comp):
@@ -1216,8 +1219,8 @@ def _(COLORS, comp_has_data, comp_model_labels, comp_profile_means, comp_profile
         tradeoff_ax_comp.spines["top"].set_visible(False)
         tradeoff_ax_comp.spines["right"].set_visible(False)
         tradeoff_ax_comp.grid(alpha=0.25)
-        tradeoff_ax_comp.axvline(0.5, color="#45475a", linestyle="--", linewidth=1)
-        tradeoff_ax_comp.axhline(0.5, color="#45475a", linestyle="--", linewidth=1)
+        tradeoff_ax_comp.axvline(0.5, color="#d1d5db", linestyle="--", linewidth=1)
+        tradeoff_ax_comp.axhline(0.5, color="#d1d5db", linestyle="--", linewidth=1)
 
         for tradeoff_model_key_comp, tradeoff_color_key_comp in [
             ("mlp", "mlp"),
@@ -1243,7 +1246,7 @@ def _(COLORS, comp_has_data, comp_model_labels, comp_profile_means, comp_profile
                 xerr=comp_profile_stds[tradeoff_model_key_comp]["typing"],
                 yerr=comp_profile_stds[tradeoff_model_key_comp]["enter"],
                 fmt="none",
-                ecolor="#cdd6f4",
+                ecolor="#94a3b8",
                 elinewidth=1,
                 alpha=0.7,
                 zorder=2,
@@ -1260,8 +1263,8 @@ def _(COLORS, comp_has_data, comp_model_labels, comp_profile_means, comp_profile
                 zorder=4,
             )
 
-        tradeoff_ax_comp.text(0.97, 0.06, "easy mechanics →", ha="right", color="#7dd3fc", fontsize=9)
-        tradeoff_ax_comp.text(0.05, 0.95, "↑ harder semantic success", va="top", color="#f9a8d4", fontsize=9)
+        tradeoff_ax_comp.text(0.97, 0.06, "easy mechanics →", ha="right", color="#2563eb", fontsize=9)
+        tradeoff_ax_comp.text(0.05, 0.95, "↑ harder semantic success", va="top", color="#be185d", fontsize=9)
         tradeoff_fig_comp.tight_layout()
         tradeoff_output_comp = tradeoff_fig_comp
 
@@ -1350,23 +1353,22 @@ Here is the clearest evidence-backed story this toy benchmark supports.
 @app.cell(hide_code=True)
 def _(COLORS, mo):
     takeaway_html_comp = f"""
-    <div style="background: linear-gradient(135deg, {COLORS['bg_dark']} 0%, #2d1b4e 50%, {COLORS['bg_dark']} 100%); border-radius: 24px; padding: 40px; margin: 24px 0; position: relative; overflow: hidden;">
-        <div style="position:absolute; inset:0; background: radial-gradient(circle at 20% 80%, rgba(34,197,94,0.10) 0%, transparent 45%), radial-gradient(circle at 80% 20%, rgba(168,85,247,0.10) 0%, transparent 45%);"></div>
-        <div style="position:relative; z-index:1; display:grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
-            <div style="text-align:center; padding: 18px;">
+    <div style="background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%); border-radius: 24px; padding: 34px; margin: 24px 0; border: 1px solid #e5e7eb; box-shadow: 0 16px 40px rgba(15,23,42,0.06);">
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+            <div style="padding: 8px 0;">
                 <div style="font-size:0.82em; letter-spacing:0.06em; text-transform:uppercase; color:{COLORS['mlp']}; margin-bottom:12px;">01</div>
-                <div style="color:{COLORS['mlp']}; font-weight:800; font-size:1.2em; margin-bottom:8px;">Best overall model</div>
-                <div style="color:#a6adc8; font-size:0.95em;">The MLP is still the strongest baseline on the main benchmark metric.</div>
+                <div style="color:{COLORS['mlp']}; font-weight:800; font-size:1.15em; margin-bottom:8px;">Best overall model</div>
+                <div style="color:#475569; line-height:1.75;">The MLP is still the strongest baseline on the main benchmark metric.</div>
             </div>
-            <div style="text-align:center; padding: 18px;">
+            <div style="padding: 8px 0;">
                 <div style="font-size:0.82em; letter-spacing:0.06em; text-transform:uppercase; color:{COLORS['transformer']}; margin-bottom:12px;">02</div>
-                <div style="color:{COLORS['transformer']}; font-weight:800; font-size:1.2em; margin-bottom:8px;">Most interesting contrast</div>
-                <div style="color:#a6adc8; font-size:0.95em;">The Transformer is relatively stronger on meaning-heavy Enter steps.</div>
+                <div style="color:{COLORS['transformer']}; font-weight:800; font-size:1.15em; margin-bottom:8px;">Most interesting contrast</div>
+                <div style="color:#475569; line-height:1.75;">The Transformer is relatively stronger on meaning-heavy Enter steps.</div>
             </div>
-            <div style="text-align:center; padding: 18px;">
+            <div style="padding: 8px 0;">
                 <div style="font-size:0.82em; letter-spacing:0.06em; text-transform:uppercase; color:{COLORS['wrong']}; margin-bottom:12px;">03</div>
-                <div style="color:{COLORS['wrong']}; font-weight:800; font-size:1.2em; margin-bottom:8px;">Important limit</div>
-                <div style="color:#a6adc8; font-size:0.95em;">That Transformer gain shrinks sharply under paraphrase, so the toy task still does not show deep semantic generalization.</div>
+                <div style="color:{COLORS['wrong']}; font-weight:800; font-size:1.15em; margin-bottom:8px;">Important limit</div>
+                <div style="color:#475569; line-height:1.75;">That Transformer gain shrinks sharply under paraphrase, so the toy task still does not show deep semantic generalization.</div>
             </div>
         </div>
     </div>

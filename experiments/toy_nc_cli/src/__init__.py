@@ -1,2 +1,4 @@
-from .toy_terminal import *
-from .cell_model import *
+"""Toy neural-computer benchmark package.
+
+Keep package import side effects minimal; import submodules directly when needed.
+"""

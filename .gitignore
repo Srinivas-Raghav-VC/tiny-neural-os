@@ -9,7 +9,8 @@ __pycache__/
 venv/
 
 # marimo local state
-notebooks/__marimo__/session/
+notebooks/__marimo__/session/*
+!notebooks/__marimo__/session/neural_computers_competition.py.json
 
 # Local agent / tool state
 .pi/
