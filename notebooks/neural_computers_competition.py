@@ -15,7 +15,7 @@ Presentation-focused and export-friendly: it uses precomputed experiment results
 import marimo
 
 __generated_with = "0.23.1"
-app = marimo.App(width="wide")
+app = marimo.App(width="medium")
 
 
 @app.cell(hide_code=True)
@@ -112,12 +112,8 @@ def _(mo):
         font-weight: 700;
         font-size: 0.9em;
     }
-    @keyframes pulse-glow {
-        0%, 100% { box-shadow: 0 0 20px rgba(137, 180, 250, 0.18); }
-        50% { box-shadow: 0 0 40px rgba(137, 180, 250, 0.32); }
-    }
-    .nc-hero-glow {
-        animation: pulse-glow 3s ease-in-out infinite;
+    .nc-hero {
+        box-shadow: 0 12px 36px rgba(0,0,0,0.22);
     }
     </style>
     """
@@ -131,7 +127,7 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     hero_html_comp = """
-    <div class="nc-hero-glow" style="background: linear-gradient(135deg, #1e1e2e 0%, #2d1b4e 50%, #1e1e2e 100%); border-radius: 24px; padding: 56px 48px; text-align: center; margin-bottom: 32px; position: relative; overflow: hidden;">
+    <div class="nc-hero" style="background: linear-gradient(135deg, #1e1e2e 0%, #2d1b4e 50%, #1e1e2e 100%); border-radius: 24px; padding: 56px 48px; text-align: center; margin-bottom: 32px; position: relative; overflow: hidden;">
         <div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.10) 0%, transparent 50%), radial-gradient(circle at 70% 70%, rgba(59, 130, 246, 0.10) 0%, transparent 50%); pointer-events: none;"></div>
         <div style="position: relative; z-index: 1;">
             <div style="display:inline-block; margin-bottom: 18px; padding: 8px 14px; border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; color: #cdd6f4; font-size: 0.9em; letter-spacing: 0.04em; text-transform: uppercase; background: rgba(255,255,255,0.04);">Interactive research notebook</div>
@@ -946,7 +942,7 @@ def _(COLORS, comp_has_data, comp_mlp_overall_win_count, comp_profile_means, com
     else:
         discovery_output_html_comp = f"""
         <div style="background: linear-gradient(135deg, {COLORS['transformer']}15 0%, {COLORS['mlp']}15 100%); border-radius: 20px; padding: 28px; margin: 24px 0; border: 2px solid {COLORS['transformer']}44;">
-            <h3 style="color:#cdd6f4; text-align:center; margin-bottom:20px;">The surprising result</h3>
+            <h3 style="color:#cdd6f4; text-align:center; margin-bottom:20px;">Main comparison outcome</h3>
             <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 18px;">
                 <div class="nc-card" style="border-left:4px solid {COLORS['mlp']}; text-align:center;">
                     <div style="font-size:0.95em; color:#a6adc8; margin-bottom:6px;">Mean overall changed-cell accuracy</div>
@@ -1046,7 +1042,7 @@ def _(mo):
 def _(mo):
     profile_heading_comp = mo.md(
         """
-## What each architecture is good at
+## Model profile
 
 Below is a more honest summary than a single winner badge: mean performance across the four settings.
 """
@@ -1185,7 +1181,7 @@ But changed-cell accuracy tells the real story, because it ignores the easy unch
 def _(mo):
     tradeoff_heading_comp = mo.md(
         """
-## Mechanics vs meaning map
+## Mechanics vs. meaning
 
 This view compresses the whole story into one picture:
 - farther right = better at typing/mechanics
@@ -1334,7 +1330,7 @@ def _(comp_has_data, comp_table_rows_html, mo):
 def _(mo):
     takeaway_heading_comp = mo.md(
         """
-## Competition takeaway
+## Takeaway
 
 Here is the clearest evidence-backed story this toy benchmark supports.
 """
