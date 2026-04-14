@@ -1,0 +1,25 @@
+{
+  "determinism_ok": true,
+  "roundtrip_ok": true,
+  "copy_overfit": {
+    "char_acc": 0.9695086178221288,
+    "changed_acc": 0.21130018269105955,
+    "exact_line_acc": 0.8789870448179271
+  },
+  "learned_overfit": {
+    "char_acc": 0.9725599527310924,
+    "changed_acc": 0.9104650990384562,
+    "exact_line_acc": 0.8539147408963585
+  },
+  "heldout_copy": {
+    "char_acc": 0.9695833158263305,
+    "changed_acc": 0.20943199792779624,
+    "exact_line_acc": 0.8755700280112045
+  },
+  "heldout": {
+    "char_acc": 0.9698293008870215,
+    "changed_acc": 0.8124952714791648,
+    "exact_line_acc": 0.8265220588235294
+  },
+  "heldout_arithmetic_exact_match": 0.0
+}

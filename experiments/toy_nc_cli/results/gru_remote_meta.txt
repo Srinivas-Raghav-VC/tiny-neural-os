@@ -1,0 +1,11 @@
+timestamp=2026-04-14T19:14:08+05:30
+hostname=2f399cd77c0c
+whoami=srinivasr
+python=Python 3.12.12
+uv=uv 0.11.4 (x86_64-unknown-linux-gnu)
+tmux=tmux 3.0a
+torch=2.6.0+cu124
+cuda_available=True
+cuda_version=12.4
+device_count=1
+device_name=NVIDIA A100-PCIE-40GB MIG 7g.40gb

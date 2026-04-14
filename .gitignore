@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv
+.venv/
+venv/
+
+# marimo local state
+notebooks/__marimo__/session/
+
+# Local agent / tool state
+.pi/
+context.md
+third_party/
+notes/subagent-sessions/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo

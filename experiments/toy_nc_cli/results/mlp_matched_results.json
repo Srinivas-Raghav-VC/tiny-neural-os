@@ -1,0 +1,118 @@
+{
+  "standard_family": {
+    "condition_level": "family",
+    "metrics": {
+      "char_acc": 0.9779308903460374,
+      "changed_acc": 0.6806138784496804,
+      "exact_line_acc": 0.8951147256882548,
+      "arithmetic_exact_match": 0.0
+    },
+    "action_breakdown": {
+      "type_char": {
+        "char_acc": 0.98246169090271,
+        "changed_acc": 0.6558773517608643,
+        "exact_line_acc": 0.9172061681747437,
+        "count": 587.0
+      },
+      "enter": {
+        "char_acc": 0.9295554161071777,
+        "changed_acc": 0.4840928316116333,
+        "exact_line_acc": 0.7777778506278992,
+        "count": 45.0
+      },
+      "idle": {
+        "char_acc": 0.9194445013999939,
+        "changed_acc": 1.0,
+        "exact_line_acc": 0.7333333492279053,
+        "count": 45.0
+      }
+    }
+  },
+  "standard_command": {
+    "condition_level": "command",
+    "metrics": {
+      "char_acc": 0.9840741074611665,
+      "changed_acc": 0.9472335571659944,
+      "exact_line_acc": 0.9031727796168973,
+      "arithmetic_exact_match": 0.0
+    },
+    "action_breakdown": {
+      "type_char": {
+        "char_acc": 0.9938133358955383,
+        "changed_acc": 0.9981883764266968,
+        "exact_line_acc": 0.9384058117866516,
+        "count": 552.0
+      },
+      "enter": {
+        "char_acc": 0.9265555739402771,
+        "changed_acc": 0.4858878254890442,
+        "exact_line_acc": 0.7711110711097717,
+        "count": 45.0
+      },
+      "idle": {
+        "char_acc": 0.9221665859222412,
+        "changed_acc": 1.0,
+        "exact_line_acc": 0.7088889479637146,
+        "count": 45.0
+      }
+    }
+  },
+  "paraphrase_family": {
+    "condition_level": "family",
+    "metrics": {
+      "char_acc": 0.974938519225872,
+      "changed_acc": 0.6369317947940543,
+      "exact_line_acc": 0.8975377472201,
+      "arithmetic_exact_match": NaN
+    },
+    "action_breakdown": {
+      "type_char": {
+        "char_acc": 0.9760585427284241,
+        "changed_acc": 0.6096552014350891,
+        "exact_line_acc": 0.9091033935546875,
+        "count": 725.0
+      },
+      "enter": {
+        "char_acc": 0.9192777872085571,
+        "changed_acc": 0.5175694227218628,
+        "exact_line_acc": 0.8200000524520874,
+        "count": 45.0
+      },
+      "idle": {
+        "char_acc": 0.918666660785675,
+        "changed_acc": 1.0,
+        "exact_line_acc": 0.7400000095367432,
+        "count": 45.0
+      }
+    }
+  },
+  "paraphrase_command": {
+    "condition_level": "command",
+    "metrics": {
+      "char_acc": 0.9493651558653764,
+      "changed_acc": 0.7164889996934747,
+      "exact_line_acc": 0.738716772769714,
+      "arithmetic_exact_match": NaN
+    },
+    "action_breakdown": {
+      "type_char": {
+        "char_acc": 0.9528942704200745,
+        "changed_acc": 0.7183288335800171,
+        "exact_line_acc": 0.7433962225914001,
+        "count": 742.0
+      },
+      "enter": {
+        "char_acc": 0.8112221360206604,
+        "changed_acc": 0.41325899958610535,
+        "exact_line_acc": 0.42888885736465454,
+        "count": 45.0
+      },
+      "idle": {
+        "char_acc": 0.8282222151756287,
+        "changed_acc": 1.0,
+        "exact_line_acc": 0.41777774691581726,
+        "count": 45.0
+      }
+    }
+  }
+}

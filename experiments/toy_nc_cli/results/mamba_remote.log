@@ -1,0 +1,45 @@
+[run_experiment] start name=standard_family condition=family seed=301
+Traceback (most recent call last):
+  File "/home/srinivasr/alpha-proj/experiments/toy_nc_cli/src/mamba_model.py", line 60, in get_mamba_block
+    from mamba_ssm import Mamba2
+  File "/home/srinivasr/alpha-proj/.venv/lib/python3.12/site-packages/mamba_ssm/__init__.py", line 3, in <module>
+    from mamba_ssm.ops.selective_scan_interface import selective_scan_fn, mamba_inner_fn
+  File "/home/srinivasr/alpha-proj/.venv/lib/python3.12/site-packages/mamba_ssm/ops/selective_scan_interface.py", line 20, in <module>
+    import selective_scan_cuda
+ImportError: /usr/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found (required by /home/srinivasr/alpha-proj/.venv/lib/python3.12/site-packages/selective_scan_cuda.cpython-312-x86_64-linux-gnu.so)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/srinivasr/alpha-proj/experiments/toy_nc_cli/src/mamba_model.py", line 64, in get_mamba_block
+    from mamba_ssm import Mamba
+  File "/home/srinivasr/alpha-proj/.venv/lib/python3.12/site-packages/mamba_ssm/__init__.py", line 3, in <module>
+    from mamba_ssm.ops.selective_scan_interface import selective_scan_fn, mamba_inner_fn
+  File "/home/srinivasr/alpha-proj/.venv/lib/python3.12/site-packages/mamba_ssm/ops/selective_scan_interface.py", line 20, in <module>
+    import selective_scan_cuda
+ImportError: /usr/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found (required by /home/srinivasr/alpha-proj/.venv/lib/python3.12/site-packages/selective_scan_cuda.cpython-312-x86_64-linux-gnu.so)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/srinivasr/alpha-proj/experiments/toy_nc_cli/scripts/train_mamba_baseline.py", line 105, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/srinivasr/alpha-proj/experiments/toy_nc_cli/scripts/train_mamba_baseline.py", line 79, in main
+    "standard_family": run_experiment("standard_family", "family", seed=301),
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/srinivasr/alpha-proj/experiments/toy_nc_cli/scripts/train_mamba_baseline.py", line 45, in run_experiment
+    model = MambaBaseline(
+            ^^^^^^^^^^^^^^
+  File "/home/srinivasr/alpha-proj/experiments/toy_nc_cli/src/mamba_model.py", line 144, in __init__
+    self.model = ScreenMamba(rows, cols, len(self.family_to_idx), config, condition_level).to(config.device)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/srinivasr/alpha-proj/experiments/toy_nc_cli/src/mamba_model.py", line 111, in __init__
+    self.layers = nn.ModuleList([ResidualMambaBlock(config.hidden_dim, config) for _ in range(config.num_layers)])
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/srinivasr/alpha-proj/experiments/toy_nc_cli/src/mamba_model.py", line 74, in __init__
+    self.mamba = get_mamba_block(d_model, cfg)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/srinivasr/alpha-proj/experiments/toy_nc_cli/src/mamba_model.py", line 67, in get_mamba_block
+    raise RuntimeError("mamba_ssm is not installed or importable") from e
+RuntimeError: mamba_ssm is not installed or importable
