@@ -11,6 +11,7 @@ if [ -f .venv/bin/activate ]; then
   source .venv/bin/activate
 fi
 
+marimo check --fix notebooks/neural_computers_competition.py
 marimo check notebooks/neural_computers_competition.py
 marimo export html notebooks/neural_computers_competition.py \
   --no-include-code \

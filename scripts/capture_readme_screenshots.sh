@@ -22,25 +22,29 @@ if [ -f .venv/bin/activate ]; then
   source .venv/bin/activate
 fi
 
+marimo check --fix notebooks/neural_computers_competition.py >/dev/null
+marimo check notebooks/neural_computers_competition.py >/dev/null
+
 marimo export html notebooks/neural_computers_competition.py \
   --no-include-code \
   -o outputs/rendered/neural_computers_competition.html \
   -f >/dev/null
 
-TMP_TALL="assets/.readme_tmp_tall.png"
+TMP_TALL="$(mktemp /tmp/readme_tall.XXXXXX.png)"
+TARGET_URL="file://$(pwd)/outputs/rendered/neural_computers_competition.html"
 
 "$CHROMIUM_BIN" \
   --headless \
   --disable-gpu \
   --no-sandbox \
   --run-all-compositor-stages-before-draw \
-  --virtual-time-budget=5000 \
-  --window-size=1440,7000 \
+  --virtual-time-budget=7000 \
+  --window-size=1440,8200 \
   --screenshot="$TMP_TALL" \
-  "file://$ROOT_DIR/outputs/rendered/neural_computers_competition.html" >/dev/null 2>&1
+  "$TARGET_URL"
 
 convert "$TMP_TALL" -crop 1440x1200+0+180 +repage assets/readme_hero.png
-convert "$TMP_TALL" -crop 1440x2300+0+4300 +repage assets/readme_showdown.png
+convert "$TMP_TALL" -crop 1440x2300+0+2000 +repage assets/readme_showdown.png
 rm -f "$TMP_TALL"
 
 echo "Wrote assets/readme_hero.png"

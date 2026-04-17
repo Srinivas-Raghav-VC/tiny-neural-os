@@ -1,100 +1,97 @@
 # tiny-neural-os
 
-A toy, visualization-first marimo project inspired by **Neural Computers** (Zhuge et al., 2026).
+[![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/Srinivas-Raghav-VC/tiny-neural-os/blob/main/notebooks/neural_computers_competition.py)
 
-> Can a model learn how a computer works just by watching the screen change?
+A research notebook that turns the **Neural Computers** idea into a small, reproducible terminal benchmark:
 
-This repo explores that question with a tiny terminal benchmark, matched baseline experiments, and a competition-ready interactive notebook.
+> Given the current terminal screen, can a model predict the next one?
 
-## Project snapshot
+It is built for **public sharing on molab** and for a competition-style review workflow.
+The notebook now leans into marimo's reactive model instead of acting like a static report.
+
+## What feels interactive now
+
+- a live toy-terminal playground with step-by-step transitions
+- side-by-side before/after terminal views
+- a benchmark explorer with linked metric + setting controls
+- tabbed analysis views for overview, pair comparison, and raw evidence
+- interactive matplotlib viewers through `mo.mpl.interactive(...)`
+
+## Snapshot
 
 <p align="center">
-  <img src="assets/readme_hero.png" alt="Notebook hero section" width="100%" />
+  <img src="assets/readme_hero.png" alt="Notebook hero" width="100%" />
 </p>
 
 <p align="center">
-  <img src="assets/readme_showdown.png" alt="Architecture showdown and benchmark summary" width="100%" />
+  <img src="assets/readme_showdown.png" alt="Benchmark charts" width="100%" />
 </p>
 
-## Recommended artifact
+## Open this first
 
-If you only open one thing, start here:
+- **Notebook source (canonical):** `notebooks/neural_computers_competition.py`
+- **Open in molab:**
+  `https://molab.marimo.io/github/Srinivas-Raghav-VC/tiny-neural-os/blob/main/notebooks/neural_computers_competition.py`
+- **Rendered HTML export:** `outputs/rendered/neural_computers_competition.html`
 
-- **Notebook source:** `notebooks/neural_computers_competition.py`
-- **Rendered HTML:** `outputs/rendered/neural_computers_competition.html`
+## Evidence-backed story in one view
 
-## What the notebook now includes
+From the saved benchmark runs in this repository:
 
-- a polished hero / pitch section
-- a plain-English benchmark protocol section
-- a lightweight live toy-terminal walkthrough
-- side-by-side baseline comparison charts
-- a Transformer-vs-MLP Enter gain chart
-- a mechanics-vs-meaning tradeoff map
-- an exact benchmark table
-- a competition-style takeaway section grounded in saved results
+- **MLP** is strongest on mean overall changed-cell accuracy.
+- **Transformer** is the interesting contrast model: relatively stronger on Enter-heavy steps.
+- **GRU** is a negative result in this setup.
+- Transformer’s Enter edge is **not universal**: it shrinks strongly under paraphrase settings.
 
-## Main result
+Primary benchmark file used by the notebook:
+- `experiments/toy_nc_cli/results/baseline_comparison.csv`
 
-On the saved toy benchmark runs in this repo:
-
-- **MLP** is the strongest overall baseline on changed-cell accuracy.
-- **Transformer** is the most interesting contrast model because it is relatively stronger on **Enter** steps.
-- **GRU** is a negative result on this benchmark.
-
-Important limitation:
-
-- The Transformer advantage on Enter is **not universal**. It is strongest in the standard setting and shrinks sharply under paraphrase.
-
-## Repo layout
-
-- `notebooks/`
-  - marimo notebooks
-  - canonical competition notebook: `neural_computers_competition.py`
-  - earlier exploratory notebook variants kept for reference
-- `experiments/toy_nc_cli/`
-  - toy terminal environment
-  - baselines and experiment scripts
-  - saved results used by the notebook
-- `notes/`
-  - experiment memos, audits, and verification notes
-- `outputs/`
-  - rendered notebook HTML and handoff docs
-- `assets/`
-  - README screenshots generated from the notebook
-- `scripts/`
-  - export and screenshot helper scripts
-
-## Run the notebook
+## Quickstart
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-marimo edit notebooks/neural_computers_competition.py
+marimo edit --watch notebooks/neural_computers_competition.py
 ```
 
-## Export the notebook
+## Rebuild public artifacts (end-to-end)
 
 ```bash
-bash scripts/export_competition_notebook.sh
+bash scripts/refresh_public_artifacts.sh
 ```
 
-## Refresh the README screenshots
+This runs:
+1. `marimo check --fix`
+2. session regeneration for the competition notebook
+3. HTML export
+4. README screenshot refresh
 
-```bash
-bash scripts/capture_readme_screenshots.sh
-```
+## Agent / editor scaffolding
 
-## Benchmark files used by the notebook
+For marimo-aware coding-agent workflows, the repo now includes:
 
-- `experiments/toy_nc_cli/results/mlp_matched_results.json`
-- `experiments/toy_nc_cli/results/transformer_results.json`
-- `experiments/toy_nc_cli/results/gru_results.json`
-- `experiments/toy_nc_cli/results/baseline_comparison.csv`
+- `CLAUDE.md` — project-specific marimo guidance
+- `.claude/commands/marimo-check.md` — a slash-command starter for `marimo check --fix`
+
+## Repository layout
+
+- `notebooks/`
+  - canonical notebook: `neural_computers_competition.py`
+  - older exploratory variants kept as references
+- `experiments/toy_nc_cli/`
+  - toy terminal benchmark code, training scripts, and saved result files
+- `outputs/`
+  - rendered notebook and project writeups
+- `assets/`
+  - README screenshot assets
+- `scripts/`
+  - notebook export/session/screenshot automation
 
 ## Sources
 
 - Neural Computers (2026): https://arxiv.org/abs/2604.06425
-- Mamba-3 (2026): https://arxiv.org/abs/2603.15569
-- Mamba repository: https://github.com/state-spaces/mamba
+- marimo gallery: https://marimo.io/gallery/
+- marimo gallery examples repository: https://github.com/marimo-team/gallery-examples
+- marimo examples repository: https://github.com/marimo-team/examples
+- marimo skills repository: https://github.com/marimo-team/skills

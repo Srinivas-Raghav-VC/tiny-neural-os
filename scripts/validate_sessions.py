@@ -4,11 +4,15 @@
 #     "marimo",
 # ]
 # ///
-"""Validate marimo session JSON files for notebooks/.
+"""Validate marimo session JSON files.
+
+Defaults to the canonical competition notebook. You can also pass explicit
+files/directories/globs to validate additional notebooks.
 """
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import os
@@ -22,7 +26,7 @@ from marimo._utils.files import expand_file_patterns
 from marimo._utils.marimo_path import MarimoPath
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-NOTEBOOKS_DIR = REPO_ROOT / "notebooks"
+DEFAULT_NOTEBOOKS = [REPO_ROOT / "notebooks" / "neural_computers_competition.py"]
 ERROR_PATTERNS = ["ModuleNotFoundError"]
 
 
@@ -37,9 +41,12 @@ def get_session_path(notebook_path: Path) -> Path:
     return notebook_path.parent / "__marimo__" / "session" / f"{notebook_path.name}.json"
 
 
-def find_notebooks() -> list[Path]:
-    all_files = expand_file_patterns((str(NOTEBOOKS_DIR),))
-    return [Path(f) for f in all_files if is_marimo_app(str(f))]
+def find_notebooks(paths: list[str]) -> list[Path]:
+    if not paths:
+        return [p for p in DEFAULT_NOTEBOOKS if p.exists()]
+
+    expanded = expand_file_patterns(tuple(paths))
+    return [Path(p) for p in expanded if is_marimo_app(str(p))]
 
 
 def hash_code(code: str) -> str:
@@ -47,7 +54,15 @@ def hash_code(code: str) -> str:
 
 
 def main() -> None:
-    notebooks = find_notebooks()
+    parser = argparse.ArgumentParser(description="Validate marimo session JSON files.")
+    parser.add_argument(
+        "paths",
+        nargs="*",
+        help="Notebook file(s), directories, or glob patterns. Defaults to canonical notebook.",
+    )
+    args = parser.parse_args()
+
+    notebooks = find_notebooks(args.paths)
     if not notebooks:
         print("No marimo notebooks found.")
         return
@@ -56,6 +71,7 @@ def main() -> None:
     for nb in notebooks:
         rel_nb = nb.relative_to(REPO_ROOT)
         session = get_session_path(nb)
+
         if not session.exists():
             report_error(str(rel_nb), f"Missing session JSON: {session.relative_to(REPO_ROOT)}")
             ok = False
@@ -71,20 +87,24 @@ def main() -> None:
         file_router = AppFileRouter.from_filename(marimo_path)
         file_key = file_router.get_unique_file_key()
         assert file_key is not None
+
         file_manager = file_router.get_file_manager(file_key)
         cell_manager = file_manager.app.cell_manager
+
         notebook_hashes = Counter(
             hash_code(cell_manager.get_cell_data(cid).code)
             for cid in cell_manager.cell_ids()
         )
         session_hashes = Counter(c["code_hash"] for c in json.loads(content).get("cells", []))
+
         if notebook_hashes != session_hashes:
             report_error(str(rel_nb), f"Session JSON is out of sync for {rel_nb}")
             ok = False
 
     if not ok:
         sys.exit(1)
-    print("All session files are present and up to date.")
+
+    print("All validated session files are present and up to date.")
 
 
 if __name__ == "__main__":
