@@ -20,6 +20,7 @@ app = marimo.App(width="full")
 
 with app.setup:
     import html
+    import json
     import sys
     from pathlib import Path
 
@@ -123,6 +124,12 @@ with app.setup:
             model_key: float(subset.loc[model_key, metric_key])
             for model_key in ["mlp", "transformer", "gru"]
         }
+
+    def trim_code(text: str, max_lines: int = 160) -> str:
+        lines = text.splitlines()
+        if len(lines) <= max_lines:
+            return text
+        return "\n".join(lines[:max_lines] + ["", "# ... truncated for notebook display ..."])
 
 
 @app.cell(hide_code=True)
@@ -1062,7 +1069,164 @@ def _(
 @app.cell(hide_code=True)
 def _():
     mo.md("""
-    ## 4) Takeaways
+    ## 4) Reproducibility and extension
+
+    This notebook stays CPU-friendly by loading saved benchmark artifacts, but the training and evaluation code is part of the project and is surfaced below.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _():
+    repro_paths = {
+        "smoke_script": ROOT / "experiments" / "toy_nc_cli" / "scripts" / "smoke_test.py",
+        "studies": ROOT / "experiments" / "toy_nc_cli" / "src" / "studies.py",
+        "transformer_train": ROOT / "experiments" / "toy_nc_cli" / "scripts" / "train_transformer_baseline.py",
+        "gru_train": ROOT / "experiments" / "toy_nc_cli" / "scripts" / "train_gru_baseline.py",
+        "remote_transformer": ROOT / "experiments" / "toy_nc_cli" / "scripts" / "remote_transformer_uv.sh",
+        "remote_gru": ROOT / "experiments" / "toy_nc_cli" / "scripts" / "remote_gru_uv.sh",
+        "smoke_result": ROOT / "experiments" / "toy_nc_cli" / "results" / "smoke_test.json",
+    }
+    repro_code = {
+        name: path.read_text(encoding="utf-8")
+        for name, path in repro_paths.items()
+        if path.exists() and path.suffix in {".py", ".sh"}
+    }
+    smoke_result = (
+        json.loads(repro_paths["smoke_result"].read_text(encoding="utf-8"))
+        if repro_paths["smoke_result"].exists()
+        else {}
+    )
+    return repro_code, repro_paths, smoke_result
+
+
+@app.cell(hide_code=True)
+def _():
+    smoke_run_button = mo.ui.run_button(label="Run local smoke test")
+    smoke_run_button
+    return (smoke_run_button,)
+
+
+@app.cell(hide_code=True)
+def _(repro_code, repro_paths, smoke_result, smoke_run_button):
+    smoke_view = mo.md("")
+
+    _smoke_output = ""
+    _latest_smoke = smoke_result
+
+    if smoke_run_button.value:
+        import subprocess
+
+        _proc = subprocess.run(
+            ["python3", "experiments/toy_nc_cli/scripts/smoke_test.py"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        _smoke_output = (_proc.stdout or "") + ("\n" + _proc.stderr if _proc.stderr else "")
+        if repro_paths["smoke_result"].exists():
+            _latest_smoke = json.loads(repro_paths["smoke_result"].read_text(encoding="utf-8"))
+
+    if _latest_smoke:
+        _stats = mo.hstack(
+            [
+                mo.stat(label="Determinism", value="OK" if _latest_smoke["determinism_ok"] else "FAIL"),
+                mo.stat(label="Encode/decode", value="OK" if _latest_smoke["roundtrip_ok"] else "FAIL"),
+                mo.stat(
+                    label="Held-out changed-cell acc",
+                    value=pct(float(_latest_smoke["heldout"]["changed_acc"])),
+                    caption="small local smoke run",
+                ),
+                mo.stat(
+                    label="Copy baseline on held-out",
+                    value=pct(float(_latest_smoke["heldout_copy"]["changed_acc"])),
+                    caption="why learning matters",
+                ),
+            ],
+            widths="equal",
+            gap=1,
+        )
+        _story = mo.callout(
+            mo.md(
+                f"The smoke test is a **CPU-scale sanity check**, not the canonical competition benchmark. On this saved run, the learned local model reaches **{pct(float(_latest_smoke['heldout']['changed_acc']))}** changed-cell accuracy on held-out episodes, versus **{pct(float(_latest_smoke['heldout_copy']['changed_acc']))}** for the copy baseline."
+            ),
+            kind="info",
+        )
+        _stdout_block = mo.accordion(
+            {
+                "Show smoke-test code and latest stdout": mo.vstack(
+                    [
+                        mo.md(f"```python\n{repro_code['smoke_script']}\n```") if 'smoke_script' in repro_code else mo.md(""),
+                        mo.md(f"```text\n{_smoke_output.strip() or json.dumps(_latest_smoke, indent=2)}\n```") if (_smoke_output or _latest_smoke) else mo.md(""),
+                    ]
+                )
+            },
+            multiple=True,
+        )
+        smoke_view = mo.vstack([smoke_run_button, _stats, _story, _stdout_block], gap=1)
+    else:
+        smoke_view = mo.vstack(
+            [
+                smoke_run_button,
+                mo.callout(mo.md("No smoke-test artifact is available yet."), kind="warn"),
+            ]
+        )
+    return (smoke_view,)
+
+
+@app.cell(hide_code=True)
+def _():
+    extension_note_view = mo.callout(
+        mo.md(
+            """
+    **Why this is more than a plain summary:** the notebook adds its own extension to the paper inspiration — a toy terminal benchmark that splits local mechanics from meaning-heavy Enter steps, includes paraphrase settings, and compares matched baselines. That extension provides insight even without reproducing the full paper.
+    """
+        ),
+        kind="success",
+    )
+    return (extension_note_view,)
+
+
+@app.cell(hide_code=True)
+def _(repro_code):
+    code_tabs_view = mo.ui.tabs(
+        {
+            "MLP study code": mo.md(f"```python\n{trim_code(repro_code['studies'])}\n```") if 'studies' in repro_code else mo.md(""),
+            "Transformer training": mo.md(f"```python\n{trim_code(repro_code['transformer_train'])}\n```") if 'transformer_train' in repro_code else mo.md(""),
+            "GRU training": mo.md(f"```python\n{trim_code(repro_code['gru_train'])}\n```") if 'gru_train' in repro_code else mo.md(""),
+            "Remote GPU launchers": mo.vstack(
+                [
+                    mo.md(f"```bash\n{repro_code['remote_transformer']}\n```") if 'remote_transformer' in repro_code else mo.md(""),
+                    mo.md(f"```bash\n{repro_code['remote_gru']}\n```") if 'remote_gru' in repro_code else mo.md(""),
+                ]
+            ),
+        },
+        value="MLP study code",
+        lazy=True,
+    )
+    return (code_tabs_view,)
+
+
+@app.cell(hide_code=True)
+def _(code_tabs_view, extension_note_view, smoke_view):
+    repro_tabs_view = mo.ui.tabs(
+        {
+            "Scope + extension": extension_note_view,
+            "Local smoke test": smoke_view,
+            "Training code": code_tabs_view,
+        },
+        value="Scope + extension",
+        lazy=True,
+    )
+    repro_tabs_view
+    return
+
+
+@app.cell(hide_code=True)
+def _():
+    mo.md("""
+    ## 5) Takeaways
 
     1. **Best overall baseline:** MLP remains strongest on changed-cell accuracy.
     2. **Most interesting contrast:** Transformer is relatively stronger on Enter-heavy updates.
