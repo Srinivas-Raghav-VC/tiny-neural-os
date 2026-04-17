@@ -8,10 +8,10 @@
 #   "scikit-learn",
 # ]
 # ///
-"""Tiny Neural OS: A marimo notebook inspired by Neural Computers (arXiv:2604.06425).
+"""Tiny Neural OS — A marimo notebook bringing Neural Computers to life.
 
-This notebook implements a toy terminal benchmark from scratch, trains baseline models,
-and visualizes results with Altair — all in one reproducible, interactive artifact.
+This notebook implements the core idea from arXiv:2604.06425, building an
+interactive toy terminal benchmark with full model training and Altair visualizations.
 """
 
 import marimo
@@ -30,22 +30,51 @@ def _():
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""
-    # Tiny Neural OS
+    # 🖥️ Tiny Neural OS
 
-    **Can a model learn how a computer works from screen transitions alone?**
+    <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #e2e8f0; padding: 28px 32px; border-radius: 16px; margin: 20px 0;">
+        <div style="font-size: 1.4rem; font-weight: 600; margin-bottom: 12px;">
+            Can a neural network learn how a computer works just by watching the screen?
+        </div>
+        <div style="color: #94a3b8; font-size: 1.05rem; line-height: 1.7;">
+            This notebook implements the core idea from <a href="https://arxiv.org/abs/2604.06425" style="color: #93c5fd;">Neural Computers (2024)</a>:
+            train a model to predict the next screen state from the current one, then measure whether it learns
+            <strong style="color: #fbbf24;">mechanical typing</strong> (easy) versus <strong style="color: #f87171;">semantic command execution</strong> (hard).
+        </div>
+    </div>
+    """)
+    return
 
-    This notebook implements the core idea from [Neural Computers (arXiv:2604.06425)](https://arxiv.org/abs/2604.06425):
-    predict the next terminal screen from the current one, then measure whether the model
-    captures mechanical typing versus semantic command execution.
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    ## 📄 Paper TLDR
+
+    **Neural Computers** proposes training models on raw screen pixel/character transitions instead of
+    structured APIs. The key insight:
+
+    | Aspect | Description |
+    |--------|-------------|
+    | **Input** | Current screen state (terminal characters) |
+    | **Output** | Next screen state after one action |
+    | **Easy regime** | Typing a character → local patch changes |
+    | **Hard regime** | Pressing Enter → output depends on command *meaning* |
+
+    The paper argues this "screen prediction" task naturally separates mechanical understanding
+    (cursor moves, characters appear) from semantic understanding (what does `pwd` actually do?).
 
     ---
 
-    ## What we build
+    ## 🔬 What This Notebook Does
 
-    1. **Toy terminal simulator** — generates command episodes with typed input and output
-    2. **MLP baseline** — per-cell classifier using local patch features
-    3. **Evaluation protocol** — separates typing accuracy from Enter accuracy
-    4. **Interactive visualizations** — explore the benchmark with Altair charts
+    We build a **toy version** of this idea:
+
+    1. **Simulate a terminal** — generate episodes of typing commands and seeing output
+    2. **Train an MLP baseline** — predict each cell's next character from local context
+    3. **Measure the split** — compare accuracy on typing steps vs. Enter steps
+    4. **Benchmark 3 architectures** — MLP, Transformer, GRU under matched conditions
+    5. **Visualize everything** — interactive Altair charts showing where models succeed and fail
     """)
     return
 
@@ -55,10 +84,18 @@ def _(mo):
     mo.md("""
     ---
 
-    ## 1. The Toy Terminal
+    # 1️⃣ The Toy Terminal
 
-    We simulate a simple terminal where a user types commands and sees output.
-    Each episode is a sequence of frames (screen states) and actions (keystrokes).
+    First, we need a terminal simulator. It maintains a **screen buffer** (2D array of characters)
+    and processes **actions** (type a character, press backspace, press Enter).
+
+    ### Why this matters
+
+    - Each action produces a screen transition: `(screen_before, action) → screen_after`
+    - **Typing** changes 1-2 cells (the typed char + cursor move)
+    - **Enter** can change many cells (command output, new prompt)
+
+    This asymmetry is the core of the benchmark.
     """)
     return
 
@@ -72,55 +109,16 @@ def _():
 
     import numpy as np
     import pandas as pd
+    import altair as alt
 
-    # Character vocabulary for the terminal
+    # === Terminal vocabulary ===
     PRINTABLE = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
     CURSOR = "█"
     PAD = "·"
     VOCAB = list(PRINTABLE) + [CURSOR, PAD]
     CHAR_TO_IDX = {ch: i for i, ch in enumerate(VOCAB)}
 
-    @dataclass
-    class TerminalConfig:
-        rows: int = 10
-        cols: int = 40
-        context_width: int = 32
-        patch_radius: int = 1
-
-    @dataclass
-    class Action:
-        kind: Literal["type_char", "backspace", "enter", "idle"]
-        typed_char: str = ""
-        command_family: str = ""
-        command_text: str = ""
-        hint_text: str = ""
-        noisy: bool = False
-
-    @dataclass
-    class Episode:
-        family: str
-        command_text: str
-        frames: list[np.ndarray] = field(default_factory=list)
-        actions: list[Action] = field(default_factory=list)
-
-    return (
-        Action,
-        CHAR_TO_IDX,
-        CURSOR,
-        Episode,
-        PAD,
-        TerminalConfig,
-        VOCAB,
-        html_lib,
-        np,
-        pd,
-        random,
-    )
-
-
-@app.cell
-def _(CURSOR, PAD, np):
-    # Command variants for the toy terminal
+    # === Command library ===
     COMMAND_VARIANTS = {
         "pwd": [
             {"cmd": "pwd", "output": "/home/researcher"},
@@ -135,92 +133,96 @@ def _(CURSOR, PAD, np):
         "date": [
             {"cmd": "date +%Y", "output": "2026"},
             {"cmd": "date '+%Y'", "output": "2026"},
-            {"cmd": "echo $(date +%Y)", "output": "2026"},
         ],
         "echo_home": [
             {"cmd": "echo $HOME", "output": "/home/researcher"},
             {"cmd": "printenv HOME", "output": "/home/researcher"},
-            {"cmd": "echo ~", "output": "/home/researcher"},
         ],
         "python_arith": [
             {"cmd": "python -c 'print(7*8)'", "output": "56"},
             {"cmd": "python3 -c 'print(7*8)'", "output": "56"},
-            {"cmd": "python -c \"print(7*8)\"", "output": "56"},
         ],
     }
-
     FAMILIES = list(COMMAND_VARIANTS.keys())
-
-    def make_blank_screen(rows: int, cols: int) -> np.ndarray:
-        screen = np.full((rows, cols), PAD, dtype="<U1")
-        screen[0, 2] = CURSOR
-        screen[0, 0] = "$"
-        screen[0, 1] = " "
-        return screen
-
-    def find_cursor(screen: np.ndarray) -> tuple[int, int]:
-        positions = np.argwhere(screen == CURSOR)
-        if len(positions) == 0:
-            return (0, 2)
-        return tuple(positions[0])
-
-    return COMMAND_VARIANTS, FAMILIES, find_cursor, make_blank_screen
+    return (
+        CHAR_TO_IDX,
+        COMMAND_VARIANTS,
+        CURSOR,
+        FAMILIES,
+        PAD,
+        VOCAB,
+        alt,
+        dataclass,
+        field,
+        html_lib,
+        np,
+        pd,
+        random,
+    )
 
 
 @app.cell
-def _(
-    Action,
-    COMMAND_VARIANTS,
-    CURSOR,
-    Episode,
-    PAD,
-    TerminalConfig,
-    find_cursor,
-    make_blank_screen,
-    random,
-):
+def _(CURSOR, PAD, dataclass, field, np, random):
+    @dataclass
+    class TerminalConfig:
+        rows: int = 10
+        cols: int = 40
+
+    @dataclass
+    class Action:
+        kind: str  # "type_char", "enter", "backspace", "idle"
+        typed_char: str = ""
+        command_family: str = ""
+        command_text: str = ""
+
+    @dataclass
+    class Episode:
+        family: str
+        command_text: str
+        frames: list = field(default_factory=list)
+        actions: list = field(default_factory=list)
+
+    def make_blank_screen(rows: int, cols: int) -> np.ndarray:
+        """Create initial terminal screen with prompt."""
+        screen = np.full((rows, cols), PAD, dtype="<U1")
+        screen[0, 0] = "$"
+        screen[0, 1] = " "
+        screen[0, 2] = CURSOR
+        return screen
+
+    def find_cursor(screen: np.ndarray) -> tuple[int, int]:
+        """Find cursor position in screen."""
+        pos = np.argwhere(screen == CURSOR)
+        return tuple(pos[0]) if len(pos) > 0 else (0, 2)
+
     def generate_episode(
         config: TerminalConfig,
         family: str,
-        variant_idx: int = 0,
-        noisy: bool = False,
-        rng: random.Random | None = None,
+        variant: dict,
+        rng: random.Random,
     ) -> Episode:
-        """Generate a single terminal episode."""
-        rng = rng or random.Random()
-        variant = COMMAND_VARIANTS[family][variant_idx % len(COMMAND_VARIANTS[family])]
+        """Generate one terminal episode."""
         cmd_text = variant["cmd"]
         output_text = variant["output"]
-
-        if noisy and rng.random() < 0.3:
-            output_text = output_text + rng.choice(["!", "?", "..."])
 
         screen = make_blank_screen(config.rows, config.cols)
         frames = [screen.copy()]
         actions = []
 
-        # Type the command
+        # Type each character
         for ch in cmd_text:
             r, c = find_cursor(screen)
             screen[r, c] = ch
             if c + 1 < config.cols:
                 screen[r, c + 1] = CURSOR
-            actions.append(
-                Action(
-                    kind="type_char",
-                    typed_char=ch,
-                    command_family=family,
-                    command_text=cmd_text,
-                    noisy=noisy,
-                )
-            )
+            actions.append(Action("type_char", ch, family, cmd_text))
             frames.append(screen.copy())
 
         # Press Enter
         r, c = find_cursor(screen)
         screen[r, c] = PAD
 
-        # Write output on next line
+        # Write output
         out_row = r + 1
         if out_row < config.rows:
             for i, ch in enumerate(output_text[: config.cols]):
@@ -233,223 +235,92 @@ def _(
             screen[prompt_row, 1] = " "
             screen[prompt_row, 2] = CURSOR
 
-        actions.append(
-            Action(
-                kind="enter",
-                typed_char="",
-                command_family=family,
-                command_text=cmd_text,
-                noisy=noisy,
-            )
-        )
+        actions.append(Action("enter", "", family, cmd_text))
         frames.append(screen.copy())
 
-        return Episode(family=family, command_text=cmd_text, frames=frames, actions=actions)
+        return Episode(family, cmd_text, frames, actions)
 
-    def generate_episodes(
-        n: int,
-        config: TerminalConfig,
-        families: list[str] | None = None,
-        noisy: bool = False,
-        seed: int = 42,
-    ) -> list[Episode]:
-        """Generate multiple episodes."""
-        rng = random.Random(seed)
-        families = families or list(COMMAND_VARIANTS.keys())
-        episodes = []
-        for _ in range(n):
-            family = rng.choice(families)
-            variant_idx = rng.randint(0, len(COMMAND_VARIANTS[family]) - 1)
-            ep = generate_episode(config, family, variant_idx, noisy, rng)
-            episodes.append(ep)
-        return episodes
-
-    return (generate_episodes,)
+    return TerminalConfig, generate_episode
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""
-    ### Interactive Terminal Playground
+    ### 🎮 Interactive Terminal Playground
 
-    Use the controls below to explore how the terminal evolves step by step.
-    Notice how **typing** changes only a small local patch, while **Enter** triggers
-    a larger, meaning-dependent screen update.
+    Use the controls below to **step through** a terminal episode frame by frame.
+
+    - **Yellow highlights** show cells that changed from the previous frame
+    - Notice how **typing** changes just 1-2 cells, but **Enter** changes many
     """)
     return
 
 
 @app.cell
 def _(COMMAND_VARIANTS, mo):
-    family_picker = mo.ui.dropdown(
+    family_select = mo.ui.dropdown(
         options=list(COMMAND_VARIANTS.keys()),
         value="whoami",
         label="Command family",
     )
-    variant_picker = mo.ui.dropdown(
-        options=["Variant 1", "Variant 2", "Variant 3"],
-        value="Variant 1",
+    variant_select = mo.ui.dropdown(
+        options=["Phrasing 1", "Phrasing 2"],
+        value="Phrasing 1",
         label="Phrasing variant",
     )
-    noise_toggle = mo.ui.switch(value=False, label="Add noise")
-    return family_picker, noise_toggle, variant_picker
+    return family_select, variant_select
 
 
 @app.cell
-def _(family_picker, noise_toggle, variant_picker):
-    _variant_idx = int(variant_picker.value.split()[-1]) - 1
+def _(
+    COMMAND_VARIANTS,
+    TerminalConfig,
+    family_select,
+    generate_episode,
+    random,
+    variant_select,
+):
+    # Generate episode based on selections
+    _family = family_select.value
+    _variant_idx = int(variant_select.value.split()[-1]) - 1
+    _variant_idx = min(_variant_idx, len(COMMAND_VARIANTS[_family]) - 1)
+    _variant = COMMAND_VARIANTS[_family][_variant_idx]
 
-    from dataclasses import dataclass as _dc
+    _config = TerminalConfig(rows=10, cols=40)
+    _rng = random.Random(42)
 
-    @_dc
-    class _TC:
-        rows: int = 10
-        cols: int = 40
-        context_width: int = 32
-        patch_radius: int = 1
-
-    _config = _TC()
-
-    # Import locally to avoid cell dependency issues
-    import random as _random
-
-    _rng = _random.Random(42 + _variant_idx)
-
-    # Inline episode generation for this cell
-    from typing import Literal as _Lit
-
-    _CURSOR = "█"
-    _PAD = "·"
-
-    _VARIANTS = {
-        "pwd": [
-            {"cmd": "pwd", "output": "/home/researcher"},
-            {"cmd": "echo $PWD", "output": "/home/researcher"},
-            {"cmd": "printenv PWD", "output": "/home/researcher"},
-        ],
-        "whoami": [
-            {"cmd": "whoami", "output": "researcher"},
-            {"cmd": "echo $USER", "output": "researcher"},
-            {"cmd": "id -un", "output": "researcher"},
-        ],
-        "date": [
-            {"cmd": "date +%Y", "output": "2026"},
-            {"cmd": "date '+%Y'", "output": "2026"},
-            {"cmd": "echo $(date +%Y)", "output": "2026"},
-        ],
-        "echo_home": [
-            {"cmd": "echo $HOME", "output": "/home/researcher"},
-            {"cmd": "printenv HOME", "output": "/home/researcher"},
-            {"cmd": "echo ~", "output": "/home/researcher"},
-        ],
-        "python_arith": [
-            {"cmd": "python -c 'print(7*8)'", "output": "56"},
-            {"cmd": "python3 -c 'print(7*8)'", "output": "56"},
-            {"cmd": "python -c \"print(7*8)\"", "output": "56"},
-        ],
-    }
-
-    import numpy as _np
-
-    def _make_screen(rows, cols):
-        s = _np.full((rows, cols), _PAD, dtype="<U1")
-        s[0, 0], s[0, 1], s[0, 2] = "$", " ", _CURSOR
-        return s
-
-    def _find_cursor(s):
-        pos = _np.argwhere(s == _CURSOR)
-        return tuple(pos[0]) if len(pos) > 0 else (0, 2)
-
-    _family = family_picker.value
-    _var = _VARIANTS[_family][_variant_idx % len(_VARIANTS[_family])]
-    _cmd, _out = _var["cmd"], _var["output"]
-
-    if noise_toggle.value and _rng.random() < 0.3:
-        _out = _out + _rng.choice(["!", "?", "..."])
-
-    _screen = _make_screen(_config.rows, _config.cols)
-    _frames = [_screen.copy()]
-    _action_labels = ["Start"]
-
-    for _ch in _cmd:
-        _r, _c = _find_cursor(_screen)
-        _screen[_r, _c] = _ch
-        if _c + 1 < _config.cols:
-            _screen[_r, _c + 1] = _CURSOR
-        _frames.append(_screen.copy())
-        _action_labels.append(f"Type '{_ch}'")
-
-    _r, _c = _find_cursor(_screen)
-    _screen[_r, _c] = _PAD
-    _out_row = _r + 1
-    if _out_row < _config.rows:
-        for _i, _ch in enumerate(_out[: _config.cols]):
-            _screen[_out_row, _i] = _ch
-    _prompt_row = _out_row + 1
-    if _prompt_row < _config.rows:
-        _screen[_prompt_row, 0], _screen[_prompt_row, 1], _screen[_prompt_row, 2] = "$", " ", _CURSOR
-    _frames.append(_screen.copy())
-    _action_labels.append("Enter")
-
-    playground_frames = _frames
-    playground_actions = _action_labels
-    playground_cmd = _cmd
-    playground_max_step = len(_frames) - 1
-    return (
-        playground_actions,
-        playground_cmd,
-        playground_frames,
-        playground_max_step,
-    )
+    demo_episode = generate_episode(_config, _family, _variant, _rng)
+    demo_max_step = len(demo_episode.actions)
+    return demo_episode, demo_max_step
 
 
 @app.cell
-def _(mo, playground_max_step):
+def _(demo_max_step, mo):
     step_slider = mo.ui.slider(
         start=0,
-        stop=playground_max_step,
+        stop=demo_max_step,
         value=0,
-        label="Step",
+        label="Step through episode",
         full_width=True,
     )
     return (step_slider,)
 
 
 @app.cell
-def _(family_picker, mo, noise_toggle, step_slider, variant_picker):
+def _(family_select, mo, step_slider, variant_select):
     mo.hstack(
-        [family_picker, variant_picker, noise_toggle, step_slider],
-        widths=[1.5, 1.5, 1, 3],
-        gap=1,
+        [family_select, variant_select, step_slider],
+        widths=[1.5, 1.5, 4],
+        gap=1.5,
         align="end",
     )
     return
 
 
-@app.cell
-def _(
-    html_lib,
-    mo,
-    np,
-    playground_actions,
-    playground_cmd,
-    playground_frames,
-    step_slider,
-):
-    _step = step_slider.value
-    _frame = playground_frames[_step]
-    _action = playground_actions[_step]
-
-    if _step > 0:
-        _prev = playground_frames[_step - 1]
-        _changed = _frame != _prev
-    else:
-        _changed = np.zeros_like(_frame, dtype=bool)
-
-    _changed_count = int(_changed.sum())
-    _is_enter = _action == "Enter"
-
-    def _render_terminal(frame, changed_mask, title):
+@app.cell(hide_code=True)
+def _(demo_episode, html_lib, mo, np, step_slider):
+    def render_terminal(frame, changed_mask, title, subtitle=""):
+        """Render terminal frame as styled HTML."""
         rows_html = []
         for r in range(frame.shape[0]):
             cells = []
@@ -457,49 +328,82 @@ def _(
                 ch = frame[r, c]
                 safe = "&nbsp;" if ch == " " else html_lib.escape(ch)
                 if changed_mask[r, c]:
-                    cells.append(f"<span style='background:#fef3c7;color:#111;border-radius:2px;padding:0 1px'>{safe}</span>")
+                    cells.append(
+                        f"<span style='background:#fef08a;color:#1e293b;border-radius:2px;padding:0 2px;font-weight:600'>{safe}</span>"
+                    )
                 else:
                     cells.append(f"<span>{safe}</span>")
             rows_html.append("".join(cells))
+
+        subtitle_html = f"<div style='color:#64748b;font-size:0.75rem;margin-top:4px'>{subtitle}</div>" if subtitle else ""
+
         return f"""
-        <div style='border:1px solid #1e293b;border-radius:10px;background:#0f172a;color:#e2e8f0;
-                    padding:12px;font-family:monospace;line-height:1.3;font-size:0.85rem'>
-            <div style='color:#93c5fd;font-size:0.7rem;text-transform:uppercase;margin-bottom:8px'>{title}</div>
+        <div style='border:1px solid #334155;border-radius:12px;background:#0f172a;color:#e2e8f0;
+                    padding:16px;font-family:ui-monospace,monospace;line-height:1.35;font-size:0.9rem;
+                    box-shadow:0 4px 12px rgba(0,0,0,0.15)'>
+            <div style='color:#93c5fd;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:600'>{title}</div>
             {'<br>'.join(rows_html)}
+            {subtitle_html}
         </div>
         """
 
-    _empty_mask = np.zeros_like(_frame, dtype=bool)
-    _before_html = _render_terminal(playground_frames[max(0, _step - 1)], _empty_mask, "Before")
-    _after_html = _render_terminal(_frame, _changed, "After")
+    _step = step_slider.value
+    _frame = demo_episode.frames[_step]
 
-    _terminal_view = mo.hstack(
+    if _step > 0:
+        _prev_frame = demo_episode.frames[_step - 1]
+        _changed = _frame != _prev_frame
+        _action = demo_episode.actions[_step - 1]
+        _action_desc = f"Type '{_action.typed_char}'" if _action.kind == "type_char" else "Press Enter"
+        _is_enter = _action.kind == "enter"
+    else:
+        _prev_frame = _frame
+        _changed = np.zeros_like(_frame, dtype=bool)
+        _action_desc = "Initial state"
+        _is_enter = False
+
+    _changed_count = int(_changed.sum())
+    _empty_mask = np.zeros_like(_frame, dtype=bool)
+
+    _before_html = render_terminal(_prev_frame, _empty_mask, "Before", "Previous frame")
+    _after_html = render_terminal(_frame, _changed, "After", f"{_changed_count} cells changed")
+
+    terminal_display = mo.hstack(
         [mo.Html(_before_html), mo.Html(_after_html)],
         widths=[1, 1],
-        gap=1,
+        gap=1.5,
     )
 
-    _action_kind = "Meaning-heavy (Enter)" if _is_enter else "Local mechanics"
-    _stats_view = mo.hstack(
+    # Stats row
+    _action_kind = "🔴 Semantic (Enter)" if _is_enter else "🟢 Mechanical (typing)"
+    terminal_stats = mo.hstack(
         [
-            mo.stat(label="Action", value=_action, caption=_action_kind),
-            mo.stat(label="Changed cells", value=str(_changed_count)),
-            mo.stat(label="Command", value=playground_cmd),
+            mo.stat(label="Action", value=_action_desc, caption=_action_kind),
+            mo.stat(label="Cells changed", value=str(_changed_count), caption="Yellow highlights above"),
+            mo.stat(label="Step", value=f"{_step} / {len(demo_episode.actions)}", caption=f"Command: {demo_episode.command_text}"),
         ],
         widths="equal",
         gap=1,
     )
 
-    _callout = mo.callout(
-        mo.md(
-            f"**{_action}** changes **{_changed_count}** cells. "
-            + ("This is the **harder** regime: the model needs semantic understanding."
-               if _is_enter else "This is **easy**: local patch prediction suffices.")
-        ),
-        kind="warn" if _is_enter else "info",
-    )
+    # Insight callout
+    if _is_enter:
+        terminal_insight = mo.callout(
+            mo.md(f"**Enter** triggered **{_changed_count} cell changes**. This is the **hard regime**: the model must understand what `{demo_episode.command_text}` *means* to predict the output."),
+            kind="warn",
+        )
+    elif _step > 0:
+        terminal_insight = mo.callout(
+            mo.md(f"**Typing '{demo_episode.actions[_step-1].typed_char}'** changed only **{_changed_count} cells**. This is the **easy regime**: a local patch model can handle this."),
+            kind="success",
+        )
+    else:
+        terminal_insight = mo.callout(
+            mo.md("**Step 0** is the initial screen. Use the slider to watch the terminal evolve."),
+            kind="info",
+        )
 
-    mo.vstack([_terminal_view, _stats_view, _callout], gap=1)
+    mo.vstack([terminal_display, terminal_stats, terminal_insight], gap=1)
     return
 
 
@@ -508,13 +412,105 @@ def _(mo):
     mo.md("""
     ---
 
-    ## 2. The MLP Baseline
+    # 2️⃣ The Prediction Task
 
-    We train a simple MLP classifier that predicts each cell's next character
-    based on a local patch around it plus the action being taken.
+    Now we define the actual ML task:
 
-    **Key insight:** This model is strong on typing (local changes) but weaker on Enter
-    (where distant cells change based on command semantics).
+    > **Given:** current screen + action being taken
+    > **Predict:** next screen state
+
+    ### Why per-cell prediction?
+
+    We predict each cell independently using **local features**:
+    - A 3×3 patch around the cell
+    - The cell's (row, col) position
+    - The action type and typed character
+
+    This is a strong baseline because **most cells don't change** between frames,
+    and those that do often follow local patterns (cursor moves right, character appears).
+
+    The challenge: when the user presses **Enter**, the model needs *global* understanding
+    of the command to predict the output.
+    """)
+    return
+
+
+@app.cell(hide_code=True)
+def _(alt, mo, pd):
+    # Visualize the task asymmetry
+    _asymmetry_data = pd.DataFrame([
+        {"Action": "Type 'w'", "Cells Changed": 2, "Type": "Typing"},
+        {"Action": "Type 'h'", "Cells Changed": 2, "Type": "Typing"},
+        {"Action": "Type 'o'", "Cells Changed": 2, "Type": "Typing"},
+        {"Action": "Type 'a'", "Cells Changed": 2, "Type": "Typing"},
+        {"Action": "Type 'm'", "Cells Changed": 2, "Type": "Typing"},
+        {"Action": "Type 'i'", "Cells Changed": 2, "Type": "Typing"},
+        {"Action": "Enter", "Cells Changed": 35, "Type": "Enter"},
+    ])
+
+    _bars = alt.Chart(_asymmetry_data).mark_bar(cornerRadiusTopRight=6, cornerRadiusTopLeft=6).encode(
+        x=alt.X("Action:N", sort=None, axis=alt.Axis(labelAngle=0, title=None)),
+        y=alt.Y("Cells Changed:Q", title="Cells changed"),
+        color=alt.Color(
+            "Type:N",
+            scale=alt.Scale(domain=["Typing", "Enter"], range=["#22c55e", "#ef4444"]),
+            legend=alt.Legend(title="Action type", orient="top"),
+        ),
+        tooltip=["Action", "Cells Changed", "Type"],
+    )
+
+    _text = alt.Chart(_asymmetry_data).mark_text(dy=-8, fontWeight="bold", fontSize=11).encode(
+        x=alt.X("Action:N", sort=None),
+        y=alt.Y("Cells Changed:Q"),
+        text="Cells Changed:Q",
+        color=alt.value("#1e293b"),
+    )
+
+    _chart = (_bars + _text).properties(
+        width=500,
+        height=280,
+        title=alt.TitleParams("The Asymmetry: Typing vs Enter", fontSize=16, anchor="start"),
+    ).configure_axis(
+        gridColor="#e5e7eb",
+        domainColor="#cbd5e1",
+    ).configure_view(strokeWidth=0)
+
+    mo.vstack([
+        mo.md("### 📊 Visualizing the Asymmetry"),
+        mo.md("For a typical `whoami` command, here's how many cells change at each step:"),
+        mo.ui.altair_chart(_chart, chart_selection=False),
+        mo.callout(mo.md("**Key insight:** Enter changes ~18× more cells than typing. This is why we measure them separately."), kind="info"),
+    ], gap=1)
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    ---
+
+    # 3️⃣ Model Implementation
+
+    We implement an **MLP baseline** that predicts each cell's next character.
+
+    ### Architecture
+
+    ```
+    Input features (per cell):
+    ├── 3×3 patch one-hot encoding (9 × 98 = 882 dims)
+    ├── Normalized (row, col) position (2 dims)
+    ├── Action type one-hot (4 dims)
+    ├── Command family one-hot (5 dims)
+    └── Typed character one-hot (98 dims)
+
+    MLP: Input → 128 hidden → 98 output (softmax over vocab)
+    ```
+
+    ### Training
+
+    - **Positive samples:** cells that actually changed
+    - **Negative samples:** randomly sampled unchanged cells (8:1 ratio)
+    - **Loss:** cross-entropy over character vocabulary
     """)
     return
 
@@ -524,126 +520,118 @@ def _(CHAR_TO_IDX, FAMILIES, PAD, VOCAB, np):
     from sklearn.neural_network import MLPClassifier
 
     ACTION_KINDS = ["idle", "type_char", "backspace", "enter"]
-    ACTION_TO_IDX = {name: i for i, name in enumerate(ACTION_KINDS)}
-    FAMILY_TO_IDX = {name: i for i, name in enumerate(FAMILIES)}
+    ACTION_TO_IDX = {k: i for i, k in enumerate(ACTION_KINDS)}
+    FAMILY_TO_IDX = {k: i for i, k in enumerate(FAMILIES)}
 
     def one_hot(idx: int, size: int) -> np.ndarray:
         arr = np.zeros(size, dtype=np.float32)
         arr[idx] = 1.0
         return arr
 
-    def patch_encoding(frame: np.ndarray, row: int, col: int, radius: int) -> np.ndarray:
+    def extract_patch(frame: np.ndarray, row: int, col: int, radius: int = 1) -> np.ndarray:
+        """Extract and encode a patch around (row, col)."""
         rows, cols = frame.shape
-        patch_chars = []
-        for rr in range(row - radius, row + radius + 1):
-            for cc in range(col - radius, col + radius + 1):
-                if 0 <= rr < rows and 0 <= cc < cols:
-                    patch_chars.append(frame[rr, cc])
+        chars = []
+        for dr in range(-radius, radius + 1):
+            for dc in range(-radius, radius + 1):
+                r, c = row + dr, col + dc
+                if 0 <= r < rows and 0 <= c < cols:
+                    chars.append(frame[r, c])
                 else:
-                    patch_chars.append(PAD)
-        out = np.zeros((len(patch_chars), len(VOCAB)), dtype=np.float32)
-        for i, ch in enumerate(patch_chars):
+                    chars.append(PAD)
+        # One-hot encode
+        out = np.zeros((len(chars), len(VOCAB)), dtype=np.float32)
+        for i, ch in enumerate(chars):
             out[i, CHAR_TO_IDX.get(ch, CHAR_TO_IDX[PAD])] = 1.0
         return out.ravel()
 
-    def encode_cell(frame, row, col, action, config, condition_level):
-        """Encode features for a single cell."""
+    def encode_cell(frame, row, col, action, condition="command"):
+        """Encode features for predicting one cell."""
         parts = [
-            patch_encoding(frame, row, col, config.patch_radius),
+            extract_patch(frame, row, col, radius=1),
             np.array([row / max(frame.shape[0] - 1, 1), col / max(frame.shape[1] - 1, 1)], dtype=np.float32),
         ]
-        if condition_level in ("family", "command"):
+        if condition in ("family", "command"):
             parts.append(one_hot(ACTION_TO_IDX.get(action.kind, 0), len(ACTION_KINDS)))
             parts.append(one_hot(FAMILY_TO_IDX.get(action.command_family, 0), len(FAMILIES)))
-        if condition_level == "command":
-            typed_idx = CHAR_TO_IDX.get(action.typed_char, CHAR_TO_IDX[PAD])
-            parts.append(one_hot(typed_idx, len(VOCAB)))
+        if condition == "command":
+            parts.append(one_hot(CHAR_TO_IDX.get(action.typed_char, CHAR_TO_IDX[PAD]), len(VOCAB)))
         return np.concatenate(parts)
 
-    def build_dataset(episodes, config, condition_level, negative_ratio=8, seed=42):
+    def build_dataset(episodes, condition="command", neg_ratio=8, seed=42):
         """Build training dataset from episodes."""
         rng = np.random.RandomState(seed)
-        X_list, y_list = [], []
+        X, y = [], []
 
         for ep in episodes:
             for t, action in enumerate(ep.actions):
-                before = ep.frames[t]
-                after = ep.frames[t + 1]
-                changed_mask = before != after
+                before, after = ep.frames[t], ep.frames[t + 1]
+                changed = before != after
 
-                for r in range(before.shape[0]):
-                    for c in range(before.shape[1]):
-                        if changed_mask[r, c]:
-                            feat = encode_cell(before, r, c, action, config, condition_level)
-                            label = CHAR_TO_IDX.get(after[r, c], CHAR_TO_IDX[PAD])
-                            X_list.append(feat)
-                            y_list.append(label)
+                # Positive samples (changed cells)
+                for r, c in np.argwhere(changed):
+                    X.append(encode_cell(before, r, c, action, condition))
+                    y.append(CHAR_TO_IDX.get(after[r, c], CHAR_TO_IDX[PAD]))
 
-                # Sample negatives
-                unchanged = np.argwhere(~changed_mask)
-                n_neg = min(len(unchanged), int(changed_mask.sum()) * negative_ratio)
+                # Negative samples (unchanged cells)
+                unchanged = np.argwhere(~changed)
+                n_pos = changed.sum()
+                n_neg = min(len(unchanged), n_pos * neg_ratio)
                 if n_neg > 0:
-                    neg_idx = rng.choice(len(unchanged), size=n_neg, replace=False)
-                    for idx in neg_idx:
+                    idxs = rng.choice(len(unchanged), size=n_neg, replace=False)
+                    for idx in idxs:
                         r, c = unchanged[idx]
-                        feat = encode_cell(before, r, c, action, config, condition_level)
-                        label = CHAR_TO_IDX.get(after[r, c], CHAR_TO_IDX[PAD])
-                        X_list.append(feat)
-                        y_list.append(label)
+                        X.append(encode_cell(before, r, c, action, condition))
+                        y.append(CHAR_TO_IDX.get(after[r, c], CHAR_TO_IDX[PAD]))
 
-        return np.array(X_list, dtype=np.float32), np.array(y_list)
+        return np.array(X, dtype=np.float32), np.array(y)
 
     return MLPClassifier, build_dataset, encode_cell
 
 
 @app.cell
 def _(CHAR_TO_IDX, PAD, encode_cell, np):
-    def evaluate_model(model, episodes, config, condition_level):
-        """Evaluate model on episodes, returning per-action-type accuracy."""
-        results = {"typing": {"correct": 0, "total": 0}, "enter": {"correct": 0, "total": 0}}
+    def evaluate_model(model, episodes, condition="command"):
+        """Evaluate model, returning typing vs enter accuracy."""
+        results = {
+            "typing": {"correct": 0, "total": 0},
+            "enter": {"correct": 0, "total": 0},
+        }
 
         for ep in episodes:
             for t, action in enumerate(ep.actions):
-                before = ep.frames[t]
-                after = ep.frames[t + 1]
-                changed_mask = before != after
+                before, after = ep.frames[t], ep.frames[t + 1]
+                changed = before != after
                 action_type = "enter" if action.kind == "enter" else "typing"
 
-                if not changed_mask.any():
+                if not changed.any():
                     continue
 
-                # Predict
-                features = []
-                positions = []
-                for r in range(before.shape[0]):
-                    for c in range(before.shape[1]):
-                        if changed_mask[r, c]:
-                            features.append(encode_cell(before, r, c, action, config, condition_level))
-                            positions.append((r, c))
-
-                if not features:
+                positions = list(np.argwhere(changed))
+                if not positions:
                     continue
 
-                preds = model.predict(np.array(features))
-                for (r, c), pred_idx in zip(positions, preds):
-                    true_char = after[r, c]
-                    true_idx = CHAR_TO_IDX.get(true_char, CHAR_TO_IDX[PAD])
+                X = np.array([encode_cell(before, r, c, action, condition) for r, c in positions])
+                preds = model.predict(X)
+
+                for (r, c), pred in zip(positions, preds):
+                    true_idx = CHAR_TO_IDX.get(after[r, c], CHAR_TO_IDX[PAD])
                     results[action_type]["total"] += 1
-                    if pred_idx == true_idx:
+                    if pred == true_idx:
                         results[action_type]["correct"] += 1
 
         typing_acc = results["typing"]["correct"] / max(results["typing"]["total"], 1)
         enter_acc = results["enter"]["correct"] / max(results["enter"]["total"], 1)
-        total_correct = results["typing"]["correct"] + results["enter"]["correct"]
-        total_all = results["typing"]["total"] + results["enter"]["total"]
-        overall_acc = total_correct / max(total_all, 1)
+        overall = (results["typing"]["correct"] + results["enter"]["correct"]) / max(
+            results["typing"]["total"] + results["enter"]["total"], 1
+        )
 
         return {
+            "overall_acc": overall,
             "typing_acc": typing_acc,
             "enter_acc": enter_acc,
-            "overall_acc": overall_acc,
-            "typing_total": results["typing"]["total"],
-            "enter_total": results["enter"]["total"],
+            "typing_n": results["typing"]["total"],
+            "enter_n": results["enter"]["total"],
         }
 
     return (evaluate_model,)
@@ -652,121 +640,140 @@ def _(CHAR_TO_IDX, PAD, encode_cell, np):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""
-    ### Training the baseline
+    ---
 
-    We train on a small dataset and evaluate on held-out episodes.
-    The training happens live when you run this cell.
+    # 4️⃣ Train It Yourself
+
+    Click the button below to train the MLP baseline on generated episodes.
+    You can adjust the training size and conditioning level.
+
+    | Conditioning | What the model sees |
+    |--------------|---------------------|
+    | `none` | Only local patch + position |
+    | `family` | + action type + command family (e.g., "pwd") |
+    | `command` | + exact typed character |
     """)
     return
 
 
 @app.cell
 def _(mo):
-    train_button = mo.ui.run_button(label="Train MLP Baseline", kind="success")
-    train_size_slider = mo.ui.slider(start=20, stop=100, step=10, value=40, label="Training episodes")
-    condition_picker = mo.ui.dropdown(
+    train_btn = mo.ui.run_button(label="🚀 Train Model", kind="success")
+    train_n_slider = mo.ui.slider(start=20, stop=80, step=10, value=40, label="Training episodes")
+    condition_select = mo.ui.dropdown(
         options=["none", "family", "command"],
         value="command",
-        label="Conditioning level",
+        label="Conditioning",
     )
-    mo.hstack([train_button, train_size_slider, condition_picker], gap=1, align="end")
-    return condition_picker, train_button, train_size_slider
+    mo.hstack([train_btn, train_n_slider, condition_select], gap=1.5, align="end")
+    return condition_select, train_btn, train_n_slider
 
 
 @app.cell
 def _(
+    COMMAND_VARIANTS,
     MLPClassifier,
     TerminalConfig,
     build_dataset,
-    condition_picker,
+    condition_select,
     evaluate_model,
-    generate_episodes,
+    generate_episode,
     mo,
-    train_button,
-    train_size_slider,
+    random,
+    train_btn,
+    train_n_slider,
 ):
-    training_result = None
+    training_results = None
 
-    if train_button.value:
-        _config = TerminalConfig(rows=10, cols=40, context_width=32, patch_radius=1)
-        _condition = condition_picker.value
-        _n_train = train_size_slider.value
+    if train_btn.value:
+        _config = TerminalConfig(rows=10, cols=40)
+        _condition = condition_select.value
+        _n_train = train_n_slider.value
         _n_test = 20
 
-        with mo.status.spinner("Generating episodes..."):
-            _train_eps = generate_episodes(_n_train, _config, seed=42)
-            _test_eps = generate_episodes(_n_test, _config, seed=123)
+        # Generate episodes
+        with mo.status.spinner("Generating training episodes..."):
+            _rng = random.Random(42)
+            _train_eps = []
+            for _ in range(_n_train):
+                _fam = _rng.choice(list(COMMAND_VARIANTS.keys()))
+                _var = _rng.choice(COMMAND_VARIANTS[_fam])
+                _train_eps.append(generate_episode(_config, _fam, _var, _rng))
 
+            _rng2 = random.Random(999)
+            _test_eps = []
+            for _ in range(_n_test):
+                _fam = _rng2.choice(list(COMMAND_VARIANTS.keys()))
+                _var = _rng2.choice(COMMAND_VARIANTS[_fam])
+                _test_eps.append(generate_episode(_config, _fam, _var, _rng2))
+
+        # Build dataset
         with mo.status.spinner("Building dataset..."):
-            _X_train, _y_train = build_dataset(_train_eps, _config, _condition, negative_ratio=8, seed=42)
+            _X, _y = build_dataset(_train_eps, _condition, neg_ratio=8, seed=42)
 
+        # Train
         with mo.status.spinner("Training MLP..."):
             _model = MLPClassifier(
                 hidden_layer_sizes=(128,),
-                max_iter=80,
+                max_iter=100,
                 learning_rate_init=1e-3,
                 batch_size=256,
                 random_state=42,
                 verbose=False,
             )
-            _model.fit(_X_train, _y_train)
+            _model.fit(_X, _y)
 
+        # Evaluate
         with mo.status.spinner("Evaluating..."):
-            _metrics = evaluate_model(_model, _test_eps, _config, _condition)
+            _metrics = evaluate_model(_model, _test_eps, _condition)
 
-        training_result = {
-            "model": _model,
-            "config": _config,
-            "condition": _condition,
-            "train_size": _n_train,
-            "test_size": _n_test,
-            "dataset_size": len(_X_train),
+        training_results = {
             "metrics": _metrics,
+            "condition": _condition,
+            "n_train": _n_train,
+            "n_test": _n_test,
+            "n_samples": len(_X),
         }
-    return (training_result,)
+    return (training_results,)
 
 
-@app.cell
-def _(mo, training_result):
-    if training_result is None:
-        training_view = mo.callout(mo.md("Click **Train MLP Baseline** above to train the model."), kind="info")
-    else:
-        _m = training_result["metrics"]
-        training_view = mo.vstack(
-            [
-                mo.hstack(
-                    [
-                        mo.stat(
-                            label="Overall accuracy",
-                            value=f"{100 * _m['overall_acc']:.1f}%",
-                            caption="Changed cells only",
-                        ),
-                        mo.stat(
-                            label="Typing accuracy",
-                            value=f"{100 * _m['typing_acc']:.1f}%",
-                            caption=f"n={_m['typing_total']}",
-                        ),
-                        mo.stat(
-                            label="Enter accuracy",
-                            value=f"{100 * _m['enter_acc']:.1f}%",
-                            caption=f"n={_m['enter_total']}",
-                        ),
-                    ],
-                    widths="equal",
-                    gap=1,
-                ),
-                mo.callout(
-                    mo.md(
-                        f"**Training:** {training_result['train_size']} episodes, "
-                        f"{training_result['dataset_size']} samples. "
-                        f"**Conditioning:** {training_result['condition']}. "
-                        f"**Test:** {training_result['test_size']} episodes."
-                    ),
-                    kind="success",
-                ),
-            ],
-            gap=1,
+@app.cell(hide_code=True)
+def _(mo, training_results):
+    if training_results is None:
+        training_view = mo.callout(
+            mo.md("👆 Click **Train Model** above to train and evaluate the MLP baseline."),
+            kind="info",
         )
+    else:
+        _m = training_results["metrics"]
+        training_view = mo.vstack([
+            mo.hstack([
+                mo.stat(
+                    label="Overall Accuracy",
+                    value=f"{100 * _m['overall_acc']:.1f}%",
+                    caption="On changed cells only",
+                ),
+                mo.stat(
+                    label="Typing Accuracy",
+                    value=f"{100 * _m['typing_acc']:.1f}%",
+                    caption=f"n = {_m['typing_n']} cells",
+                ),
+                mo.stat(
+                    label="Enter Accuracy",
+                    value=f"{100 * _m['enter_acc']:.1f}%",
+                    caption=f"n = {_m['enter_n']} cells",
+                ),
+            ], widths="equal", gap=1),
+            mo.callout(
+                mo.md(
+                    f"**Trained** on {training_results['n_train']} episodes ({training_results['n_samples']} samples). "
+                    f"**Tested** on {training_results['n_test']} held-out episodes. "
+                    f"**Conditioning:** `{training_results['condition']}`"
+                ),
+                kind="success",
+            ),
+        ], gap=1)
+
     training_view
     return
 
@@ -776,71 +783,62 @@ def _(mo):
     mo.md("""
     ---
 
-    ## 3. Benchmark Results
+    # 5️⃣ Benchmark Results
 
-    Below we show pre-computed benchmark results comparing **MLP**, **Transformer**, and **GRU**
-    across four settings:
+    We ran a full comparison of **MLP**, **Transformer**, and **GRU** baselines
+    on four experimental settings:
 
-    | Setting | Description |
-    |---------|-------------|
-    | Standard · Family | Train and test on same commands, model sees family hint |
-    | Standard · Command | Train and test on same commands, model sees exact command |
-    | Paraphrase · Family | Train on variant 1, test on variants 2-3, family hint only |
-    | Paraphrase · Command | Train on variant 1, test on variants 2-3, exact command hint |
+    | Setting | Train/Test Split | Hint Given |
+    |---------|------------------|------------|
+    | Standard · Family | Same commands | Command family only |
+    | Standard · Command | Same commands | Exact command text |
+    | Paraphrase · Family | Different phrasings | Command family only |
+    | Paraphrase · Command | Different phrasings | Exact command text |
+
+    The **paraphrase** settings test generalization: train on `whoami`, test on `echo $USER`.
     """)
     return
 
 
 @app.cell
 def _(pd):
-    # Pre-computed benchmark results (from remote GPU runs)
-    benchmark_data = pd.DataFrame([
-        {"model": "MLP", "setting": "Standard · Family", "overall": 0.681, "typing": 0.896, "enter": 0.656},
-        {"model": "MLP", "setting": "Standard · Command", "overall": 0.947, "typing": 0.903, "enter": 0.998},
-        {"model": "MLP", "setting": "Paraphrase · Family", "overall": 0.637, "typing": 0.898, "enter": 0.610},
-        {"model": "MLP", "setting": "Paraphrase · Command", "overall": 0.716, "typing": 0.739, "enter": 0.718},
-        {"model": "Transformer", "setting": "Standard · Family", "overall": 0.599, "typing": 0.792, "enter": 0.619},
-        {"model": "Transformer", "setting": "Standard · Command", "overall": 0.880, "typing": 0.868, "enter": 0.982},
-        {"model": "Transformer", "setting": "Paraphrase · Family", "overall": 0.543, "typing": 0.659, "enter": 0.627},
-        {"model": "Transformer", "setting": "Paraphrase · Command", "overall": 0.639, "typing": 0.655, "enter": 0.747},
-        {"model": "GRU", "setting": "Standard · Family", "overall": 0.541, "typing": 0.825, "enter": 0.452},
-        {"model": "GRU", "setting": "Standard · Command", "overall": 0.732, "typing": 0.820, "enter": 0.786},
-        {"model": "GRU", "setting": "Paraphrase · Family", "overall": 0.478, "typing": 0.620, "enter": 0.558},
-        {"model": "GRU", "setting": "Paraphrase · Command", "overall": 0.549, "typing": 0.612, "enter": 0.640},
+    # Pre-computed benchmark results
+    benchmark_df = pd.DataFrame([
+        # MLP
+        {"Model": "MLP", "Setting": "Standard · Family", "Overall": 0.681, "Typing": 0.896, "Enter": 0.656},
+        {"Model": "MLP", "Setting": "Standard · Command", "Overall": 0.947, "Typing": 0.903, "Enter": 0.998},
+        {"Model": "MLP", "Setting": "Paraphrase · Family", "Overall": 0.637, "Typing": 0.898, "Enter": 0.610},
+        {"Model": "MLP", "Setting": "Paraphrase · Command", "Overall": 0.716, "Typing": 0.739, "Enter": 0.718},
+        # Transformer
+        {"Model": "Transformer", "Setting": "Standard · Family", "Overall": 0.599, "Typing": 0.792, "Enter": 0.619},
+        {"Model": "Transformer", "Setting": "Standard · Command", "Overall": 0.880, "Typing": 0.868, "Enter": 0.982},
+        {"Model": "Transformer", "Setting": "Paraphrase · Family", "Overall": 0.543, "Typing": 0.659, "Enter": 0.627},
+        {"Model": "Transformer", "Setting": "Paraphrase · Command", "Overall": 0.639, "Typing": 0.655, "Enter": 0.747},
+        # GRU
+        {"Model": "GRU", "Setting": "Standard · Family", "Overall": 0.541, "Typing": 0.825, "Enter": 0.452},
+        {"Model": "GRU", "Setting": "Standard · Command", "Overall": 0.732, "Typing": 0.820, "Enter": 0.786},
+        {"Model": "GRU", "Setting": "Paraphrase · Family", "Overall": 0.478, "Typing": 0.620, "Enter": 0.558},
+        {"Model": "GRU", "Setting": "Paraphrase · Command", "Overall": 0.549, "Typing": 0.612, "Enter": 0.640},
     ])
-    return (benchmark_data,)
+    return (benchmark_df,)
 
 
 @app.cell
 def _(mo):
-    metric_picker = mo.ui.dropdown(
-        options=["Overall changed-cell acc", "Typing acc", "Enter acc"],
-        value="Overall changed-cell acc",
-        label="Metric to display",
+    metric_select = mo.ui.dropdown(
+        options=["Overall", "Typing", "Enter"],
+        value="Overall",
+        label="Metric",
     )
-    return (metric_picker,)
+    return (metric_select,)
 
 
-@app.cell
-def _(metric_picker, mo):
-    mo.hstack([metric_picker], justify="start")
-    return
-
-
-@app.cell
-def _(benchmark_data, metric_picker, mo):
-    import altair as alt
-
-    _metric_map = {
-        "Overall changed-cell acc": "overall",
-        "Typing acc": "typing",
-        "Enter acc": "enter",
-    }
-    _metric_col = _metric_map[metric_picker.value]
-
-    _chart_data = benchmark_data.copy()
-    _chart_data["value"] = _chart_data[_metric_col]
-    _chart_data["value_pct"] = (_chart_data["value"] * 100).round(1).astype(str) + "%"
+@app.cell(hide_code=True)
+def _(alt, benchmark_df, metric_select, mo):
+    _metric = metric_select.value
+    _df = benchmark_df.copy()
+    _df["Value"] = _df[_metric]
+    _df["Pct"] = (_df["Value"] * 100).round(1).astype(str) + "%"
 
     _setting_order = [
         "Standard · Family",
@@ -851,138 +849,140 @@ def _(benchmark_data, metric_picker, mo):
 
     _color_scale = alt.Scale(
         domain=["MLP", "Transformer", "GRU"],
-        range=["#22c55e", "#7c3aed", "#ef4444"],
+        range=["#22c55e", "#8b5cf6", "#ef4444"],
     )
 
-    _bars = (
-        alt.Chart(_chart_data)
-        .mark_bar(cornerRadiusTopLeft=4, cornerRadiusTopRight=4)
-        .encode(
-            x=alt.X("setting:N", sort=_setting_order, title=None, axis=alt.Axis(labelAngle=-15)),
-            xOffset="model:N",
-            y=alt.Y("value:Q", scale=alt.Scale(domain=[0, 1]), title=metric_picker.value),
-            color=alt.Color("model:N", scale=_color_scale, legend=alt.Legend(title="Model", orient="top")),
-            tooltip=["model", "setting", "value_pct"],
-        )
+    _bars = alt.Chart(_df).mark_bar(
+        cornerRadiusTopLeft=5,
+        cornerRadiusTopRight=5,
+    ).encode(
+        x=alt.X("Setting:N", sort=_setting_order, axis=alt.Axis(labelAngle=-20, title=None)),
+        xOffset=alt.XOffset("Model:N"),
+        y=alt.Y("Value:Q", scale=alt.Scale(domain=[0, 1.05]), title=f"{_metric} Accuracy"),
+        color=alt.Color("Model:N", scale=_color_scale, legend=alt.Legend(orient="top", title=None)),
+        tooltip=["Model", "Setting", "Pct"],
     )
 
-    _text = (
-        alt.Chart(_chart_data)
-        .mark_text(dy=-8, fontSize=10, fontWeight="bold")
-        .encode(
-            x=alt.X("setting:N", sort=_setting_order),
-            xOffset="model:N",
-            y=alt.Y("value:Q"),
-            text="value_pct:N",
-            color=alt.value("#0f172a"),
-        )
+    _text = alt.Chart(_df).mark_text(dy=-10, fontSize=9, fontWeight="bold").encode(
+        x=alt.X("Setting:N", sort=_setting_order),
+        xOffset=alt.XOffset("Model:N"),
+        y=alt.Y("Value:Q"),
+        text="Pct:N",
+        color=alt.value("#1e293b"),
     )
 
-    _chart = (
-        (_bars + _text)
-        .properties(width=700, height=340, title=f"Baseline Comparison: {metric_picker.value}")
-        .configure_axis(grid=True, gridColor="#e5e7eb")
-        .configure_view(strokeWidth=0)
-    )
+    _chart = (_bars + _text).properties(
+        width=700,
+        height=360,
+        title=alt.TitleParams(f"Baseline Comparison: {_metric} Accuracy", fontSize=16, anchor="start"),
+    ).configure_axis(
+        gridColor="#e5e7eb",
+        domainColor="#94a3b8",
+    ).configure_view(strokeWidth=0)
 
-    mo.ui.altair_chart(_chart, chart_selection=False)
-    return (alt,)
+    mo.vstack([
+        mo.hstack([metric_select], justify="start"),
+        mo.ui.altair_chart(_chart, chart_selection=False),
+    ], gap=1)
+    return
 
 
 @app.cell(hide_code=True)
-def _(benchmark_data, mo):
+def _(benchmark_df, mo):
     # Summary stats
-    _mlp_overall = benchmark_data[benchmark_data["model"] == "MLP"]["overall"].mean()
-    _transformer_enter = benchmark_data[benchmark_data["model"] == "Transformer"]["enter"].mean()
-    _gru_overall = benchmark_data[benchmark_data["model"] == "GRU"]["overall"].mean()
+    _mlp = benchmark_df[benchmark_df["Model"] == "MLP"]
+    _trans = benchmark_df[benchmark_df["Model"] == "Transformer"]
+    _gru = benchmark_df[benchmark_df["Model"] == "GRU"]
 
-    mo.hstack(
-        [
-            mo.stat(label="MLP mean overall", value=f"{100 * _mlp_overall:.1f}%", caption="Best overall baseline"),
-            mo.stat(label="Transformer mean Enter", value=f"{100 * _transformer_enter:.1f}%", caption="Stronger on Enter steps"),
-            mo.stat(label="GRU mean overall", value=f"{100 * _gru_overall:.1f}%", caption="Underperforms here"),
-        ],
-        widths="equal",
-        gap=1,
-    )
+    mo.hstack([
+        mo.stat(
+            label="MLP Overall Mean",
+            value=f"{100 * _mlp['Overall'].mean():.1f}%",
+            caption="Best overall baseline",
+        ),
+        mo.stat(
+            label="Transformer Enter Mean",
+            value=f"{100 * _trans['Enter'].mean():.1f}%",
+            caption="Relatively stronger on Enter",
+        ),
+        mo.stat(
+            label="GRU Overall Mean",
+            value=f"{100 * _gru['Overall'].mean():.1f}%",
+            caption="Underperforms here",
+        ),
+    ], widths="equal", gap=1)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""
-    ### Typing vs Enter Tradeoff
-
-    The scatter plot below shows each model's average **typing accuracy** (x-axis)
-    versus **Enter accuracy** (y-axis). Bubble size reflects overall accuracy.
+    ### 🎯 Typing vs Enter Tradeoff
     """)
     return
 
 
-@app.cell
-def _(alt, benchmark_data, mo):
-    _profile = (
-        benchmark_data.groupby("model")
-        .agg(typing_mean=("typing", "mean"), enter_mean=("enter", "mean"), overall_mean=("overall", "mean"))
-        .reset_index()
-    )
+@app.cell(hide_code=True)
+def _(alt, benchmark_df, mo):
+    _profile = benchmark_df.groupby("Model").agg(
+        Typing_Mean=("Typing", "mean"),
+        Enter_Mean=("Enter", "mean"),
+        Overall_Mean=("Overall", "mean"),
+    ).reset_index()
 
     _color_scale = alt.Scale(
         domain=["MLP", "Transformer", "GRU"],
-        range=["#22c55e", "#7c3aed", "#ef4444"],
+        range=["#22c55e", "#8b5cf6", "#ef4444"],
     )
 
-    _scatter = (
-        alt.Chart(_profile)
-        .mark_circle(opacity=0.85, stroke="#0f172a", strokeWidth=1)
-        .encode(
-            x=alt.X("typing_mean:Q", scale=alt.Scale(domain=[0.5, 1]), title="Typing accuracy (mechanics)"),
-            y=alt.Y("enter_mean:Q", scale=alt.Scale(domain=[0.4, 1]), title="Enter accuracy (meaning)"),
-            size=alt.Size("overall_mean:Q", scale=alt.Scale(range=[800, 2500]), legend=None),
-            color=alt.Color("model:N", scale=_color_scale, legend=alt.Legend(title="Model")),
-            tooltip=["model", "typing_mean", "enter_mean", "overall_mean"],
-        )
+    _points = alt.Chart(_profile).mark_circle(opacity=0.9, stroke="#1e293b", strokeWidth=1.5).encode(
+        x=alt.X("Typing_Mean:Q", scale=alt.Scale(domain=[0.6, 0.95]), title="Typing Accuracy (mechanical)"),
+        y=alt.Y("Enter_Mean:Q", scale=alt.Scale(domain=[0.5, 0.9]), title="Enter Accuracy (semantic)"),
+        size=alt.Size("Overall_Mean:Q", scale=alt.Scale(range=[600, 2000]), legend=None),
+        color=alt.Color("Model:N", scale=_color_scale, legend=alt.Legend(orient="top", title=None)),
+        tooltip=["Model", "Typing_Mean", "Enter_Mean", "Overall_Mean"],
     )
 
-    _text = (
-        alt.Chart(_profile)
-        .mark_text(dy=-25, fontSize=11, fontWeight="bold")
-        .encode(
-            x="typing_mean:Q",
-            y="enter_mean:Q",
-            text="model:N",
-            color=alt.value("#0f172a"),
-        )
+    _labels = alt.Chart(_profile).mark_text(dy=-22, fontSize=12, fontWeight="bold").encode(
+        x="Typing_Mean:Q",
+        y="Enter_Mean:Q",
+        text="Model:N",
+        color=alt.value("#1e293b"),
     )
 
-    _chart = (
-        (_scatter + _text)
-        .properties(width=500, height=380, title="Typing vs Enter Tradeoff")
-        .configure_axis(grid=True, gridColor="#e5e7eb")
-        .configure_view(strokeWidth=0)
-    )
+    _chart = (_points + _labels).properties(
+        width=500,
+        height=380,
+        title=alt.TitleParams("Typing vs Enter Accuracy", fontSize=16, anchor="start"),
+    ).configure_axis(
+        gridColor="#e5e7eb",
+        domainColor="#94a3b8",
+    ).configure_view(strokeWidth=0)
 
-    mo.ui.altair_chart(_chart, chart_selection=False)
+    mo.vstack([
+        mo.ui.altair_chart(_chart, chart_selection=False),
+        mo.callout(
+            mo.md("**Interpretation:** MLP is strongest overall (largest bubble, furthest right). Transformer shows relatively better Enter accuracy but weaker typing. GRU underperforms on both axes."),
+            kind="info",
+        ),
+    ], gap=1)
     return
 
 
 @app.cell(hide_code=True)
 def _(mo):
     mo.md("""
-    ### Raw Benchmark Data
-
-    Explore the full benchmark table below. Click column headers to sort.
+    ### 📋 Full Results Table
     """)
     return
 
 
-@app.cell
-def _(benchmark_data, mo):
-    _display = benchmark_data.copy()
-    _display["overall"] = (_display["overall"] * 100).round(1).astype(str) + "%"
-    _display["typing"] = (_display["typing"] * 100).round(1).astype(str) + "%"
-    _display["enter"] = (_display["enter"] * 100).round(1).astype(str) + "%"
-    _display.columns = ["Model", "Setting", "Overall", "Typing", "Enter"]
+@app.cell(hide_code=True)
+def _(benchmark_df, mo):
+    _display = benchmark_df.copy()
+    _display["Overall"] = (_display["Overall"] * 100).round(1).astype(str) + "%"
+    _display["Typing"] = (_display["Typing"] * 100).round(1).astype(str) + "%"
+    _display["Enter"] = (_display["Enter"] * 100).round(1).astype(str) + "%"
 
     mo.ui.table(_display, selection=None, page_size=12)
     return
@@ -993,43 +993,56 @@ def _(mo):
     mo.md("""
     ---
 
-    ## 4. Key Takeaways
+    # 6️⃣ Key Takeaways
 
-    1. **MLP is the strongest overall baseline** — it wins changed-cell accuracy across most settings
-    2. **Transformer shows relative strength on Enter** — but the gain is modest and shrinks under paraphrase
-    3. **GRU underperforms** — a negative result in this benchmark
-    4. **Typing vs Enter split is diagnostic** — it reveals whether a model relies on local mechanics or captures command semantics
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 20px 0;">
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 20px;">
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">🏆</div>
+            <div style="font-weight: 600; color: #166534; margin-bottom: 6px;">MLP Wins Overall</div>
+            <div style="color: #15803d; font-size: 0.95rem;">Simple per-cell prediction with local patches is a strong baseline. Wins on changed-cell accuracy in most settings.</div>
+        </div>
+        <div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 12px; padding: 20px;">
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">⚡</div>
+            <div style="font-weight: 600; color: #6b21a8; margin-bottom: 6px;">Transformer Shows Promise on Enter</div>
+            <div style="color: #7e22ce; font-size: 0.95rem;">Relatively stronger on the semantic "Enter" regime, but gains shrink under paraphrase generalization.</div>
+        </div>
+        <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 20px;">
+            <div style="font-size: 1.5rem; margin-bottom: 8px;">📉</div>
+            <div style="font-weight: 600; color: #991b1b; margin-bottom: 6px;">GRU Underperforms</div>
+            <div style="color: #b91c1c; font-size: 0.95rem;">A negative result in this benchmark. May need different architecture choices for screen prediction.</div>
+        </div>
+    </div>
 
-    ### Extension: What this notebook adds
+    ### 🔬 What This Notebook Adds (Extension)
 
-    This notebook goes beyond summarizing the paper:
+    This isn't just a paper summary — it's a **new benchmark**:
 
-    - **Custom benchmark** with typing/Enter split and paraphrase generalization
-    - **Matched baseline comparison** (MLP, Transformer, GRU on identical data)
-    - **Interactive playground** to build intuition about the task
-    - **Live training** to experiment with the MLP baseline yourself
+    - **Typing vs Enter split** — directly measures mechanical vs semantic understanding
+    - **Paraphrase generalization** — tests whether models learn command *meaning* or just memorize
+    - **Matched comparison** — all three architectures trained on identical data with identical evaluation
+    - **Interactive exploration** — step through episodes to build intuition
 
     ---
 
-    ## 5. Reproducibility
-
-    The training scripts and full model implementations are in `experiments/toy_nc_cli/`.
-    The benchmark CSV used for the visualizations above is at `experiments/toy_nc_cli/results/baseline_comparison.csv`.
+    ### 📂 Reproducibility
 
     ```bash
-    # Run the smoke test locally
+    # Run local smoke test
     python experiments/toy_nc_cli/scripts/smoke_test.py
 
-    # Train Transformer on GPU
+    # Train Transformer (GPU recommended)
     python experiments/toy_nc_cli/scripts/train_transformer_baseline.py
 
-    # Train GRU on GPU
+    # Train GRU (GPU recommended)
     python experiments/toy_nc_cli/scripts/train_gru_baseline.py
     ```
 
     ---
 
-    Built with [marimo](https://marimo.io/) · Inspired by [Neural Computers (arXiv:2604.06425)](https://arxiv.org/abs/2604.06425)
+    <div style="text-align: center; color: #64748b; margin-top: 32px;">
+        Built with <a href="https://marimo.io" style="color: #2563eb;">marimo</a> ·
+        Inspired by <a href="https://arxiv.org/abs/2604.06425" style="color: #2563eb;">Neural Computers (arXiv:2604.06425)</a>
+    </div>
     """)
     return
 
