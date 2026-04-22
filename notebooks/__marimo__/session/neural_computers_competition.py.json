@@ -7,12 +7,12 @@
   "cells": [
     {
       "id": "Hbol",
-      "code_hash": "1d0db38904205bec4d6f6f6a1f6cec3e",
+      "code_hash": "a8d577b507d301bb306045ba6f07744a",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/plain": ""
+            "text/html": "<pre class='text-xs'>ThemeRegistry.enable(&#x27;default&#x27;)</pre>"
           }
         }
       ],
@@ -20,12 +20,12 @@
     },
     {
       "id": "MJUe",
-      "code_hash": "62b953e0737f1761bc6562efcb26acf3",
+      "code_hash": "2c7aea7c695c0ea7dea587163456b950",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h1 id=\"tiny-neural-os\">\ud83d\udda5\ufe0f Tiny Neural OS</h1>\n<div style=\"background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #e2e8f0; padding: 28px 32px; border-radius: 16px; margin: 20px 0;\">\n    <div style=\"font-size: 1.4rem; font-weight: 600; margin-bottom: 12px;\">\n        Can a neural network learn how a computer works just by watching the screen?\n    </div>\n    <div style=\"color: #94a3b8; font-size: 1.05rem; line-height: 1.7;\">\n        This notebook implements the core idea from <a href=\"https://arxiv.org/abs/2604.06425\" style=\"color: #93c5fd;\">Neural Computers (2024)</a>:\n        train a model to predict the next screen state from the current one, then measure whether it learns\n        <strong style=\"color: #fbbf24;\">mechanical typing</strong> (easy) versus <strong style=\"color: #f87171;\">semantic command execution</strong> (hard).\n    </div>\n</div></span>"
+            "text/html": "<marimo-sidebar ><div style='display: flex;flex: 1;flex-direction: column;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"tiny-neural-os\"><iconify-icon icon='lucide:monitor' inline></iconify-icon> Tiny Neural OS</h2></span><marimo-nav-menu data-items='[{&quot;label&quot;:&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;iconify-icon icon=&#x27;lucide:home&#x27; inline&gt;&lt;/iconify-icon&gt; Introduction&lt;/span&gt;&lt;/span&gt;&quot;,&quot;href&quot;:&quot;#intro&quot;,&quot;description&quot;:null},{&quot;label&quot;:&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;iconify-icon icon=&#x27;lucide:terminal&#x27; inline&gt;&lt;/iconify-icon&gt; 1. Toy Terminal&lt;/span&gt;&lt;/span&gt;&quot;,&quot;href&quot;:&quot;#part-1&quot;,&quot;description&quot;:null},{&quot;label&quot;:&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;iconify-icon icon=&#x27;lucide:eye&#x27; inline&gt;&lt;/iconify-icon&gt; 2. Visualization&lt;/span&gt;&lt;/span&gt;&quot;,&quot;href&quot;:&quot;#part-2&quot;,&quot;description&quot;:null},{&quot;label&quot;:&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;iconify-icon icon=&#x27;lucide:database&#x27; inline&gt;&lt;/iconify-icon&gt; 3. Dataset&lt;/span&gt;&lt;/span&gt;&quot;,&quot;href&quot;:&quot;#part-3&quot;,&quot;description&quot;:null},{&quot;label&quot;:&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;iconify-icon icon=&#x27;lucide:brain&#x27; inline&gt;&lt;/iconify-icon&gt; 4. MLP Model&lt;/span&gt;&lt;/span&gt;&quot;,&quot;href&quot;:&quot;#part-4&quot;,&quot;description&quot;:null},{&quot;label&quot;:&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;iconify-icon icon=&#x27;lucide:bar-chart-2&#x27; inline&gt;&lt;/iconify-icon&gt; 5. Benchmark&lt;/span&gt;&lt;/span&gt;&quot;,&quot;href&quot;:&quot;#part-5&quot;,&quot;description&quot;:null},{&quot;label&quot;:&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;iconify-icon icon=&#x27;lucide:check-circle&#x27; inline&gt;&lt;/iconify-icon&gt; 6. Conclusions&lt;/span&gt;&lt;/span&gt;&quot;,&quot;href&quot;:&quot;#part-6&quot;,&quot;description&quot;:null}]' data-orientation='&quot;vertical&quot;'></marimo-nav-menu></div><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><hr /></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><iconify-icon icon='lucide:file-text' inline></iconify-icon> <a href=\"https://arxiv.org/abs/2604.06425\" rel=\"noopener noreferrer\" target=\"_blank\">arXiv:2604.06425</a></span></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><iconify-icon icon='lucide:github' inline></iconify-icon> <a href=\"https://github.com\" rel=\"noopener noreferrer\" target=\"_blank\">View on GitHub</a></span></span></div></div></marimo-sidebar>"
           }
         }
       ],
@@ -33,12 +33,12 @@
     },
     {
       "id": "vblA",
-      "code_hash": "db99b1369d8766b01dbecad96daf4893",
+      "code_hash": "edc95eca92a50fa4d1f525c0bcc36fee",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"paper-tldr\">\ud83d\udcc4 Paper TLDR</h2>\n<span class=\"paragraph\"><strong>Neural Computers</strong> proposes training models on raw screen pixel/character transitions instead of\nstructured APIs. The key insight:</span>\n<table>\n<thead>\n<tr>\n<th>Aspect</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><strong>Input</strong></td>\n<td>Current screen state (terminal characters)</td>\n</tr>\n<tr>\n<td><strong>Output</strong></td>\n<td>Next screen state after one action</td>\n</tr>\n<tr>\n<td><strong>Easy regime</strong></td>\n<td>Typing a character \u2192 local patch changes</td>\n</tr>\n<tr>\n<td><strong>Hard regime</strong></td>\n<td>Pressing Enter \u2192 output depends on command <em>meaning</em></td>\n</tr>\n</tbody>\n</table>\n<span class=\"paragraph\">The paper argues this \"screen prediction\" task naturally separates mechanical understanding\n(cursor moves, characters appear) from semantic understanding (what does <code>pwd</code> actually do?).</span>\n<hr />\n<h2 id=\"what-this-notebook-does\">\ud83d\udd2c What This Notebook Does</h2>\n<span class=\"paragraph\">We build a <strong>toy version</strong> of this idea:</span>\n<ol>\n<li><strong>Simulate a terminal</strong> \u2014 generate episodes of typing commands and seeing output</li>\n<li><strong>Train an MLP baseline</strong> \u2014 predict each cell's next character from local context</li>\n<li><strong>Measure the split</strong> \u2014 compare accuracy on typing steps vs. Enter steps</li>\n<li><strong>Benchmark 3 architectures</strong> \u2014 MLP, Transformer, GRU under matched conditions</li>\n<li><strong>Visualize everything</strong> \u2014 interactive Altair charts showing where models succeed and fail</li>\n</ol></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><a id=\"intro\"></a></span>\n<h1 id=\"tiny-neural-os-learning-to-predict-terminal-screens\">Tiny Neural OS: Learning to Predict Terminal Screens</h1>\n<span class=\"paragraph\"><strong>The core question:</strong> Can a neural network learn how a computer works just by watching the screen change?</span>\n<span class=\"paragraph\">This notebook revisits the central idea from <strong>Neural Computers</strong> (<a href=\"https://arxiv.org/abs/2604.06425\" rel=\"noopener noreferrer\" target=\"_blank\">arXiv:2604.06425</a>).\nThe paper proposes that a neural system can internalize computation, memory, and I/O by learning from interface traces alone \u2014 no explicit program state required.</span>\n<span class=\"paragraph\">Rather than reimplement the full paper, we isolate one essential primitive:</span>\n<blockquote>\n<span class=\"paragraph\"><strong>Given the current terminal screen and an action, predict what the screen looks like next.</strong></span>\n</blockquote>\n<span class=\"paragraph\">This simple task exposes the core tension:</span>\n<ul>\n<li><strong>Typing</strong> transitions are mechanical and local \u2014 the cursor moves, a character appears</li>\n<li><strong>Enter</strong> transitions are semantic \u2014 the model must know what the command <em>does</em></li>\n</ul>\n<hr />\n<h2 id=\"what-this-notebook-implements\">What this notebook implements</h2>\n<ol>\n<li>A <strong>toy terminal</strong> environment (10\u00d740 character grid)</li>\n<li>A <strong>next-screen prediction</strong> task from screen-action traces</li>\n<li>A clean split between <strong>easy</strong> transitions (typing) and <strong>hard</strong> transitions (Enter)</li>\n<li>A <strong>CPU-trainable MLP</strong> baseline that predicts cell updates from local context</li>\n<li>A <strong>benchmark comparison</strong> against Transformer and GRU baselines</li>\n</ol>\n<h2 id=\"why-this-matches-the-competition\">Why this matches the competition</h2>\n<span class=\"paragraph\">The competition asks for a notebook that brings a paper's core idea to life through code, UI elements, and explanatory text \u2014 not a full reimplementation.</span>\n<table>\n<thead>\n<tr>\n<th></th>\n<th></th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><strong>Paper's vision</strong></td>\n<td>A learned neural runtime for interactive computing</td>\n</tr>\n<tr>\n<td><strong>This notebook</strong></td>\n<td>A toy CLI that makes next-screen prediction legible</td>\n</tr>\n<tr>\n<td><strong>Our extension</strong></td>\n<td>Benchmark framing: typing vs. Enter, paraphrase generalization</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<span class=\"paragraph\"><strong>Standalone note:</strong> Everything runs here \u2014 simulator, dataset builder, feature encoder, training loop, and interactive analysis \u2014 all in notebook cells. External scripts are optional.</span>\n</blockquote></span>"
           }
         }
       ],
@@ -46,12 +46,12 @@
     },
     {
       "id": "bkHC",
-      "code_hash": "0ec6639ce965281f93818e9b5e56123b",
+      "code_hash": "4168d2741f46b122bf0688a790512c87",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h1 id=\"1-the-toy-terminal\">1\ufe0f\u20e3 The Toy Terminal</h1>\n<span class=\"paragraph\">First, we need a terminal simulator. It maintains a <strong>screen buffer</strong> (2D array of characters)\nand processes <strong>actions</strong> (type a character, press backspace, press Enter).</span>\n<h3 id=\"why-this-matters\">Why this matters</h3>\n<ul>\n<li>Each action produces a screen transition: <code>(screen_before, action) \u2192 screen_after</code></li>\n<li><strong>Typing</strong> changes 1-2 cells (the typed char + cursor move)</li>\n<li><strong>Enter</strong> can change many cells (command output, new prompt)</li>\n</ul>\n<span class=\"paragraph\">This asymmetry is the core of the benchmark.</span></span>"
+            "text/html": "<marimo-accordion data-labels='[&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;iconify-icon icon=&#x27;lucide:workflow&#x27; inline&gt;&lt;/iconify-icon&gt; View the prediction pipeline&lt;/span&gt;&lt;/span&gt;&quot;]' data-multiple='false'><div><marimo-mermaid data-diagram='&quot;&#92;nflowchart LR&#92;n    subgraph Input&#92;n        A[Terminal Screen] --&gt; B[Action]&#92;n    end&#92;n    subgraph Processing&#92;n        B --&gt; C[Feature Encoder]&#92;n        C --&gt; D[3x3 Patch + Position + Conditioning]&#92;n    end&#92;n    subgraph Model&#92;n        D --&gt; E[MLP / GRU / Transformer]&#92;n    end&#92;n    subgraph Output&#92;n        E --&gt; F[Next Screen Prediction]&#92;n    end&#92;n&#92;n    style A fill:#e0f2fe&#92;n    style F fill:#dcfce7&#92;n    style E fill:#fef3c7&#92;n&quot;'></marimo-mermaid></div></marimo-accordion>"
           }
         }
       ],
@@ -59,12 +59,12 @@
     },
     {
       "id": "lEQa",
-      "code_hash": "53096f12cd4ff7bd56b55cd54b240683",
+      "code_hash": "6436abad51be5830845590f05747cc97",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/plain": ""
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<span class=\"paragraph\"><a id=\"part-1\"></a></span>\n<h1 id=\"part-1-building-a-toy-terminal\"><iconify-icon icon='lucide:terminal' inline></iconify-icon> Part 1: Building a Toy Terminal</h1>\n<span class=\"paragraph\">We need training data. Our terminal simulator:</span>\n<ol>\n<li>Maintains a <strong>screen buffer</strong> \u2014 a 10\u00d740 grid of characters</li>\n<li>Processes <strong>actions</strong> \u2014 typing, backspace, Enter</li>\n<li>Produces <strong>screen transitions</strong> \u2014 (before, after) pairs for each action</li>\n</ol></span>"
           }
         }
       ],
@@ -72,7 +72,7 @@
     },
     {
       "id": "PKri",
-      "code_hash": "d5b9df9419ab375b206214908011c8a8",
+      "code_hash": "2d8ee88c844edfc83279ece2edacdd62",
       "outputs": [
         {
           "type": "data",
@@ -85,12 +85,12 @@
     },
     {
       "id": "Xref",
-      "code_hash": "208ae567fe0d2446f5115ea2d45f59f7",
+      "code_hash": "caf93b831773822a9b0e80d0467c0779",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"interactive-terminal-playground\">\ud83c\udfae Interactive Terminal Playground</h3>\n<span class=\"paragraph\">Use the controls below to <strong>step through</strong> a terminal episode frame by frame.</span>\n<ul>\n<li><strong>Yellow highlights</strong> show cells that changed from the previous frame</li>\n<li>Notice how <strong>typing</strong> changes just 1-2 cells, but <strong>Enter</strong> changes many</li>\n</ul></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"the-command-library\">The Command Library</h3>\n<span class=\"paragraph\">Each command belongs to a <strong>family</strong> with multiple <strong>phrasings</strong> that produce the same output:</span>\n<table>\n<thead>\n<tr>\n<th>Family</th>\n<th>Phrasings</th>\n<th>Output</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>pwd</code></td>\n<td><code>pwd</code>, <code>echo $PWD</code>, <code>printenv PWD</code></td>\n<td><code>/home/researcher</code></td>\n</tr>\n<tr>\n<td><code>whoami</code></td>\n<td><code>whoami</code>, <code>echo $USER</code>, <code>id -un</code></td>\n<td><code>researcher</code></td>\n</tr>\n</tbody>\n</table>\n<span class=\"paragraph\">This lets us test <strong>generalization</strong>: does the model understand command semantics, or just memorize character sequences?</span></span>"
           }
         }
       ],
@@ -98,7 +98,7 @@
     },
     {
       "id": "SFPL",
-      "code_hash": "f7b03a10da060c5fca487b93341912ee",
+      "code_hash": "e22808f9f7067986ae8aa87d8d702631",
       "outputs": [
         {
           "type": "data",
@@ -111,12 +111,12 @@
     },
     {
       "id": "BYtC",
-      "code_hash": "8ba5d0b4df8dede3e8706dcb78136658",
+      "code_hash": "be56134f817cae9b8d4357abb562ad46",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/plain": ""
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><div style='flex: 1'><marimo-stat data-value='&quot;97&quot;' data-label='&quot;Vocabulary size&quot;' data-caption='&quot;printable chars + cursor + pad&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;5&quot;' data-label='&quot;Command families&quot;' data-caption='&quot;pwd, whoami, date, echo_home, python_arith&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;12&quot;' data-label='&quot;Command phrasings&quot;' data-caption='&quot;used for variation and paraphrase tests&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div></div>"
           }
         }
       ],
@@ -124,7 +124,20 @@
     },
     {
       "id": "RGSE",
-      "code_hash": "b7f9446fbd47c8bc0d1a7161d401403b",
+      "code_hash": "2a4d1d8f0c37f09cd1b47f97b50dec56",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 2rem'><div style='flex: 1;display: flex;min-width: 0;min-height: 0'><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"data-structures\">Data Structures</h3></span><span class=\"markdown prose dark:prose-invert contents\"><table>\n<thead>\n<tr>\n<th>Structure</th>\n<th>Purpose</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>TerminalConfig</code></td>\n<td>Terminal dimensions (rows, columns)</td>\n</tr>\n<tr>\n<td><code>Action</code></td>\n<td>A single user action (type char, Enter, backspace)</td>\n</tr>\n<tr>\n<td><code>Episode</code></td>\n<td>A complete command sequence: type \u2192 Enter \u2192 output</td>\n</tr>\n</tbody>\n</table></span></div></div><div style='flex: 1;display: flex;min-width: 0;min-height: 0'><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"example-episode\">Example Episode</h3></span><marimo-json-output data-json-data='{&quot;Episode&quot;:{&quot;family&quot;:&quot;&#x27;pwd&#x27; | &#x27;whoami&#x27; | &#x27;date&#x27; | ...&quot;,&quot;command_text&quot;:&quot;&#x27;echo &#36;PWD&#x27;&quot;,&quot;frames&quot;:[&quot;screen_0&quot;,&quot;screen_1&quot;,&quot;...&quot;,&quot;screen_n&quot;],&quot;actions&quot;:[{&quot;kind&quot;:&quot;type_char&quot;,&quot;typed_char&quot;:&quot;&#x27;e&#x27;&quot;},{&quot;kind&quot;:&quot;type_char&quot;,&quot;typed_char&quot;:&quot;&#x27;c&#x27;&quot;},&quot;...&quot;,{&quot;kind&quot;:&quot;enter&quot;}]}}' data-value-types='&quot;python&quot;'></marimo-json-output></div></div></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Kclp",
+      "code_hash": "d3dcf787e848374688f382a306ecdba3",
       "outputs": [
         {
           "type": "data",
@@ -136,26 +149,13 @@
       "console": []
     },
     {
-      "id": "Kclp",
-      "code_hash": "f6a39d6a84889bda409f93239b5b0f5d",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: flex-end;flex-wrap: nowrap;gap: 1.5rem'><div style='flex: 1.5'><marimo-ui-element object-id='SFPL-0' random-id='3d2d7cdc-a6f4-505b-697f-413ab28432a6'><marimo-dropdown data-initial-value='[&quot;whoami&quot;]' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Command family&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;pwd&quot;,&quot;whoami&quot;,&quot;date&quot;,&quot;echo_home&quot;,&quot;python_arith&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false'></marimo-dropdown></marimo-ui-element></div><div style='flex: 1.5'><marimo-ui-element object-id='SFPL-1' random-id='0ce6d533-bc9d-d84f-9263-86c354fd7636'><marimo-dropdown data-initial-value='[&quot;Phrasing 1&quot;]' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Phrasing variant&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;Phrasing 1&quot;,&quot;Phrasing 2&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false'></marimo-dropdown></marimo-ui-element></div><div style='flex: 4'><marimo-ui-element object-id='RGSE-0' random-id='ceea0cab-49af-4c43-f12c-00a9c6d0828b'><marimo-slider data-initial-value='0' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Step through episode&lt;/span&gt;&lt;/span&gt;&quot;' data-start='0' data-stop='7' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='true'></marimo-slider></marimo-ui-element></div></div>"
-          }
-        }
-      ],
-      "console": []
-    },
-    {
       "id": "emfo",
-      "code_hash": "f079742ae54cf87daf21a43af9463fad",
+      "code_hash": "8aba87ad762136acc3ed9fb2535bcdb1",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 1rem'><div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 1.5rem'><div style='flex: 1'>\n    <div style='border:1px solid #334155;border-radius:12px;background:#0f172a;color:#e2e8f0;\n                padding:16px;font-family:ui-monospace,monospace;line-height:1.35;font-size:0.9rem;\n                box-shadow:0 4px 12px rgba(0,0,0,0.15)'>\n        <div style='color:#93c5fd;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:600'>Before</div>\n        <span>$</span><span>&nbsp;</span><span>\u2588</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span>\n        <div style='color:#64748b;font-size:0.75rem;margin-top:4px'>Previous frame</div>\n    </div>\n    </div><div style='flex: 1'>\n    <div style='border:1px solid #334155;border-radius:12px;background:#0f172a;color:#e2e8f0;\n                padding:16px;font-family:ui-monospace,monospace;line-height:1.35;font-size:0.9rem;\n                box-shadow:0 4px 12px rgba(0,0,0,0.15)'>\n        <div style='color:#93c5fd;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;font-weight:600'>After</div>\n        <span>$</span><span>&nbsp;</span><span>\u2588</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span>\n        <div style='color:#64748b;font-size:0.75rem;margin-top:4px'>0 cells changed</div>\n    </div>\n    </div></div><div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 1rem'><div style='flex: 1'><marimo-stat data-value='&quot;Initial state&quot;' data-label='&quot;Action&quot;' data-caption='&quot;\ud83d\udfe2 Mechanical (typing)&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;0&quot;' data-label='&quot;Cells changed&quot;' data-caption='&quot;Yellow highlights above&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;0 / 7&quot;' data-label='&quot;Step&quot;' data-caption='&quot;Command: whoami&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div></div><marimo-callout-output data-html='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;strong&gt;Step 0&lt;/strong&gt; is the initial screen. Use the slider to watch the terminal evolve.&lt;/span&gt;&lt;/span&gt;&quot;' data-kind='&quot;info&quot;'></marimo-callout-output></div>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"the-episode-generator\">The Episode Generator</h3>\n<span class=\"paragraph\">For each episode:</span>\n<ol>\n<li>Start with a blank screen: <code>$ \u2588</code></li>\n<li>Simulate typing each character of the command</li>\n<li>Simulate pressing Enter to execute</li>\n</ol>\n<span class=\"paragraph\">Each step produces one screen transition \u2014 our training data.</span></span>"
           }
         }
       ],
@@ -163,12 +163,12 @@
     },
     {
       "id": "Hstk",
-      "code_hash": "83920502454a715f1a2b381a6fb887e3",
+      "code_hash": "66fefb7d814619de389d55d82dfe0df3",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h1 id=\"2-the-prediction-task\">2\ufe0f\u20e3 The Prediction Task</h1>\n<span class=\"paragraph\">Now we define the actual ML task:</span>\n<blockquote>\n<span class=\"paragraph\"><strong>Given:</strong> current screen + action being taken\n<strong>Predict:</strong> next screen state</span>\n</blockquote>\n<h3 id=\"why-per-cell-prediction\">Why per-cell prediction?</h3>\n<span class=\"paragraph\">We predict each cell independently using <strong>local features</strong>:</span>\n<ul>\n<li>A 3\u00d73 patch around the cell</li>\n<li>The cell's (row, col) position</li>\n<li>The action type and typed character</li>\n</ul>\n<span class=\"paragraph\">This is a strong baseline because <strong>most cells don't change</strong> between frames,\nand those that do often follow local patterns (cursor moves right, character appears).</span>\n<span class=\"paragraph\">The challenge: when the user presses <strong>Enter</strong>, the model needs <em>global</em> understanding\nof the command to predict the output.</span></span>"
+            "text/plain": ""
           }
         }
       ],
@@ -176,32 +176,25 @@
     },
     {
       "id": "nWHF",
-      "code_hash": "d0876f2d9930b456db655966db913833",
+      "code_hash": "b2b40ce0e304e35cdc55b4bd700ff2cc",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 1rem'><span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"visualizing-the-asymmetry\">\ud83d\udcca Visualizing the Asymmetry</h3></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">For a typical <code>whoami</code> command, here's how many cells change at each step:</span></span><marimo-ui-element object-id='nWHF-0' random-id='b072032a-f00b-1657-23f3-0e44a0a67b30'><marimo-vega data-initial-value='{}' data-label='null' data-spec='{&quot;config&quot;:{&quot;view&quot;:{&quot;continuousWidth&quot;:300,&quot;continuousHeight&quot;:300,&quot;strokeWidth&quot;:0},&quot;axis&quot;:{&quot;domainColor&quot;:&quot;#cbd5e1&quot;,&quot;gridColor&quot;:&quot;#e5e7eb&quot;}},&quot;layer&quot;:[{&quot;mark&quot;:{&quot;type&quot;:&quot;bar&quot;,&quot;cornerRadiusTopLeft&quot;:6,&quot;cornerRadiusTopRight&quot;:6},&quot;encoding&quot;:{&quot;color&quot;:{&quot;field&quot;:&quot;Type&quot;,&quot;legend&quot;:{&quot;orient&quot;:&quot;top&quot;,&quot;title&quot;:&quot;Action type&quot;},&quot;scale&quot;:{&quot;domain&quot;:[&quot;Typing&quot;,&quot;Enter&quot;],&quot;range&quot;:[&quot;#22c55e&quot;,&quot;#ef4444&quot;]},&quot;type&quot;:&quot;nominal&quot;},&quot;tooltip&quot;:[{&quot;field&quot;:&quot;Action&quot;,&quot;type&quot;:&quot;nominal&quot;},{&quot;field&quot;:&quot;Cells Changed&quot;,&quot;type&quot;:&quot;quantitative&quot;},{&quot;field&quot;:&quot;Type&quot;,&quot;type&quot;:&quot;nominal&quot;}],&quot;x&quot;:{&quot;axis&quot;:{&quot;labelAngle&quot;:0,&quot;title&quot;:null},&quot;field&quot;:&quot;Action&quot;,&quot;sort&quot;:null,&quot;type&quot;:&quot;nominal&quot;},&quot;y&quot;:{&quot;field&quot;:&quot;Cells Changed&quot;,&quot;title&quot;:&quot;Cells changed&quot;,&quot;type&quot;:&quot;quantitative&quot;}}},{&quot;mark&quot;:{&quot;type&quot;:&quot;text&quot;,&quot;dy&quot;:-8,&quot;fontSize&quot;:11,&quot;fontWeight&quot;:&quot;bold&quot;},&quot;encoding&quot;:{&quot;color&quot;:{&quot;value&quot;:&quot;#1e293b&quot;},&quot;text&quot;:{&quot;field&quot;:&quot;Cells Changed&quot;,&quot;type&quot;:&quot;quantitative&quot;},&quot;x&quot;:{&quot;field&quot;:&quot;Action&quot;,&quot;sort&quot;:null,&quot;type&quot;:&quot;nominal&quot;},&quot;y&quot;:{&quot;field&quot;:&quot;Cells Changed&quot;,&quot;type&quot;:&quot;quantitative&quot;}}}],&quot;data&quot;:{&quot;url&quot;:&quot;data:text/csv;base64,QWN0aW9uLENlbGxzIENoYW5nZWQsVHlwZQpUeXBlICd3JywyLFR5cGluZwpUeXBlICdoJywyLFR5cGluZwpUeXBlICdvJywyLFR5cGluZwpUeXBlICdhJywyLFR5cGluZwpUeXBlICdtJywyLFR5cGluZwpUeXBlICdpJywyLFR5cGluZwpFbnRlciwzNSxFbnRlcgo=&quot;,&quot;format&quot;:{&quot;type&quot;:&quot;csv&quot;}},&quot;height&quot;:280,&quot;title&quot;:{&quot;text&quot;:&quot;The Asymmetry: Typing vs Enter&quot;,&quot;anchor&quot;:&quot;start&quot;,&quot;fontSize&quot;:16},&quot;width&quot;:500,&quot;&#36;schema&quot;:&quot;https://vega.github.io/schema/vega-lite/v5.20.1.json&quot;}' data-chart-selection='false' data-field-selection='true' data-embed-options='{}'></marimo-vega></marimo-ui-element><marimo-callout-output data-html='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;strong&gt;Key insight:&lt;/strong&gt; Enter changes ~18\u00d7 more cells than typing. This is why we measure them separately.&lt;/span&gt;&lt;/span&gt;&quot;' data-kind='&quot;info&quot;'></marimo-callout-output></div>"
+            "text/plain": ""
           }
         }
       ],
-      "console": [
-        {
-          "type": "stream",
-          "name": "stderr",
-          "text": "[W 260417 20:17:36 altair_transformer:79] Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
-          "mimetype": "text/plain"
-        }
-      ]
+      "console": []
     },
     {
       "id": "iLit",
-      "code_hash": "a3301a85af63d182463e46abdeb71349",
+      "code_hash": "80eea5d9621bb44f34a5a981951e319b",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h1 id=\"3-model-implementation\">3\ufe0f\u20e3 Model Implementation</h1>\n<span class=\"paragraph\">We implement an <strong>MLP baseline</strong> that predicts each cell's next character.</span>\n<h3 id=\"architecture\">Architecture</h3>\n<div class=\"language-carbon codehilite\"><pre><span></span><code><span class=\"nx\">Input</span><span class=\"w\"> </span><span class=\"nx\">features</span><span class=\"w\"> </span><span class=\"p\">(</span><span class=\"nx\">per</span><span class=\"w\"> </span><span class=\"nx\">cell</span><span class=\"p\">):</span>\n<span class=\"err\">\u251c\u2500\u2500</span><span class=\"w\"> </span><span class=\"mi\">3</span><span class=\"err\">\u00d7</span><span class=\"mi\">3</span><span class=\"w\"> </span><span class=\"nx\">patch</span><span class=\"w\"> </span><span class=\"nx\">one</span><span class=\"o\">-</span><span class=\"nx\">hot</span><span class=\"w\"> </span><span class=\"nx\">encoding</span><span class=\"w\"> </span><span class=\"p\">(</span><span class=\"mi\">9</span><span class=\"w\"> </span><span class=\"err\">\u00d7</span><span class=\"w\"> </span><span class=\"mi\">98</span><span class=\"w\"> </span><span class=\"p\">=</span><span class=\"w\"> </span><span class=\"mi\">882</span><span class=\"w\"> </span><span class=\"nx\">dims</span><span class=\"p\">)</span>\n<span class=\"err\">\u251c\u2500\u2500</span><span class=\"w\"> </span><span class=\"nx\">Normalized</span><span class=\"w\"> </span><span class=\"p\">(</span><span class=\"nx\">row</span><span class=\"p\">,</span><span class=\"w\"> </span><span class=\"nx\">col</span><span class=\"p\">)</span><span class=\"w\"> </span><span class=\"nx\">position</span><span class=\"w\"> </span><span class=\"p\">(</span><span class=\"mi\">2</span><span class=\"w\"> </span><span class=\"nx\">dims</span><span class=\"p\">)</span>\n<span class=\"err\">\u251c\u2500\u2500</span><span class=\"w\"> </span><span class=\"nx\">Action</span><span class=\"w\"> </span><span class=\"k\">type</span><span class=\"w\"> </span><span class=\"nx\">one</span><span class=\"o\">-</span><span class=\"nx\">hot</span><span class=\"w\"> </span><span class=\"p\">(</span><span class=\"mi\">4</span><span class=\"w\"> </span><span class=\"nx\">dims</span><span class=\"p\">)</span>\n<span class=\"err\">\u251c\u2500\u2500</span><span class=\"w\"> </span><span class=\"nx\">Command</span><span class=\"w\"> </span><span class=\"nx\">family</span><span class=\"w\"> </span><span class=\"nx\">one</span><span class=\"o\">-</span><span class=\"nx\">hot</span><span class=\"w\"> </span><span class=\"p\">(</span><span class=\"mi\">5</span><span class=\"w\"> </span><span class=\"nx\">dims</span><span class=\"p\">)</span>\n<span class=\"err\">\u2514\u2500\u2500</span><span class=\"w\"> </span><span class=\"nx\">Typed</span><span class=\"w\"> </span><span class=\"nx\">character</span><span class=\"w\"> </span><span class=\"nx\">one</span><span class=\"o\">-</span><span class=\"nx\">hot</span><span class=\"w\"> </span><span class=\"p\">(</span><span class=\"mi\">98</span><span class=\"w\"> </span><span class=\"nx\">dims</span><span class=\"p\">)</span>\n\n<span class=\"nx\">MLP</span><span class=\"p\">:</span><span class=\"w\"> </span><span class=\"nx\">Input</span><span class=\"w\"> </span><span class=\"err\">\u2192</span><span class=\"w\"> </span><span class=\"mi\">128</span><span class=\"w\"> </span><span class=\"nx\">hidden</span><span class=\"w\"> </span><span class=\"err\">\u2192</span><span class=\"w\"> </span><span class=\"mi\">98</span><span class=\"w\"> </span><span class=\"nx\">output</span><span class=\"w\"> </span><span class=\"p\">(</span><span class=\"nx\">softmax</span><span class=\"w\"> </span><span class=\"nx\">over</span><span class=\"w\"> </span><span class=\"nx\">vocab</span><span class=\"p\">)</span>\n</code></pre></div>\n<h3 id=\"training\">Training</h3>\n<ul>\n<li><strong>Positive samples:</strong> cells that actually changed</li>\n<li><strong>Negative samples:</strong> randomly sampled unchanged cells (8:1 ratio)</li>\n<li><strong>Loss:</strong> cross-entropy over character vocabulary</li>\n</ul></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<span class=\"paragraph\"><a id=\"part-2\"></a></span>\n<h1 id=\"part-2-visualizing-the-terminal\"><iconify-icon icon='lucide:eye' inline></iconify-icon> Part 2: Visualizing the Terminal</h1>\n<span class=\"paragraph\">Step through an episode frame by frame. Watch for:</span>\n<ul>\n<li><strong>Yellow cells</strong> = what changed from the previous frame</li>\n<li><strong>Typing</strong> = 2 cells change (new char + cursor move)</li>\n<li><strong>Enter</strong> = 20\u201340 cells change (output + new prompt)</li>\n</ul></span>"
           }
         }
       ],
@@ -209,7 +202,7 @@
     },
     {
       "id": "ZHCJ",
-      "code_hash": "f3b05368e70765f02def3c1afa01cd16",
+      "code_hash": "64da117cda420faa4b6840ea97f9a0d9",
       "outputs": [
         {
           "type": "data",
@@ -222,7 +215,7 @@
     },
     {
       "id": "ROlb",
-      "code_hash": "fa087ac2f3b12a29f6574a2c9ad16757",
+      "code_hash": "33d1dd37bb6b0a97a60204085693209d",
       "outputs": [
         {
           "type": "data",
@@ -235,12 +228,12 @@
     },
     {
       "id": "qnkX",
-      "code_hash": "bb46af8abc6e6e056b6d5cf3da094f68",
+      "code_hash": "10b6d05a8fb827b482404bb0a053e443",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h1 id=\"4-train-it-yourself\">4\ufe0f\u20e3 Train It Yourself</h1>\n<span class=\"paragraph\">Click the button below to train the MLP baseline on generated episodes.\nYou can adjust the training size and conditioning level.</span>\n<table>\n<thead>\n<tr>\n<th>Conditioning</th>\n<th>What the model sees</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>none</code></td>\n<td>Only local patch + position</td>\n</tr>\n<tr>\n<td><code>family</code></td>\n<td>+ action type + command family (e.g., \"pwd\")</td>\n</tr>\n<tr>\n<td><code>command</code></td>\n<td>+ exact typed character</td>\n</tr>\n</tbody>\n</table></span>"
+            "text/plain": ""
           }
         }
       ],
@@ -248,12 +241,12 @@
     },
     {
       "id": "TqIu",
-      "code_hash": "e43a74cc5d482e2efce4fd093dc42491",
+      "code_hash": "04cd2577855bf6c770b635d684e48370",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: flex-end;flex-wrap: nowrap;gap: 1.5rem'><marimo-ui-element object-id='TqIu-0' random-id='50e61c42-9a1c-2adc-6615-9021e7524f42'><marimo-button data-initial-value='0' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;\ud83d\ude80 Train Model&lt;/span&gt;&lt;/span&gt;&quot;' data-kind='&quot;success&quot;' data-disabled='false' data-full-width='false'></marimo-button></marimo-ui-element><marimo-ui-element object-id='TqIu-1' random-id='e301abc5-1001-b5fe-c2aa-b488224e3327'><marimo-slider data-initial-value='40' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Training episodes&lt;/span&gt;&lt;/span&gt;&quot;' data-start='20' data-stop='80' data-step='10' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='false'></marimo-slider></marimo-ui-element><marimo-ui-element object-id='TqIu-2' random-id='17934923-4db4-2a33-a2e0-b404aa783201'><marimo-dropdown data-initial-value='[&quot;command&quot;]' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Conditioning&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;none&quot;,&quot;family&quot;,&quot;command&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false'></marimo-dropdown></marimo-ui-element></div>"
+            "text/plain": ""
           }
         }
       ],
@@ -261,7 +254,7 @@
     },
     {
       "id": "Vxnm",
-      "code_hash": "2a8714fbb84610fd8aa9db24bced75db",
+      "code_hash": "d84b41dcb82f3aaadcc4e567f9a8521c",
       "outputs": [
         {
           "type": "data",
@@ -274,12 +267,12 @@
     },
     {
       "id": "DnEU",
-      "code_hash": "46722fd3dd55c19b046f6069cc64acc0",
+      "code_hash": "17cf2d16ed5193b455a70dedde828a41",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/html": "<marimo-callout-output data-html='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;\ud83d\udc46 Click &lt;strong&gt;Train Model&lt;/strong&gt; above to train and evaluate the MLP baseline.&lt;/span&gt;&lt;/span&gt;&quot;' data-kind='&quot;info&quot;'></marimo-callout-output>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"the-key-insight-typing-vs-enter\">The Key Insight: Typing vs. Enter</h3>\n<table>\n<thead>\n<tr>\n<th>Action</th>\n<th>Cells Changed</th>\n<th>What the Model Needs</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Typing</td>\n<td>2</td>\n<td>Local rule: cursor \u2192 char, next cell \u2192 cursor</td>\n</tr>\n<tr>\n<td>Enter</td>\n<td>20\u201340</td>\n<td>Semantic knowledge: what does this command output?</td>\n</tr>\n</tbody>\n</table>\n<span class=\"paragraph\">This is why we <strong>evaluate them separately</strong> \u2014 a model could hit 95% overall by acing typing while completely failing Enter.</span></span>"
           }
         }
       ],
@@ -287,12 +280,12 @@
     },
     {
       "id": "ulZA",
-      "code_hash": "7cdc556387f81658900a9d9986c73d52",
+      "code_hash": "088461565f3413ba5d206b22e0868afd",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h1 id=\"5-benchmark-results\">5\ufe0f\u20e3 Benchmark Results</h1>\n<span class=\"paragraph\">We ran a full comparison of <strong>MLP</strong>, <strong>Transformer</strong>, and <strong>GRU</strong> baselines\non four experimental settings:</span>\n<table>\n<thead>\n<tr>\n<th>Setting</th>\n<th>Train/Test Split</th>\n<th>Hint Given</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Standard \u00b7 Family</td>\n<td>Same commands</td>\n<td>Command family only</td>\n</tr>\n<tr>\n<td>Standard \u00b7 Command</td>\n<td>Same commands</td>\n<td>Exact command text</td>\n</tr>\n<tr>\n<td>Paraphrase \u00b7 Family</td>\n<td>Different phrasings</td>\n<td>Command family only</td>\n</tr>\n<tr>\n<td>Paraphrase \u00b7 Command</td>\n<td>Different phrasings</td>\n<td>Exact command text</td>\n</tr>\n</tbody>\n</table>\n<span class=\"paragraph\">The <strong>paraphrase</strong> settings test generalization: train on <code>whoami</code>, test on <code>echo $USER</code>.</span></span>"
+            "text/plain": ""
           }
         }
       ],
@@ -300,7 +293,7 @@
     },
     {
       "id": "ecfG",
-      "code_hash": "5993e97949313fa11d4c8d491a3429df",
+      "code_hash": "ad432aad1c071875e7d6f20a096b82a0",
       "outputs": [
         {
           "type": "data",
@@ -309,16 +302,23 @@
           }
         }
       ],
-      "console": []
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "[W 260418 06:47:35 altair_transformer:79] Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
+          "mimetype": "text/plain"
+        }
+      ]
     },
     {
       "id": "Pvdt",
-      "code_hash": "7a29ee0d81371515fbf85ed7ccf4eaa8",
+      "code_hash": "7ad2e90e5ac43a6be40d351b6039b565",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/plain": ""
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<span class=\"paragraph\"><a id=\"part-3\"></a></span>\n<h1 id=\"part-3-building-the-training-dataset\"><iconify-icon icon='lucide:database' inline></iconify-icon> Part 3: Building the Training Dataset</h1>\n<span class=\"paragraph\"><strong>The prediction task:</strong> For each cell, predict the character after the action.</span>\n<ul>\n<li><strong>Input (X):</strong> Current screen, cell position, action info</li>\n<li><strong>Output (y):</strong> Next character (class index 0\u201396)</li>\n</ul>\n<h3 id=\"features-per-cell\">Features per cell</h3>\n<table>\n<thead>\n<tr>\n<th>Feature</th>\n<th>Dimensions</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Local 3\u00d73 patch</td>\n<td>873</td>\n<td>One-hot encoding of 9 neighbors</td>\n</tr>\n<tr>\n<td>Position</td>\n<td>2</td>\n<td>Normalized (row, col)</td>\n</tr>\n<tr>\n<td>Action type</td>\n<td>4</td>\n<td>One-hot: idle, type, backspace, enter</td>\n</tr>\n<tr>\n<td>Command family</td>\n<td>5</td>\n<td>One-hot: pwd, whoami, date, ...</td>\n</tr>\n<tr>\n<td>Typed character</td>\n<td>97</td>\n<td>One-hot: which char was typed</td>\n</tr>\n</tbody>\n</table>\n<span class=\"paragraph\">The last three are <strong>conditioning features</strong> \u2014 they tell the model what action is happening.</span></span>"
           }
         }
       ],
@@ -326,12 +326,25 @@
     },
     {
       "id": "ZBYS",
-      "code_hash": "3b3bd5d67ccba0687cc7553e5183aa1e",
+      "code_hash": "85f68e41b0e6811e7faa96d9b5c1110a",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 1rem'><div style='display: flex;flex: 1;flex-direction: row;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><marimo-ui-element object-id='Pvdt-0' random-id='5a7512eb-615a-b820-3260-873d558e0608'><marimo-dropdown data-initial-value='[&quot;Overall&quot;]' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Metric&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;Overall&quot;,&quot;Typing&quot;,&quot;Enter&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false'></marimo-dropdown></marimo-ui-element></div><marimo-ui-element object-id='ZBYS-0' random-id='0fa14513-1294-8a32-a90b-0cdfa91f8049'><marimo-vega data-initial-value='{}' data-label='null' data-spec='{&quot;config&quot;:{&quot;view&quot;:{&quot;continuousWidth&quot;:300,&quot;continuousHeight&quot;:300,&quot;strokeWidth&quot;:0},&quot;axis&quot;:{&quot;domainColor&quot;:&quot;#94a3b8&quot;,&quot;gridColor&quot;:&quot;#e5e7eb&quot;}},&quot;layer&quot;:[{&quot;mark&quot;:{&quot;type&quot;:&quot;bar&quot;,&quot;cornerRadiusTopLeft&quot;:5,&quot;cornerRadiusTopRight&quot;:5},&quot;encoding&quot;:{&quot;color&quot;:{&quot;field&quot;:&quot;Model&quot;,&quot;legend&quot;:{&quot;orient&quot;:&quot;top&quot;,&quot;title&quot;:null},&quot;scale&quot;:{&quot;domain&quot;:[&quot;MLP&quot;,&quot;Transformer&quot;,&quot;GRU&quot;],&quot;range&quot;:[&quot;#22c55e&quot;,&quot;#8b5cf6&quot;,&quot;#ef4444&quot;]},&quot;type&quot;:&quot;nominal&quot;},&quot;tooltip&quot;:[{&quot;field&quot;:&quot;Model&quot;,&quot;type&quot;:&quot;nominal&quot;},{&quot;field&quot;:&quot;Setting&quot;,&quot;type&quot;:&quot;nominal&quot;},{&quot;field&quot;:&quot;Pct&quot;,&quot;type&quot;:&quot;nominal&quot;}],&quot;x&quot;:{&quot;axis&quot;:{&quot;labelAngle&quot;:-20,&quot;title&quot;:null},&quot;field&quot;:&quot;Setting&quot;,&quot;sort&quot;:[&quot;Standard \u00b7 Family&quot;,&quot;Standard \u00b7 Command&quot;,&quot;Paraphrase \u00b7 Family&quot;,&quot;Paraphrase \u00b7 Command&quot;],&quot;type&quot;:&quot;nominal&quot;},&quot;xOffset&quot;:{&quot;field&quot;:&quot;Model&quot;,&quot;type&quot;:&quot;nominal&quot;},&quot;y&quot;:{&quot;field&quot;:&quot;Value&quot;,&quot;scale&quot;:{&quot;domain&quot;:[0,1.05]},&quot;title&quot;:&quot;Overall Accuracy&quot;,&quot;type&quot;:&quot;quantitative&quot;}}},{&quot;mark&quot;:{&quot;type&quot;:&quot;text&quot;,&quot;dy&quot;:-10,&quot;fontSize&quot;:9,&quot;fontWeight&quot;:&quot;bold&quot;},&quot;encoding&quot;:{&quot;color&quot;:{&quot;value&quot;:&quot;#1e293b&quot;},&quot;text&quot;:{&quot;field&quot;:&quot;Pct&quot;,&quot;type&quot;:&quot;nominal&quot;},&quot;x&quot;:{&quot;field&quot;:&quot;Setting&quot;,&quot;sort&quot;:[&quot;Standard \u00b7 Family&quot;,&quot;Standard \u00b7 Command&quot;,&quot;Paraphrase \u00b7 Family&quot;,&quot;Paraphrase \u00b7 Command&quot;],&quot;type&quot;:&quot;nominal&quot;},&quot;xOffset&quot;:{&quot;field&quot;:&quot;Model&quot;,&quot;type&quot;:&quot;nominal&quot;},&quot;y&quot;:{&quot;field&quot;:&quot;Value&quot;,&quot;type&quot;:&quot;quantitative&quot;}}}],&quot;data&quot;:{&quot;url&quot;:&quot;data:text/csv;base64,TW9kZWwsU2V0dGluZyxPdmVyYWxsLFR5cGluZyxFbnRlcixWYWx1ZSxQY3QKTUxQLFN0YW5kYXJkIMK3IEZhbWlseSwwLjY4MSwwLjg5NiwwLjY1NiwwLjY4MSw2OC4xJQpNTFAsU3RhbmRhcmQgwrcgQ29tbWFuZCwwLjk0NywwLjkwMywwLjk5OCwwLjk0Nyw5NC43JQpNTFAsUGFyYXBocmFzZSDCtyBGYW1pbHksMC42MzcsMC44OTgsMC42MSwwLjYzNyw2My43JQpNTFAsUGFyYXBocmFzZSDCtyBDb21tYW5kLDAuNzE2LDAuNzM5LDAuNzE4LDAuNzE2LDcxLjYlClRyYW5zZm9ybWVyLFN0YW5kYXJkIMK3IEZhbWlseSwwLjU5OSwwLjc5MiwwLjYxOSwwLjU5OSw1OS45JQpUcmFuc2Zvcm1lcixTdGFuZGFyZCDCtyBDb21tYW5kLDAuODgsMC44NjgsMC45ODIsMC44OCw4OC4wJQpUcmFuc2Zvcm1lcixQYXJhcGhyYXNlIMK3IEZhbWlseSwwLjU0MywwLjY1OSwwLjYyNywwLjU0Myw1NC4zJQpUcmFuc2Zvcm1lcixQYXJhcGhyYXNlIMK3IENvbW1hbmQsMC42MzksMC42NTUsMC43NDcsMC42MzksNjMuOSUKR1JVLFN0YW5kYXJkIMK3IEZhbWlseSwwLjU0MSwwLjgyNSwwLjQ1MiwwLjU0MSw1NC4xJQpHUlUsU3RhbmRhcmQgwrcgQ29tbWFuZCwwLjczMiwwLjgyLDAuNzg2LDAuNzMyLDczLjIlCkdSVSxQYXJhcGhyYXNlIMK3IEZhbWlseSwwLjQ3OCwwLjYyLDAuNTU4LDAuNDc4LDQ3LjglCkdSVSxQYXJhcGhyYXNlIMK3IENvbW1hbmQsMC41NDksMC42MTIsMC42NCwwLjU0OSw1NC45JQo=&quot;,&quot;format&quot;:{&quot;type&quot;:&quot;csv&quot;}},&quot;height&quot;:360,&quot;title&quot;:{&quot;text&quot;:&quot;Baseline Comparison: Overall Accuracy&quot;,&quot;anchor&quot;:&quot;start&quot;,&quot;fontSize&quot;:16},&quot;width&quot;:700,&quot;&#36;schema&quot;:&quot;https://vega.github.io/schema/vega-lite/v5.20.1.json&quot;}' data-chart-selection='false' data-field-selection='true' data-embed-options='{}'></marimo-vega></marimo-ui-element></div>"
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "aLJB",
+      "code_hash": "cc1b28d0c39b208d1728a7d936b3493c",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
           }
         }
       ],
@@ -339,32 +352,19 @@
         {
           "type": "stream",
           "name": "stderr",
-          "text": "[W 260417 20:17:37 altair_transformer:79] Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
+          "text": "[W 260418 06:47:35 altair_transformer:79] Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
           "mimetype": "text/plain"
         }
       ]
     },
     {
-      "id": "aLJB",
-      "code_hash": "dd194feaa3262675bb0c3d2ad3e89956",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 1rem'><div style='flex: 1'><marimo-stat data-value='&quot;74.5%&quot;' data-label='&quot;MLP Overall Mean&quot;' data-caption='&quot;Best overall baseline&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;74.4%&quot;' data-label='&quot;Transformer Enter Mean&quot;' data-caption='&quot;Relatively stronger on Enter&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;57.5%&quot;' data-label='&quot;GRU Overall Mean&quot;' data-caption='&quot;Underperforms here&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div></div>"
-          }
-        }
-      ],
-      "console": []
-    },
-    {
       "id": "nHfw",
-      "code_hash": "59e87e8e66cb99bf580566613c760af3",
+      "code_hash": "0ddaa020eff8b9d7ce6b74575184abe8",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"typing-vs-enter-tradeoff\">\ud83c\udfaf Typing vs Enter Tradeoff</h3></span>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"sampling-strategy\">Sampling Strategy</h3>\n<span class=\"paragraph\">In a typical transition: ~395 cells stay the same, ~5 cells change.</span>\n<span class=\"paragraph\">Training on all cells equally \u2192 the model learns to copy everything (98% accuracy, 0% on cells that matter).</span>\n<span class=\"paragraph\"><strong>Our fix:</strong></span>\n<ul>\n<li>Keep <strong>all changed cells</strong> as positives</li>\n<li>Sample a limited set of <strong>unchanged cells</strong> as negatives</li>\n<li>This forces the model to learn real patterns, not just copying</li>\n</ul></span>"
           }
         }
       ],
@@ -372,12 +372,25 @@
     },
     {
       "id": "xXTn",
-      "code_hash": "a2c25221cbfaf6777ce41c783384b277",
+      "code_hash": "3e48b0f225e27ea76da2cdbd1b95a7ef",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 1rem'><marimo-ui-element object-id='xXTn-0' random-id='3e4c62cf-77af-9d20-695e-fae7ee1b8250'><marimo-vega data-initial-value='{}' data-label='null' data-spec='{&quot;config&quot;:{&quot;view&quot;:{&quot;continuousWidth&quot;:300,&quot;continuousHeight&quot;:300,&quot;strokeWidth&quot;:0},&quot;axis&quot;:{&quot;domainColor&quot;:&quot;#94a3b8&quot;,&quot;gridColor&quot;:&quot;#e5e7eb&quot;}},&quot;layer&quot;:[{&quot;mark&quot;:{&quot;type&quot;:&quot;circle&quot;,&quot;opacity&quot;:0.9,&quot;stroke&quot;:&quot;#1e293b&quot;,&quot;strokeWidth&quot;:1.5},&quot;encoding&quot;:{&quot;color&quot;:{&quot;field&quot;:&quot;Model&quot;,&quot;legend&quot;:{&quot;orient&quot;:&quot;top&quot;,&quot;title&quot;:null},&quot;scale&quot;:{&quot;domain&quot;:[&quot;MLP&quot;,&quot;Transformer&quot;,&quot;GRU&quot;],&quot;range&quot;:[&quot;#22c55e&quot;,&quot;#8b5cf6&quot;,&quot;#ef4444&quot;]},&quot;type&quot;:&quot;nominal&quot;},&quot;size&quot;:{&quot;field&quot;:&quot;Overall_Mean&quot;,&quot;legend&quot;:null,&quot;scale&quot;:{&quot;range&quot;:[600,2000]},&quot;type&quot;:&quot;quantitative&quot;},&quot;tooltip&quot;:[{&quot;field&quot;:&quot;Model&quot;,&quot;type&quot;:&quot;nominal&quot;},{&quot;field&quot;:&quot;Typing_Mean&quot;,&quot;type&quot;:&quot;quantitative&quot;},{&quot;field&quot;:&quot;Enter_Mean&quot;,&quot;type&quot;:&quot;quantitative&quot;},{&quot;field&quot;:&quot;Overall_Mean&quot;,&quot;type&quot;:&quot;quantitative&quot;}],&quot;x&quot;:{&quot;field&quot;:&quot;Typing_Mean&quot;,&quot;scale&quot;:{&quot;domain&quot;:[0.6,0.95]},&quot;title&quot;:&quot;Typing Accuracy (mechanical)&quot;,&quot;type&quot;:&quot;quantitative&quot;},&quot;y&quot;:{&quot;field&quot;:&quot;Enter_Mean&quot;,&quot;scale&quot;:{&quot;domain&quot;:[0.5,0.9]},&quot;title&quot;:&quot;Enter Accuracy (semantic)&quot;,&quot;type&quot;:&quot;quantitative&quot;}}},{&quot;mark&quot;:{&quot;type&quot;:&quot;text&quot;,&quot;dy&quot;:-22,&quot;fontSize&quot;:12,&quot;fontWeight&quot;:&quot;bold&quot;},&quot;encoding&quot;:{&quot;color&quot;:{&quot;value&quot;:&quot;#1e293b&quot;},&quot;text&quot;:{&quot;field&quot;:&quot;Model&quot;,&quot;type&quot;:&quot;nominal&quot;},&quot;x&quot;:{&quot;field&quot;:&quot;Typing_Mean&quot;,&quot;type&quot;:&quot;quantitative&quot;},&quot;y&quot;:{&quot;field&quot;:&quot;Enter_Mean&quot;,&quot;type&quot;:&quot;quantitative&quot;}}}],&quot;data&quot;:{&quot;url&quot;:&quot;data:text/csv;base64,TW9kZWwsVHlwaW5nX01lYW4sRW50ZXJfTWVhbixPdmVyYWxsX01lYW4KR1JVLDAuNzE5MjUsMC42MDksMC41NzUKTUxQLDAuODU5LDAuNzQ1NSwwLjc0NTI1ClRyYW5zZm9ybWVyLDAuNzQzNSwwLjc0Mzc1LDAuNjY1MjUK&quot;,&quot;format&quot;:{&quot;type&quot;:&quot;csv&quot;}},&quot;height&quot;:380,&quot;title&quot;:{&quot;text&quot;:&quot;Typing vs Enter Accuracy&quot;,&quot;anchor&quot;:&quot;start&quot;,&quot;fontSize&quot;:16},&quot;width&quot;:500,&quot;&#36;schema&quot;:&quot;https://vega.github.io/schema/vega-lite/v5.20.1.json&quot;}' data-chart-selection='false' data-field-selection='true' data-embed-options='{}'></marimo-vega></marimo-ui-element><marimo-callout-output data-html='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;strong&gt;Interpretation:&lt;/strong&gt; MLP is strongest overall (largest bubble, furthest right). Transformer shows relatively better Enter accuracy but weaker typing. GRU underperforms on both axes.&lt;/span&gt;&lt;/span&gt;&quot;' data-kind='&quot;info&quot;'></marimo-callout-output></div>"
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "AjVT",
+      "code_hash": "aa329f54ab921cea1c10ba956710d234",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
           }
         }
       ],
@@ -385,32 +398,19 @@
         {
           "type": "stream",
           "name": "stderr",
-          "text": "[W 260417 20:17:37 altair_transformer:79] Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
+          "text": "[W 260418 06:47:36 altair_transformer:79] Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
           "mimetype": "text/plain"
         }
       ]
     },
     {
-      "id": "AjVT",
-      "code_hash": "b4fbb03393568c612fbceadc8c345230",
-      "outputs": [
-        {
-          "type": "data",
-          "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"full-results-table\">\ud83d\udccb Full Results Table</h3></span>"
-          }
-        }
-      ],
-      "console": []
-    },
-    {
       "id": "pHFh",
-      "code_hash": "b7ee9b3a6f1cb3dfec4b85f2ce2e84dd",
+      "code_hash": "8e7da35a376ef02346d0cda3f34a63b0",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/html": "<marimo-ui-element object-id='pHFh-0' random-id='d50c7fe6-656d-34eb-0b88-a07160e2a379'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;Model&#92;&quot;:&#92;&quot;MLP&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Standard &#92;&#92;u00b7 Family&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;68.1%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;89.6%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;65.6%&#92;&quot;},{&#92;&quot;Model&#92;&quot;:&#92;&quot;MLP&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Standard &#92;&#92;u00b7 Command&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;94.7%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;90.3%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;99.8%&#92;&quot;},{&#92;&quot;Model&#92;&quot;:&#92;&quot;MLP&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Paraphrase &#92;&#92;u00b7 Family&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;63.7%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;89.8%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;61.0%&#92;&quot;},{&#92;&quot;Model&#92;&quot;:&#92;&quot;MLP&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Paraphrase &#92;&#92;u00b7 Command&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;71.6%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;73.9%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;71.8%&#92;&quot;},{&#92;&quot;Model&#92;&quot;:&#92;&quot;Transformer&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Standard &#92;&#92;u00b7 Family&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;59.9%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;79.2%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;61.9%&#92;&quot;},{&#92;&quot;Model&#92;&quot;:&#92;&quot;Transformer&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Standard &#92;&#92;u00b7 Command&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;88.0%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;86.8%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;98.2%&#92;&quot;},{&#92;&quot;Model&#92;&quot;:&#92;&quot;Transformer&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Paraphrase &#92;&#92;u00b7 Family&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;54.3%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;65.9%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;62.7%&#92;&quot;},{&#92;&quot;Model&#92;&quot;:&#92;&quot;Transformer&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Paraphrase &#92;&#92;u00b7 Command&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;63.9%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;65.5%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;74.7%&#92;&quot;},{&#92;&quot;Model&#92;&quot;:&#92;&quot;GRU&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Standard &#92;&#92;u00b7 Family&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;54.1%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;82.5%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;45.2%&#92;&quot;},{&#92;&quot;Model&#92;&quot;:&#92;&quot;GRU&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Standard &#92;&#92;u00b7 Command&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;73.2%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;82.0%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;78.6%&#92;&quot;},{&#92;&quot;Model&#92;&quot;:&#92;&quot;GRU&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Paraphrase &#92;&#92;u00b7 Family&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;47.8%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;62.0%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;55.8%&#92;&quot;},{&#92;&quot;Model&#92;&quot;:&#92;&quot;GRU&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Paraphrase &#92;&#92;u00b7 Command&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;54.9%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;61.2%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;64.0%&#92;&quot;}]&quot;' data-total-rows='12' data-total-columns='5' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='false' data-page-size='12' data-field-types='[[&quot;Model&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;Setting&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;Overall&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;Typing&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;Enter&quot;,[&quot;string&quot;,&quot;str&quot;]]]' data-show-filters='true' data-show-download='true' data-show-column-summaries='true' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[]' data-has-stable-row-id='false' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element>"
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<span class=\"paragraph\"><a id=\"part-4\"></a></span>\n<h1 id=\"part-4-the-mlp-baseline-model\"><iconify-icon icon='lucide:brain' inline></iconify-icon> Part 4: The MLP Baseline Model</h1>\n<span class=\"paragraph\">We use a simple <strong>Multi-Layer Perceptron (MLP)</strong>:</span>\n<table>\n<thead>\n<tr>\n<th>Layer</th>\n<th>Size</th>\n<th>Description</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Input</td>\n<td>981</td>\n<td>Features (or fewer with less conditioning)</td>\n</tr>\n<tr>\n<td>Hidden</td>\n<td>128</td>\n<td>ReLU activation</td>\n</tr>\n<tr>\n<td>Output</td>\n<td>97</td>\n<td>Softmax over vocabulary</td>\n</tr>\n</tbody>\n</table>\n<span class=\"paragraph\"><strong>Loss:</strong> Cross-entropy, <code>Loss = -log(P(correct_char))</code></span>\n<span class=\"paragraph\"><strong>Why MLP?</strong> It treats each cell independently, using only local context. This is a strong baseline because:</span>\n<ol>\n<li>Most screen changes are local</li>\n<li>The 3\u00d73 patch usually suffices</li>\n<li>Fast to train on CPU</li>\n</ol>\n<span class=\"paragraph\"><strong>Weakness:</strong> Enter predictions require knowing command outputs \u2014 more than local context.</span></span>"
           }
         }
       ],
@@ -418,12 +418,398 @@
     },
     {
       "id": "NCOB",
-      "code_hash": "ec8867b931d943f0a77edc72d5b9151c",
+      "code_hash": "7bd35470740abf1944a860b8b217670c",
       "outputs": [
         {
           "type": "data",
           "data": {
-            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<h1 id=\"6-key-takeaways\">6\ufe0f\u20e3 Key Takeaways</h1>\n<div style=\"display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 20px 0;\">\n    <div style=\"background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 20px;\">\n        <div style=\"font-size: 1.5rem; margin-bottom: 8px;\">\ud83c\udfc6</div>\n        <div style=\"font-weight: 600; color: #166534; margin-bottom: 6px;\">MLP Wins Overall</div>\n        <div style=\"color: #15803d; font-size: 0.95rem;\">Simple per-cell prediction with local patches is a strong baseline. Wins on changed-cell accuracy in most settings.</div>\n    </div>\n    <div style=\"background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 12px; padding: 20px;\">\n        <div style=\"font-size: 1.5rem; margin-bottom: 8px;\">\u26a1</div>\n        <div style=\"font-weight: 600; color: #6b21a8; margin-bottom: 6px;\">Transformer Shows Promise on Enter</div>\n        <div style=\"color: #7e22ce; font-size: 0.95rem;\">Relatively stronger on the semantic \"Enter\" regime, but gains shrink under paraphrase generalization.</div>\n    </div>\n    <div style=\"background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 20px;\">\n        <div style=\"font-size: 1.5rem; margin-bottom: 8px;\">\ud83d\udcc9</div>\n        <div style=\"font-weight: 600; color: #991b1b; margin-bottom: 6px;\">GRU Underperforms</div>\n        <div style=\"color: #b91c1c; font-size: 0.95rem;\">A negative result in this benchmark. May need different architecture choices for screen prediction.</div>\n    </div>\n</div>\n\n<h3 id=\"what-this-notebook-adds-extension\">\ud83d\udd2c What This Notebook Adds (Extension)</h3>\n<span class=\"paragraph\">This isn't just a paper summary \u2014 it's a <strong>new benchmark</strong>:</span>\n<ul>\n<li><strong>Typing vs Enter split</strong> \u2014 directly measures mechanical vs semantic understanding</li>\n<li><strong>Paraphrase generalization</strong> \u2014 tests whether models learn command <em>meaning</em> or just memorize</li>\n<li><strong>Matched comparison</strong> \u2014 all three architectures trained on identical data with identical evaluation</li>\n<li><strong>Interactive exploration</strong> \u2014 step through episodes to build intuition</li>\n</ul>\n<hr />\n<h3 id=\"reproducibility\">\ud83d\udcc2 Reproducibility</h3>\n<div class=\"language-bash codehilite\"><pre><span></span><code><span class=\"c1\"># Run local smoke test</span>\npython<span class=\"w\"> </span>experiments/toy_nc_cli/scripts/smoke_test.py\n\n<span class=\"c1\"># Train Transformer (GPU recommended)</span>\npython<span class=\"w\"> </span>experiments/toy_nc_cli/scripts/train_transformer_baseline.py\n\n<span class=\"c1\"># Train GRU (GPU recommended)</span>\npython<span class=\"w\"> </span>experiments/toy_nc_cli/scripts/train_gru_baseline.py\n</code></pre></div>\n<hr />\n<div style=\"text-align: center; color: #64748b; margin-top: 32px;\">\n    Built with <a href=\"https://marimo.io\" style=\"color: #2563eb;\">marimo</a> \u00b7\n    Inspired by <a href=\"https://arxiv.org/abs/2604.06425\" style=\"color: #2563eb;\">Neural Computers (arXiv:2604.06425)</a>\n</div></span>"
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "aqbW",
+      "code_hash": "ed6e1dc650164647fee0a3da047cda73",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"the-training-code\">The Training Code</h3>\n<span class=\"paragraph\">Here is the actual training code. We use scikit-learn's MLPClassifier:</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "TRpd",
+      "code_hash": "a5aa2ae5b50139017b0bd11865dbf6c8",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "TXez",
+      "code_hash": "111e0da45accf3ff468f23175bfcc6c9",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"try-it-yourself\">Try It Yourself</h3>\n<span class=\"paragraph\">Train an MLP with different settings to see how conditioning affects accuracy.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "dNNg",
+      "code_hash": "f84d1e551caf963a4b156d84fedc4f56",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "yCnT",
+      "code_hash": "bede70b694b03753100ab1b24c6948d7",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "wlCL",
+      "code_hash": "1d3d8df1392a9e9be558fe0430e102cb",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "kqZH",
+      "code_hash": "3af7488c7fd94116bb75a1d39f4883af",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "wAgl",
+      "code_hash": "904db155791149e09d58b11a1a8c1b34",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='wAgl-0' random-id='44969512-fd37-b6a1-a72f-b34d26608078'><marimo-tabs data-initial-value='&quot;0&quot;' data-label='null' data-tabs='[&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Playground&lt;/span&gt;&lt;/span&gt;&quot;,&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Dataset&lt;/span&gt;&lt;/span&gt;&quot;,&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Training&lt;/span&gt;&lt;/span&gt;&quot;]'><div data-kind='tab'><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 1rem'><div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><div style='flex: 1'><marimo-stat data-value='&quot;97&quot;' data-label='&quot;Vocabulary size&quot;' data-caption='&quot;printable chars + cursor + pad&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;5&quot;' data-label='&quot;Command families&quot;' data-caption='&quot;pwd, whoami, date, echo_home, python_arith&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;12&quot;' data-label='&quot;Command phrasings&quot;' data-caption='&quot;used for variation and paraphrase tests&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div></div><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.75rem'><div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: center;flex-wrap: nowrap;gap: 1.5rem'><marimo-ui-element object-id='ZHCJ-0' random-id='fadc84e3-b93c-aff8-0ad7-7855f2e3ccf2'><marimo-dropdown data-initial-value='[&quot;whoami&quot;]' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Command&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;pwd&quot;,&quot;whoami&quot;,&quot;date&quot;,&quot;echo_home&quot;,&quot;python_arith&quot;]' data-allow-select-none='false' data-searchable='false' data-full-width='false'></marimo-dropdown></marimo-ui-element><marimo-ui-element object-id='ZHCJ-1' random-id='a586af3d-1530-1850-f134-9868f400641c'><marimo-radio data-initial-value='&quot;1st phrasing&quot;' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Phrasing&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;1st phrasing&quot;,&quot;2nd phrasing&quot;,&quot;3rd phrasing&quot;]' data-inline='true' data-disabled='false'></marimo-radio></marimo-ui-element><marimo-ui-element object-id='ZHCJ-2' random-id='84e7ebc4-6185-46b2-46fd-fa77b779ec79'><marimo-switch data-initial-value='false' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Auto-play&lt;/span&gt;&lt;/span&gt;&quot;' data-disabled='false'></marimo-switch></marimo-ui-element></div><marimo-ui-element object-id='qnkX-0' random-id='f1949c3f-0699-7046-9e2f-c3b8484eb125'><marimo-slider data-initial-value='0' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Step through the episode&lt;/span&gt;&lt;/span&gt;&quot;' data-start='0' data-stop='7' data-steps='[]' data-debounce='false' data-disabled='false' data-orientation='&quot;horizontal&quot;' data-show-value='false' data-include-input='false' data-full-width='true'></marimo-slider></marimo-ui-element></div><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 1rem'><div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 1rem'><div style='flex: 1'>\n    <div style='border:1px solid #334155;border-radius:8px;background:#0f172a;color:#e2e8f0;\n                padding:12px;font-family:monospace;font-size:14px;line-height:1.4'>\n        <div style='color:#94a3b8;font-size:11px;margin-bottom:8px;font-weight:600'>BEFORE</div>\n        <span>$</span><span>&nbsp;</span><span>\u2588</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span>\n    </div>\n    </div><div style='flex: 1'>\n    <div style='border:1px solid #334155;border-radius:8px;background:#0f172a;color:#e2e8f0;\n                padding:12px;font-family:monospace;font-size:14px;line-height:1.4'>\n        <div style='color:#94a3b8;font-size:11px;margin-bottom:8px;font-weight:600'>AFTER (changed cells in yellow)</div>\n        <span>$</span><span>&nbsp;</span><span>\u2588</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><br><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span><span>\u00b7</span>\n    </div>\n    </div></div><div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><div style='flex: 1'><marimo-stat data-value='&quot;0 / 7&quot;' data-label='&quot;Step&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;Initial state&quot;' data-label='&quot;Action&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;START&quot;' data-label='&quot;Action Type&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;0&quot;' data-label='&quot;Cells Changed&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div></div><marimo-callout-output data-html='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;strong&gt;Step 0&lt;/strong&gt; shows the initial screen state: an empty terminal with a prompt. Use the slider to step through the episode.&lt;/span&gt;&lt;/span&gt;&quot;' data-kind='&quot;info&quot;'></marimo-callout-output></div><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 1rem'><span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"visualizing-the-asymmetry\">Visualizing the Asymmetry</h3></span><marimo-ui-element object-id='ecfG-0' random-id='7afb84f7-09fd-2590-b9c6-5960360f074e'><marimo-vega data-initial-value='{}' data-label='null' data-spec='{&quot;config&quot;:{&quot;view&quot;:{&quot;continuousWidth&quot;:300,&quot;continuousHeight&quot;:300},&quot;axis&quot;:{&quot;grid&quot;:true,&quot;gridColor&quot;:&quot;#e5e7eb&quot;}},&quot;layer&quot;:[{&quot;mark&quot;:{&quot;type&quot;:&quot;bar&quot;,&quot;cornerRadiusTopLeft&quot;:4,&quot;cornerRadiusTopRight&quot;:4},&quot;encoding&quot;:{&quot;color&quot;:{&quot;field&quot;:&quot;Type&quot;,&quot;legend&quot;:{&quot;orient&quot;:&quot;top&quot;,&quot;title&quot;:&quot;Action Type&quot;},&quot;scale&quot;:{&quot;domain&quot;:[&quot;Typing&quot;,&quot;Enter&quot;],&quot;range&quot;:[&quot;#22c55e&quot;,&quot;#ef4444&quot;]},&quot;type&quot;:&quot;nominal&quot;},&quot;x&quot;:{&quot;axis&quot;:{&quot;labelAngle&quot;:0},&quot;field&quot;:&quot;Step&quot;,&quot;title&quot;:&quot;Step Number&quot;,&quot;type&quot;:&quot;ordinal&quot;},&quot;y&quot;:{&quot;field&quot;:&quot;Cells Changed&quot;,&quot;scale&quot;:{&quot;domain&quot;:[0,40]},&quot;title&quot;:&quot;Number of Cells Changed&quot;,&quot;type&quot;:&quot;quantitative&quot;}},&quot;title&quot;:&quot;Cells Changed Per Step: &#x27;whoami&#x27; Command&quot;},{&quot;mark&quot;:{&quot;type&quot;:&quot;text&quot;,&quot;dy&quot;:-8,&quot;fontSize&quot;:11,&quot;fontWeight&quot;:&quot;bold&quot;},&quot;encoding&quot;:{&quot;text&quot;:{&quot;field&quot;:&quot;Cells Changed&quot;,&quot;type&quot;:&quot;quantitative&quot;},&quot;x&quot;:{&quot;field&quot;:&quot;Step&quot;,&quot;type&quot;:&quot;ordinal&quot;},&quot;y&quot;:{&quot;field&quot;:&quot;Cells Changed&quot;,&quot;type&quot;:&quot;quantitative&quot;}}}],&quot;data&quot;:{&quot;url&quot;:&quot;data:text/csv;base64,U3RlcCxBY3Rpb24sQ2VsbHMgQ2hhbmdlZCxUeXBlCjEsVHlwZSAndycsMixUeXBpbmcKMixUeXBlICdoJywyLFR5cGluZwozLFR5cGUgJ28nLDIsVHlwaW5nCjQsVHlwZSAnYScsMixUeXBpbmcKNSxUeXBlICdtJywyLFR5cGluZwo2LFR5cGUgJ2knLDIsVHlwaW5nCjcsRW50ZXIsMzIsRW50ZXIK&quot;,&quot;format&quot;:{&quot;type&quot;:&quot;csv&quot;}},&quot;height&quot;:300,&quot;width&quot;:600,&quot;&#36;schema&quot;:&quot;https://vega.github.io/schema/vega-lite/v5.20.1.json&quot;}' data-chart-selection='false' data-field-selection='true' data-embed-options='{}'></marimo-vega></marimo-ui-element><marimo-callout-output data-html='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;strong&gt;Key insight:&lt;/strong&gt; Enter changes ~16x more cells than typing. This is why we measure them separately.&lt;/span&gt;&lt;/span&gt;&quot;' data-kind='&quot;info&quot;'></marimo-callout-output></div></div></div><div data-kind='tab'><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 1rem'><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 1rem'><span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"conditioning-levels\">Conditioning levels</h3></span><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\">These three settings let us test how much action information the model really needs.</span></span><marimo-ui-element object-id='aLJB-0' random-id='d0494b55-b727-02dd-4465-bb83d6532447'><marimo-vega data-initial-value='{}' data-label='null' data-spec='{&quot;config&quot;:{&quot;view&quot;:{&quot;continuousWidth&quot;:300,&quot;continuousHeight&quot;:300,&quot;strokeWidth&quot;:0},&quot;axis&quot;:{&quot;grid&quot;:true,&quot;gridColor&quot;:&quot;#e5e7eb&quot;}},&quot;data&quot;:{&quot;url&quot;:&quot;data:text/csv;base64,Q29uZGl0aW9uaW5nLEZlYXR1cmUgR3JvdXAsRGltZW5zaW9ucyxFeHBsYW5hdGlvbgpub25lLDN4MyBwYXRjaCArIHBvc2l0aW9uLDg3NSxPbmx5IGxvY2FsIHZpc3VhbCBjb250ZXh0CmZhbWlseSxQYXRjaCArIHBvc2l0aW9uICsgYWN0aW9uIHR5cGUgKyBmYW1pbHksODg0LEFkZHMgY29hcnNlIGFjdGlvbiBpbnRlbnQKZnVsbCxQYXRjaCArIHBvc2l0aW9uICsgYWN0aW9uIHR5cGUgKyBmYW1pbHkgKyB0eXBlZCBjaGFyLDk4MSxBZGRzIGV4YWN0IGtleXByZXNzIGluZm9ybWF0aW9uCg==&quot;,&quot;format&quot;:{&quot;type&quot;:&quot;csv&quot;}},&quot;mark&quot;:{&quot;type&quot;:&quot;bar&quot;,&quot;cornerRadiusTopLeft&quot;:4,&quot;cornerRadiusTopRight&quot;:4},&quot;encoding&quot;:{&quot;color&quot;:{&quot;field&quot;:&quot;Conditioning&quot;,&quot;legend&quot;:null,&quot;scale&quot;:{&quot;domain&quot;:[&quot;none&quot;,&quot;family&quot;,&quot;full&quot;],&quot;range&quot;:[&quot;#94a3b8&quot;,&quot;#60a5fa&quot;,&quot;#2563eb&quot;]},&quot;type&quot;:&quot;nominal&quot;},&quot;x&quot;:{&quot;field&quot;:&quot;Conditioning&quot;,&quot;sort&quot;:[&quot;none&quot;,&quot;family&quot;,&quot;full&quot;],&quot;title&quot;:null,&quot;type&quot;:&quot;nominal&quot;},&quot;y&quot;:{&quot;field&quot;:&quot;Dimensions&quot;,&quot;title&quot;:&quot;Feature dimensions&quot;,&quot;type&quot;:&quot;quantitative&quot;}},&quot;height&quot;:260,&quot;title&quot;:&quot;How conditioning changes the input size&quot;,&quot;width&quot;:480,&quot;&#36;schema&quot;:&quot;https://vega.github.io/schema/vega-lite/v5.20.1.json&quot;}' data-chart-selection='false' data-field-selection='true' data-embed-options='{}'></marimo-vega></marimo-ui-element></div><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 1rem'><span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"sample-dataset-statistics\">Sample dataset statistics</h3></span><div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><div style='flex: 1'><marimo-stat data-value='&quot;20&quot;' data-label='&quot;Episodes&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;253&quot;' data-label='&quot;Transitions&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;6,606&quot;' data-label='&quot;Training samples&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;981&quot;' data-label='&quot;Features per sample&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div></div><marimo-ui-element object-id='AjVT-0' random-id='e5c713da-1fc8-33fd-d631-b33cc9510ef7'><marimo-vega data-initial-value='{}' data-label='null' data-spec='{&quot;config&quot;:{&quot;view&quot;:{&quot;continuousWidth&quot;:300,&quot;continuousHeight&quot;:300,&quot;strokeWidth&quot;:0},&quot;axis&quot;:{&quot;grid&quot;:true,&quot;gridColor&quot;:&quot;#e5e7eb&quot;}},&quot;data&quot;:{&quot;url&quot;:&quot;data:text/csv;base64,QnVja2V0LENvdW50LEtpbmQKQ2hhbmdlZCBjZWxscyB1c2VkIGFzIHBvc2l0aXZlcyw3MzQsVXNlZApVbmNoYW5nZWQgY2VsbHMgc2FtcGxlZCBhcyBuZWdhdGl2ZXMsNTg3MixVc2VkClVuY2hhbmdlZCBjZWxscyBpZ25vcmVkLDk0NTk0LElnbm9yZWQK&quot;,&quot;format&quot;:{&quot;type&quot;:&quot;csv&quot;}},&quot;mark&quot;:{&quot;type&quot;:&quot;bar&quot;,&quot;cornerRadiusTopLeft&quot;:4,&quot;cornerRadiusTopRight&quot;:4},&quot;encoding&quot;:{&quot;color&quot;:{&quot;field&quot;:&quot;Kind&quot;,&quot;legend&quot;:{&quot;orient&quot;:&quot;top&quot;,&quot;title&quot;:null},&quot;scale&quot;:{&quot;domain&quot;:[&quot;Used&quot;,&quot;Ignored&quot;],&quot;range&quot;:[&quot;#2563eb&quot;,&quot;#cbd5e1&quot;]},&quot;type&quot;:&quot;nominal&quot;},&quot;x&quot;:{&quot;field&quot;:&quot;Count&quot;,&quot;title&quot;:&quot;Cell examples across all transitions&quot;,&quot;type&quot;:&quot;quantitative&quot;},&quot;y&quot;:{&quot;field&quot;:&quot;Bucket&quot;,&quot;sort&quot;:&quot;-x&quot;,&quot;title&quot;:null,&quot;type&quot;:&quot;nominal&quot;}},&quot;height&quot;:180,&quot;title&quot;:&quot;Why we sample negatives instead of training on every cell&quot;,&quot;width&quot;:560,&quot;&#36;schema&quot;:&quot;https://vega.github.io/schema/vega-lite/v5.20.1.json&quot;}' data-chart-selection='false' data-field-selection='true' data-embed-options='{}'></marimo-vega></marimo-ui-element><marimo-callout-output data-html='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;From 20 episodes and 253 frame transitions, we extracted &lt;strong&gt;6,606 training samples&lt;/strong&gt;.&#92;nWe keep &lt;strong&gt;all 734 changed cells&lt;/strong&gt; because those are the informative targets, sample &lt;strong&gt;5,872 unchanged cells&lt;/strong&gt; as negatives,&#92;nand deliberately ignore &lt;strong&gt;94,594 unchanged cells&lt;/strong&gt; so the model does not collapse into a trivial copy-everything strategy.&lt;/span&gt;&lt;/span&gt;&quot;' data-kind='&quot;info&quot;'></marimo-callout-output></div></div></div><div data-kind='tab'><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 1rem'><marimo-accordion data-labels='[&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;View training code&lt;/span&gt;&lt;/span&gt;&quot;]' data-multiple='false'><div><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><span class=\"markdown prose dark:prose-invert contents\"><div class=\"language-python codehilite\"><pre><span></span><code><span class=\"c1\"># ==========================================================================</span>\n<span class=\"c1\"># TRAINING CODE</span>\n<span class=\"c1\"># ==========================================================================</span>\n\n<span class=\"kn\">from</span><span class=\"w\"> </span><span class=\"nn\">sklearn.neural_network</span><span class=\"w\"> </span><span class=\"kn\">import</span> <span class=\"n\">MLPClassifier</span>\n\n<span class=\"c1\"># 1. Generate training and test episodes</span>\n<span class=\"n\">train_episodes</span> <span class=\"o\">=</span> <span class=\"n\">generate_episodes</span><span class=\"p\">(</span><span class=\"n\">n</span><span class=\"o\">=</span><span class=\"mi\">40</span><span class=\"p\">,</span> <span class=\"n\">seed</span><span class=\"o\">=</span><span class=\"mi\">42</span><span class=\"p\">)</span>\n<span class=\"n\">test_episodes</span> <span class=\"o\">=</span> <span class=\"n\">generate_episodes</span><span class=\"p\">(</span><span class=\"n\">n</span><span class=\"o\">=</span><span class=\"mi\">25</span><span class=\"p\">,</span> <span class=\"n\">seed</span><span class=\"o\">=</span><span class=\"mi\">999</span><span class=\"p\">)</span>\n\n<span class=\"c1\"># 2. Build the training dataset</span>\n<span class=\"c1\"># - X: feature matrix (n_samples, 981 features)</span>\n<span class=\"c1\"># - y: labels (character indices 0-96)</span>\n<span class=\"n\">X_train</span><span class=\"p\">,</span> <span class=\"n\">y_train</span><span class=\"p\">,</span> <span class=\"n\">stats</span> <span class=\"o\">=</span> <span class=\"n\">build_training_dataset</span><span class=\"p\">(</span>\n    <span class=\"n\">train_episodes</span><span class=\"p\">,</span>\n    <span class=\"n\">conditioning</span><span class=\"o\">=</span><span class=\"s2\">&quot;full&quot;</span><span class=\"p\">,</span>  <span class=\"c1\"># use all features</span>\n    <span class=\"n\">neg_ratio</span><span class=\"o\">=</span><span class=\"mi\">8</span><span class=\"p\">,</span>            <span class=\"c1\"># 8 unchanged cells per changed cell</span>\n    <span class=\"n\">seed</span><span class=\"o\">=</span><span class=\"mi\">42</span><span class=\"p\">,</span>\n<span class=\"p\">)</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"sa\">f</span><span class=\"s2\">&quot;Training samples: </span><span class=\"si\">{</span><span class=\"nb\">len</span><span class=\"p\">(</span><span class=\"n\">X_train</span><span class=\"p\">)</span><span class=\"si\">:</span><span class=\"s2\">,</span><span class=\"si\">}</span><span class=\"s2\">&quot;</span><span class=\"p\">)</span>\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"sa\">f</span><span class=\"s2\">&quot;Features per sample: </span><span class=\"si\">{</span><span class=\"n\">X_train</span><span class=\"o\">.</span><span class=\"n\">shape</span><span class=\"p\">[</span><span class=\"mi\">1</span><span class=\"p\">]</span><span class=\"si\">}</span><span class=\"s2\">&quot;</span><span class=\"p\">)</span>\n\n<span class=\"c1\"># 3. Create and train the MLP</span>\n<span class=\"n\">model</span> <span class=\"o\">=</span> <span class=\"n\">MLPClassifier</span><span class=\"p\">(</span>\n    <span class=\"n\">hidden_layer_sizes</span><span class=\"o\">=</span><span class=\"p\">(</span><span class=\"mi\">128</span><span class=\"p\">,),</span>   <span class=\"c1\"># one hidden layer with 128 neurons</span>\n    <span class=\"n\">max_iter</span><span class=\"o\">=</span><span class=\"mi\">150</span><span class=\"p\">,</span>\n    <span class=\"n\">learning_rate_init</span><span class=\"o\">=</span><span class=\"mf\">0.001</span><span class=\"p\">,</span>\n    <span class=\"n\">batch_size</span><span class=\"o\">=</span><span class=\"mi\">256</span><span class=\"p\">,</span>\n    <span class=\"n\">random_state</span><span class=\"o\">=</span><span class=\"mi\">42</span><span class=\"p\">,</span>\n    <span class=\"n\">early_stopping</span><span class=\"o\">=</span><span class=\"kc\">True</span><span class=\"p\">,</span>\n    <span class=\"n\">validation_fraction</span><span class=\"o\">=</span><span class=\"mf\">0.1</span><span class=\"p\">,</span>\n<span class=\"p\">)</span>\n\n<span class=\"c1\"># Train the model (this is where the learning happens)</span>\n<span class=\"n\">model</span><span class=\"o\">.</span><span class=\"n\">fit</span><span class=\"p\">(</span><span class=\"n\">X_train</span><span class=\"p\">,</span> <span class=\"n\">y_train</span><span class=\"p\">)</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"sa\">f</span><span class=\"s2\">&quot;Converged in </span><span class=\"si\">{</span><span class=\"n\">model</span><span class=\"o\">.</span><span class=\"n\">n_iter_</span><span class=\"si\">}</span><span class=\"s2\"> iterations&quot;</span><span class=\"p\">)</span>\n\n<span class=\"c1\"># 4. Evaluate on test episodes</span>\n<span class=\"n\">metrics</span> <span class=\"o\">=</span> <span class=\"n\">evaluate_model</span><span class=\"p\">(</span><span class=\"n\">model</span><span class=\"p\">,</span> <span class=\"n\">test_episodes</span><span class=\"p\">,</span> <span class=\"n\">conditioning</span><span class=\"o\">=</span><span class=\"s2\">&quot;full&quot;</span><span class=\"p\">)</span>\n\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"sa\">f</span><span class=\"s2\">&quot;Overall accuracy: </span><span class=\"si\">{</span><span class=\"mi\">100</span><span class=\"w\"> </span><span class=\"o\">*</span><span class=\"w\"> </span><span class=\"n\">metrics</span><span class=\"p\">[</span><span class=\"s1\">&#39;overall_acc&#39;</span><span class=\"p\">]</span><span class=\"si\">:</span><span class=\"s2\">.1f</span><span class=\"si\">}</span><span class=\"s2\">%&quot;</span><span class=\"p\">)</span>\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"sa\">f</span><span class=\"s2\">&quot;Typing accuracy:  </span><span class=\"si\">{</span><span class=\"mi\">100</span><span class=\"w\"> </span><span class=\"o\">*</span><span class=\"w\"> </span><span class=\"n\">metrics</span><span class=\"p\">[</span><span class=\"s1\">&#39;typing_acc&#39;</span><span class=\"p\">]</span><span class=\"si\">:</span><span class=\"s2\">.1f</span><span class=\"si\">}</span><span class=\"s2\">%&quot;</span><span class=\"p\">)</span>\n<span class=\"nb\">print</span><span class=\"p\">(</span><span class=\"sa\">f</span><span class=\"s2\">&quot;Enter accuracy:   </span><span class=\"si\">{</span><span class=\"mi\">100</span><span class=\"w\"> </span><span class=\"o\">*</span><span class=\"w\"> </span><span class=\"n\">metrics</span><span class=\"p\">[</span><span class=\"s1\">&#39;enter_acc&#39;</span><span class=\"p\">]</span><span class=\"si\">:</span><span class=\"s2\">.1f</span><span class=\"si\">}</span><span class=\"s2\">%&quot;</span><span class=\"p\">)</span>\n</code></pre></div></span><marimo-callout-output data-html='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;&lt;strong&gt;Pipeline:&lt;/strong&gt; Generate episodes \u2192 Build dataset \u2192 Train MLP \u2192 Evaluate (typing vs. Enter)&lt;/span&gt;&lt;/span&gt;&quot;' data-kind='&quot;info&quot;'></marimo-callout-output></div></div></marimo-accordion><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.75rem'><marimo-ui-element object-id='dNNg-8' random-id='9d611bbb-8b4c-8bf6-faac-1b940c5f4973'><marimo-form data-initial-value='null' data-label='null' data-element-id='&quot;dNNg-7&quot;' data-loading='false' data-bordered='true' data-submit-button-label='&quot;Train Model&quot;' data-submit-button-tooltip='&quot;Train an MLP with these settings&quot;' data-submit-button-disabled='false' data-clear-on-submit='false' data-show-clear-button='true' data-clear-button-label='&quot;Reset&quot;' data-should-validate='false'><marimo-ui-element object-id='dNNg-7' random-id='d2aa11cb-1f48-4b73-daf9-b2ff73f82889'><marimo-dict data-initial-value='{&quot;episodes&quot;:40,&quot;conditioning&quot;:&quot;Full (+ typed char)&quot;}' data-label='null' data-element-ids='{&quot;dNNg-5&quot;:&quot;episodes&quot;,&quot;dNNg-6&quot;:&quot;conditioning&quot;}'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Configure training:</strong></span>\n<span class=\"paragraph\"><marimo-ui-element object-id='dNNg-5' random-id='bdb5e3b9-6ba6-d802-82ed-83a039f51538'><marimo-number data-initial-value='40' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Training episodes&lt;/span&gt;&lt;/span&gt;&quot;' data-start='10' data-stop='200' data-step='10' data-debounce='false' data-full-width='false' data-disabled='false'></marimo-number></marimo-ui-element></span>\n<span class=\"paragraph\"><marimo-ui-element object-id='dNNg-6' random-id='a391556d-3389-9333-9f3e-fcfdf469f872'><marimo-radio data-initial-value='&quot;Full (+ typed char)&quot;' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Conditioning level&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;None (patch only)&quot;,&quot;Family (+ action, family)&quot;,&quot;Full (+ typed char)&quot;]' data-inline='true' data-disabled='false'></marimo-radio></marimo-ui-element></span></span></marimo-dict></marimo-ui-element></marimo-form></marimo-ui-element></div><marimo-callout-output data-html='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Click &lt;strong&gt;Train Model&lt;/strong&gt; above to train an MLP and see the results.&lt;/span&gt;&lt;/span&gt;&quot;' data-kind='&quot;info&quot;'></marimo-callout-output></div></div></marimo-tabs></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "rEll",
+      "code_hash": "fe491470b5d8856e555fe4d7c8d848be",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<span class=\"paragraph\"><a id=\"part-5\"></a></span>\n<h1 id=\"part-5-benchmark-comparison\"><iconify-icon icon='lucide:bar-chart-2' inline></iconify-icon> Part 5: Benchmark Comparison</h1>\n<span class=\"paragraph\">We compare three architectures:</span>\n<table>\n<thead>\n<tr>\n<th>Model</th>\n<th>Architecture</th>\n<th>Key Property</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><strong>MLP</strong></td>\n<td>Per-cell classifier</td>\n<td>Fast, local-only</td>\n</tr>\n<tr>\n<td><strong>Transformer</strong></td>\n<td>Attention over screen</td>\n<td>Global dependencies</td>\n</tr>\n<tr>\n<td><strong>GRU</strong></td>\n<td>Recurrent over screen</td>\n<td>Sequential processing</td>\n</tr>\n</tbody>\n</table>\n<h3 id=\"four-experimental-settings\">Four experimental settings</h3>\n<table>\n<thead>\n<tr>\n<th>Setting</th>\n<th>Train/Test</th>\n<th>Conditioning</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Standard / Family</td>\n<td>Same commands</td>\n<td>Command family only</td>\n</tr>\n<tr>\n<td>Standard / Command</td>\n<td>Same commands</td>\n<td>Exact command text</td>\n</tr>\n<tr>\n<td>Paraphrase / Family</td>\n<td>Train phrasing 1, test 2\u20133</td>\n<td>Family only</td>\n</tr>\n<tr>\n<td>Paraphrase / Command</td>\n<td>Train phrasing 1, test 2\u20133</td>\n<td>Exact text</td>\n</tr>\n</tbody>\n</table>\n<span class=\"paragraph\"><strong>Paraphrase</strong> tests generalization: can the model handle <code>echo $USER</code> after only seeing <code>whoami</code>?</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "dGlV",
+      "code_hash": "15af27ff6f4d1a6299f53c2356fc266d",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "SdmI",
+      "code_hash": "54da6fe1f68b80cfed1f0d390386b915",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "lgWD",
+      "code_hash": "e0d5bf5ff4a4dff959c1856cbe6ded5f",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: center;flex-wrap: nowrap;gap: 1rem'><span class=\"markdown prose dark:prose-invert contents\"><span class=\"paragraph\"><strong>Filter by metric:</strong></span></span><marimo-ui-element object-id='SdmI-0' random-id='640870b9-4b82-8e00-9d6a-1c3216fded05'><marimo-radio data-initial-value='&quot;Overall (changed cells)&quot;' data-label='&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Metric&lt;/span&gt;&lt;/span&gt;&quot;' data-options='[&quot;Overall (changed cells)&quot;,&quot;Typing only&quot;,&quot;Enter only&quot;]' data-inline='true' data-disabled='false'></marimo-radio></marimo-ui-element></div>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "yOPj",
+      "code_hash": "1f8c1fc501df60bb0f862963632706ec",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "[W 260418 06:47:36 altair_transformer:79] Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "fwwy",
+      "code_hash": "2f16faaaa29484aa70c69cd6c7a0ab74",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "[W 260418 06:47:36 altair_transformer:79] Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "LJZf",
+      "code_hash": "1994e5b2cfea1bd600f99590ff74cfb6",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "urSm",
+      "code_hash": "34cd29a9dda47d7f42366f10d4f14d46",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "jxvo",
+      "code_hash": "71223bdcbd06239e91eddcef2f626bb0",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"derived-views-conditioning-gain-and-paraphrase-penalty\">Derived views: conditioning gain and paraphrase penalty</h3>\n<span class=\"paragraph\">The grouped bar chart shows the raw scores, but two derived questions are especially useful:</span>\n<ol>\n<li><strong>How much does exact command information help?</strong>\n   This is the gain from <code>Command</code> over <code>Family</code> within the same train/test regime.</li>\n<li><strong>How much does paraphrase hurt?</strong>\n   This is the drop from <code>Standard</code> to <code>Paraphrase</code> under the same conditioning level.</li>\n</ol>\n<span class=\"paragraph\">These views make the benchmark easier to read because they turn four settings into two interpretable comparisons.</span></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "mWxS",
+      "code_hash": "97da9a76c1dc6fad069817f81af6475a",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "[W 260418 06:47:36 altair_transformer:79] Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "CcZR",
+      "code_hash": "ac939363d294bb2a75ac9b0e6a5abc25",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "[W 260418 06:47:36 altair_transformer:79] Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n[W 260418 06:47:36 altair_transformer:79] Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n[W 260418 06:47:36 altair_transformer:79] Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "YWSi",
+      "code_hash": "9912b43b1ddc21d689a704b0d642347b",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"typing-vs-enter-tradeoff\">Typing vs Enter Tradeoff</h3></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "zlud",
+      "code_hash": "b3682c79760706c6a37f7602e39021d5",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": [
+        {
+          "type": "stream",
+          "name": "stderr",
+          "text": "[W 260418 06:47:36 altair_transformer:79] Failed to convert data to arrow format, falling back to CSV: No module named 'pyarrow'\n",
+          "mimetype": "text/plain"
+        }
+      ]
+    },
+    {
+      "id": "tZnO",
+      "code_hash": "ffc058e208ef5feb2b2573fc1be2ba5a",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"full-results-table\">Full Results Table</h3></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "xvXZ",
+      "code_hash": "1e981699395bc8706a167e72396dc927",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "CLip",
+      "code_hash": "31dbdb03c3f242d11f27e78dd1e8a946",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/plain": ""
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "YECM",
+      "code_hash": "49ae2da792fd28f399a018a27400a37a",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<marimo-ui-element object-id='YECM-4' random-id='01d2e7cb-d202-c987-65c1-8d38dc07ce9c'><marimo-tabs data-initial-value='&quot;0&quot;' data-label='null' data-tabs='[&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Overview&lt;/span&gt;&lt;/span&gt;&quot;,&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Heatmap&lt;/span&gt;&lt;/span&gt;&quot;,&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Derived&lt;/span&gt;&lt;/span&gt;&quot;,&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Tradeoff&lt;/span&gt;&lt;/span&gt;&quot;,&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Table&lt;/span&gt;&lt;/span&gt;&quot;,&quot;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Explorer&lt;/span&gt;&lt;/span&gt;&quot;]'><div data-kind='tab'><div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 1rem'><div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 0.5rem'><div style='flex: 1'><marimo-stat data-value='&quot;74.5%&quot;' data-label='&quot;&lt;iconify-icon icon=&#x27;lucide:trophy&#x27; inline style=&#x27;color: gold&#x27;&gt;&lt;/iconify-icon&gt; MLP&quot;' data-caption='&quot;Winner&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;66.5%&quot;' data-label='&quot;&lt;iconify-icon icon=&#x27;lucide:award&#x27; inline style=&#x27;color: silver&#x27;&gt;&lt;/iconify-icon&gt; Transformer&quot;' data-caption='&quot;Second place&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div><div style='flex: 1'><marimo-stat data-value='&quot;57.5%&quot;' data-label='&quot;&lt;iconify-icon icon=&#x27;lucide:medal&#x27; inline style=&#x27;color: #cd7f32&#x27;&gt;&lt;/iconify-icon&gt; GRU&quot;' data-caption='&quot;Third place&quot;' data-bordered='false' data-target_direction='&quot;increase&quot;'></marimo-stat></div></div><span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"understanding-the-results\">Understanding the Results</h3>\n<span class=\"paragraph\">Several patterns emerge from the benchmark:</span>\n<span class=\"paragraph\"><strong>1. MLP is surprisingly strong.</strong> Despite being the simplest model, MLP achieves the highest\noverall accuracy. This is because most screen changes are local \u2014 a simple patch-based classifier\ncaptures them well.</span>\n<span class=\"paragraph\"><strong>2. Conditioning matters.</strong> All models improve dramatically when given exact command information\n(\"Standard / Command\" vs \"Standard / Family\"). This makes sense \u2014 knowing the exact typed characters\nmakes prediction much easier.</span>\n<span class=\"paragraph\"><strong>3. Paraphrase is harder.</strong> When we train on \"whoami\" but test on \"echo $USER\", accuracy drops.\nThis measures whether models learn command <em>semantics</em> or just memorize character patterns.</span>\n<span class=\"paragraph\"><strong>4. Enter is the hard case.</strong> For all models, Enter accuracy is lower than Typing accuracy\nin the generalization settings.</span></span><marimo-ui-element object-id='yOPj-0' random-id='67da5d9d-613d-2614-88fb-ba31916ec8e2'><marimo-vega data-initial-value='{}' data-label='null' data-spec='{&quot;config&quot;:{&quot;view&quot;:{&quot;continuousWidth&quot;:300,&quot;continuousHeight&quot;:300,&quot;strokeWidth&quot;:0},&quot;axis&quot;:{&quot;grid&quot;:true,&quot;gridColor&quot;:&quot;#e5e7eb&quot;}},&quot;layer&quot;:[{&quot;mark&quot;:{&quot;type&quot;:&quot;bar&quot;,&quot;cornerRadiusTopLeft&quot;:4,&quot;cornerRadiusTopRight&quot;:4},&quot;encoding&quot;:{&quot;color&quot;:{&quot;field&quot;:&quot;Model&quot;,&quot;legend&quot;:{&quot;orient&quot;:&quot;top&quot;,&quot;title&quot;:null},&quot;scale&quot;:{&quot;domain&quot;:[&quot;MLP&quot;,&quot;Transformer&quot;,&quot;GRU&quot;],&quot;range&quot;:[&quot;#16a34a&quot;,&quot;#7c3aed&quot;,&quot;#dc2626&quot;]},&quot;type&quot;:&quot;nominal&quot;},&quot;x&quot;:{&quot;axis&quot;:{&quot;labelAngle&quot;:-15,&quot;title&quot;:null},&quot;field&quot;:&quot;Setting&quot;,&quot;sort&quot;:[&quot;Standard / Family&quot;,&quot;Standard / Command&quot;,&quot;Paraphrase / Family&quot;,&quot;Paraphrase / Command&quot;],&quot;type&quot;:&quot;nominal&quot;},&quot;xOffset&quot;:{&quot;field&quot;:&quot;Model&quot;,&quot;type&quot;:&quot;nominal&quot;},&quot;y&quot;:{&quot;field&quot;:&quot;Value&quot;,&quot;scale&quot;:{&quot;domain&quot;:[0,1.08]},&quot;title&quot;:&quot;Overall Accuracy&quot;,&quot;type&quot;:&quot;quantitative&quot;}}},{&quot;mark&quot;:{&quot;type&quot;:&quot;text&quot;,&quot;dy&quot;:-8,&quot;fontSize&quot;:9},&quot;encoding&quot;:{&quot;text&quot;:{&quot;field&quot;:&quot;Percentage&quot;,&quot;format&quot;:&quot;.0f&quot;,&quot;type&quot;:&quot;quantitative&quot;},&quot;x&quot;:{&quot;field&quot;:&quot;Setting&quot;,&quot;sort&quot;:[&quot;Standard / Family&quot;,&quot;Standard / Command&quot;,&quot;Paraphrase / Family&quot;,&quot;Paraphrase / Command&quot;],&quot;type&quot;:&quot;nominal&quot;},&quot;xOffset&quot;:{&quot;field&quot;:&quot;Model&quot;,&quot;type&quot;:&quot;nominal&quot;},&quot;y&quot;:{&quot;field&quot;:&quot;Value&quot;,&quot;type&quot;:&quot;quantitative&quot;}}}],&quot;data&quot;:{&quot;url&quot;:&quot;data:text/csv;base64,TW9kZWwsU2V0dGluZyxPdmVyYWxsLFR5cGluZyxFbnRlcixWYWx1ZSxQZXJjZW50YWdlCk1MUCxTdGFuZGFyZCAvIEZhbWlseSwwLjY4MSwwLjg5NiwwLjY1NiwwLjY4MSw2OC4xCk1MUCxTdGFuZGFyZCAvIENvbW1hbmQsMC45NDcsMC45MDMsMC45OTgsMC45NDcsOTQuNwpNTFAsUGFyYXBocmFzZSAvIEZhbWlseSwwLjYzNywwLjg5OCwwLjYxLDAuNjM3LDYzLjcKTUxQLFBhcmFwaHJhc2UgLyBDb21tYW5kLDAuNzE2LDAuNzM5LDAuNzE4LDAuNzE2LDcxLjYKVHJhbnNmb3JtZXIsU3RhbmRhcmQgLyBGYW1pbHksMC41OTksMC43OTIsMC42MTksMC41OTksNTkuOQpUcmFuc2Zvcm1lcixTdGFuZGFyZCAvIENvbW1hbmQsMC44OCwwLjg2OCwwLjk4MiwwLjg4LDg4LjAKVHJhbnNmb3JtZXIsUGFyYXBocmFzZSAvIEZhbWlseSwwLjU0MywwLjY1OSwwLjYyNywwLjU0Myw1NC4zClRyYW5zZm9ybWVyLFBhcmFwaHJhc2UgLyBDb21tYW5kLDAuNjM5LDAuNjU1LDAuNzQ3LDAuNjM5LDYzLjkKR1JVLFN0YW5kYXJkIC8gRmFtaWx5LDAuNTQxLDAuODI1LDAuNDUyLDAuNTQxLDU0LjEKR1JVLFN0YW5kYXJkIC8gQ29tbWFuZCwwLjczMiwwLjgyLDAuNzg2LDAuNzMyLDczLjIKR1JVLFBhcmFwaHJhc2UgLyBGYW1pbHksMC40NzgsMC42MiwwLjU1OCwwLjQ3OCw0Ny44CkdSVSxQYXJhcGhyYXNlIC8gQ29tbWFuZCwwLjU0OSwwLjYxMiwwLjY0LDAuNTQ5LDU0LjkK&quot;,&quot;format&quot;:{&quot;type&quot;:&quot;csv&quot;}},&quot;height&quot;:350,&quot;title&quot;:&quot;Model Comparison: Overall Accuracy Across Settings&quot;,&quot;width&quot;:700,&quot;&#36;schema&quot;:&quot;https://vega.github.io/schema/vega-lite/v5.20.1.json&quot;}' data-chart-selection='false' data-field-selection='true' data-embed-options='{}'></marimo-vega></marimo-ui-element></div></div><div data-kind='tab'><marimo-ui-element object-id='YECM-0' random-id='807d4163-fe02-2238-15e1-765f42847c37'><marimo-lazy data-initial-value='false' data-label='null' data-show-loading-indicator='false'></marimo-lazy></marimo-ui-element></div><div data-kind='tab'><marimo-ui-element object-id='YECM-1' random-id='1d6c58b0-1d6e-ca13-93ef-239c2cbf5dac'><marimo-lazy data-initial-value='false' data-label='null' data-show-loading-indicator='false'></marimo-lazy></marimo-ui-element></div><div data-kind='tab'><marimo-ui-element object-id='YECM-2' random-id='561543c8-deff-1d84-87c9-3a1171a05de9'><marimo-lazy data-initial-value='false' data-label='null' data-show-loading-indicator='false'></marimo-lazy></marimo-ui-element></div><div data-kind='tab'><marimo-ui-element object-id='CLip-0' random-id='f89afc76-e844-ae7b-d1df-97c748852cee'><marimo-table data-initial-value='[]' data-label='null' data-data='&quot;[{&#92;&quot;_marimo_row_id&#92;&quot;:0,&#92;&quot;Model&#92;&quot;:&#92;&quot;MLP&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Standard / Family&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;68.1%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;89.6%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;65.6%&#92;&quot;},{&#92;&quot;_marimo_row_id&#92;&quot;:1,&#92;&quot;Model&#92;&quot;:&#92;&quot;MLP&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Standard / Command&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;94.7%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;90.3%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;99.8%&#92;&quot;},{&#92;&quot;_marimo_row_id&#92;&quot;:2,&#92;&quot;Model&#92;&quot;:&#92;&quot;MLP&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Paraphrase / Family&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;63.7%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;89.8%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;61.0%&#92;&quot;},{&#92;&quot;_marimo_row_id&#92;&quot;:3,&#92;&quot;Model&#92;&quot;:&#92;&quot;MLP&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Paraphrase / Command&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;71.6%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;73.9%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;71.8%&#92;&quot;},{&#92;&quot;_marimo_row_id&#92;&quot;:4,&#92;&quot;Model&#92;&quot;:&#92;&quot;Transformer&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Standard / Family&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;59.9%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;79.2%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;61.9%&#92;&quot;},{&#92;&quot;_marimo_row_id&#92;&quot;:5,&#92;&quot;Model&#92;&quot;:&#92;&quot;Transformer&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Standard / Command&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;88.0%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;86.8%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;98.2%&#92;&quot;},{&#92;&quot;_marimo_row_id&#92;&quot;:6,&#92;&quot;Model&#92;&quot;:&#92;&quot;Transformer&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Paraphrase / Family&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;54.3%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;65.9%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;62.7%&#92;&quot;},{&#92;&quot;_marimo_row_id&#92;&quot;:7,&#92;&quot;Model&#92;&quot;:&#92;&quot;Transformer&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Paraphrase / Command&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;63.9%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;65.5%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;74.7%&#92;&quot;},{&#92;&quot;_marimo_row_id&#92;&quot;:8,&#92;&quot;Model&#92;&quot;:&#92;&quot;GRU&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Standard / Family&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;54.1%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;82.5%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;45.2%&#92;&quot;},{&#92;&quot;_marimo_row_id&#92;&quot;:9,&#92;&quot;Model&#92;&quot;:&#92;&quot;GRU&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Standard / Command&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;73.2%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;82.0%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;78.6%&#92;&quot;},{&#92;&quot;_marimo_row_id&#92;&quot;:10,&#92;&quot;Model&#92;&quot;:&#92;&quot;GRU&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Paraphrase / Family&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;47.8%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;62.0%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;55.8%&#92;&quot;},{&#92;&quot;_marimo_row_id&#92;&quot;:11,&#92;&quot;Model&#92;&quot;:&#92;&quot;GRU&#92;&quot;,&#92;&quot;Setting&#92;&quot;:&#92;&quot;Paraphrase / Command&#92;&quot;,&#92;&quot;Overall&#92;&quot;:&#92;&quot;54.9%&#92;&quot;,&#92;&quot;Typing&#92;&quot;:&#92;&quot;61.2%&#92;&quot;,&#92;&quot;Enter&#92;&quot;:&#92;&quot;64.0%&#92;&quot;}]&quot;' data-total-rows='12' data-total-columns='5' data-max-columns='50' data-banner-text='&quot;&quot;' data-pagination='false' data-page-size='15' data-field-types='[[&quot;Model&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;Setting&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;Overall&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;Typing&quot;,[&quot;string&quot;,&quot;str&quot;]],[&quot;Enter&quot;,[&quot;string&quot;,&quot;str&quot;]]]' data-selection='&quot;single&quot;' data-show-filters='true' data-show-download='true' data-show-column-summaries='true' data-show-data-types='true' data-show-page-size-selector='true' data-show-column-explorer='true' data-show-chart-builder='true' data-row-headers='[]' data-has-stable-row-id='true' data-lazy='false' data-preload='false'></marimo-table></marimo-ui-element></div><div data-kind='tab'><marimo-ui-element object-id='YECM-3' random-id='acf9f908-7f7d-531a-470f-f8e20a118296'><marimo-lazy data-initial-value='false' data-label='null' data-show-loading-indicator='false'></marimo-lazy></marimo-ui-element></div></marimo-tabs></marimo-ui-element>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "cEAS",
+      "code_hash": "1bb3caff5cf7534b97dc857be43e0551",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><hr />\n<span class=\"paragraph\"><a id=\"part-6\"></a></span>\n<h1 id=\"part-6-conclusions\"><iconify-icon icon='lucide:check-circle' inline></iconify-icon> Part 6: Conclusions</h1></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "iXej",
+      "code_hash": "484754f632ff9609cdd93c360380578d",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/html": "<div style='display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 1rem'><span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"key-findings\">Key Findings</h3></span><div style='display: flex;flex: 1;flex-direction: row;justify-content: space-between;align-items: normal;flex-wrap: nowrap;gap: 1rem'><div style='flex: 1'><marimo-callout-output data-html='&quot;&lt;div style=&#x27;display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem&#x27;&gt;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;h3 id=&#92;&quot;two-regimes&#92;&quot;&gt;Two Regimes&lt;/h3&gt;&lt;/span&gt;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Typing = &lt;strong&gt;easy&lt;/strong&gt; (local)&lt;/span&gt;&#92;n&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Enter = &lt;strong&gt;hard&lt;/strong&gt; (semantic)&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&quot;' data-kind='&quot;info&quot;'></marimo-callout-output></div><div style='flex: 1'><marimo-callout-output data-html='&quot;&lt;div style=&#x27;display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem&#x27;&gt;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;h3 id=&#92;&quot;mlp-wins&#92;&quot;&gt;MLP Wins&lt;/h3&gt;&lt;/span&gt;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Simple local classifiers&lt;/span&gt;&#92;n&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;beat sequence models here&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&quot;' data-kind='&quot;success&quot;'></marimo-callout-output></div><div style='flex: 1'><marimo-callout-output data-html='&quot;&lt;div style=&#x27;display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem&#x27;&gt;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;h3 id=&#92;&quot;generalization-fails&#92;&quot;&gt;Generalization Fails&lt;/h3&gt;&lt;/span&gt;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Models learn char patterns&lt;/span&gt;&#92;n&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;not command semantics&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&quot;' data-kind='&quot;warn&quot;'></marimo-callout-output></div><div style='flex: 1'><marimo-callout-output data-html='&quot;&lt;div style=&#x27;display: flex;flex: 1;flex-direction: column;justify-content: flex-start;align-items: normal;flex-wrap: nowrap;gap: 0.5rem&#x27;&gt;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;h3 id=&#92;&quot;metrics-matter&#92;&quot;&gt;Metrics Matter&lt;/h3&gt;&lt;/span&gt;&lt;span class=&#92;&quot;markdown prose dark:prose-invert contents&#92;&quot;&gt;&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;Overall accuracy&lt;/span&gt;&#92;n&lt;span class=&#92;&quot;paragraph&#92;&quot;&gt;hides Enter failures&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&quot;' data-kind='&quot;danger&quot;'></marimo-callout-output></div></div><span class=\"markdown prose dark:prose-invert contents\"><h3 id=\"what-this-means-for-neural-computers\">What this means for Neural Computers</h3>\n<span class=\"paragraph\">The paper's vision \u2014 learning computation from screen traces \u2014 runs into a fundamental split:</span>\n<ul>\n<li><strong>Local patterns</strong> are learnable</li>\n<li><strong>Semantic understanding</strong> requires more (larger context, diverse pre-training, or explicit memory)</li>\n</ul>\n<hr />\n<h3 id=\"reproducibility\">Reproducibility</h3>\n<div class=\"language-scdoc codehilite\"><pre><span></span><code>experiments/toy_nc_cli/\n\u251c\u2500\u2500 scripts/           # smoke_test.py, train_transformer_baseline.py, train_gru_baseline.py\n\u2514\u2500\u2500 results/           # baseline_comparison.csv (benchmark data shown above)\n</code></pre></div>\n<hr />\n<span class=\"paragraph\"><em>Built with <a href=\"https://marimo.io/\" rel=\"noopener noreferrer\" target=\"_blank\">marimo</a> \u00b7 Inspired by <a href=\"https://arxiv.org/abs/2604.06425\" rel=\"noopener noreferrer\" target=\"_blank\">Neural Computers (arXiv:2604.06425)</a></em></span></span></div>"
           }
         }
       ],
