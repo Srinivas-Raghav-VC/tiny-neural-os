@@ -22,7 +22,15 @@ app = marimo.App(width="full")
 
 @app.cell(hide_code=True)
 def _():
+    # WASM (molab /pyodide): keep this cell to *only* `import marimo as mo` for reliable rendering
+    # (https://docs.marimo.io/guides/wasm/)
     import marimo as mo
+
+    return (mo,)
+
+
+@app.cell(hide_code=True)
+def _(mo):
     import numpy as np
     import pandas as pd
     import altair as alt
@@ -82,14 +90,9 @@ def _():
     except Exception:
         pass  # already registered on marimo hot-reload
     alt.themes.enable("molab_readable")
-    return MLPClassifier, Path, alt, dataclass, field, html_lib, json, mo, np, pd, random
-
-
-@app.cell(hide_code=True)
-def _():
-    # Set your public molab / marimo URL when you publish; leave "" to omit the live-app link in the sidebar.
+    # Public marimo/molab share URL (optional). Set when you publish; "" omits the sidebar "Live app" link.
     MOLAB_APP_URL = ""
-    return (MOLAB_APP_URL,)
+    return MLPClassifier, Path, alt, dataclass, field, html_lib, json, mo, np, pd, random, MOLAB_APP_URL
 
 
 @app.cell(hide_code=True)
@@ -2061,16 +2064,25 @@ def _(
     training_snapshots = None
 
     if training_form.value is not None:
+        # Pyodide/WASM: no real threads — mo.status.spinner can break; use a no-op context there.
+        import sys
+        from contextlib import nullcontext
+
+        def _train_spinner_ctx(sub: str):
+            if "pyodide" in sys.modules:
+                return nullcontext()
+            return mo.status.spinner(title="Training MLP", subtitle=sub)
+
         _n_train = training_form.value["episodes"]
         _n_test = 25
         _conditioning = training_form.value["conditioning"]
         _n_epochs = 25
 
-        with mo.status.spinner(title="Training MLP", subtitle="Generating episodes..."):
+        with _train_spinner_ctx("Generating episodes..."):
             _train_episodes = generate_episodes(_n_train, seed=42)
             _test_episodes = generate_episodes(_n_test, seed=999)
 
-        with mo.status.spinner(title="Training MLP", subtitle="Building dataset..."):
+        with _train_spinner_ctx("Building dataset..."):
             _X_train, _y_train, _train_stats = build_training_dataset(
                 _train_episodes, conditioning=_conditioning, neg_ratio=8, seed=42
             )
@@ -2102,7 +2114,7 @@ def _(
 
         _all_classes = np.arange(len(VOCAB))
 
-        with mo.status.spinner(title="Training MLP", subtitle="Running epoch-by-epoch..."):
+        with _train_spinner_ctx("Running epoch-by-epoch..."):
             _model = MLPClassifier(
                 hidden_layer_sizes=(128,),
                 learning_rate_init=0.002,
@@ -2131,7 +2143,7 @@ def _(
             # Back-fill `loss_curve_` so the existing Learning viz keeps working.
             _model.loss_curve_ = _loss_curve
 
-        with mo.status.spinner(title="Training MLP", subtitle="Evaluating..."):
+        with _train_spinner_ctx("Evaluating..."):
             _metrics = evaluate_model(_model, _test_episodes, conditioning=_conditioning)
 
         trained_model = _model
